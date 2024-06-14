@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class AuthenticationController extends AbstractController
 {
     #[Route('/user/register', name: 'user_register')]
-    public function register(Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    public function register(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
         $data = $request->getContent();
         $data = json_decode($data, true);
@@ -43,20 +44,29 @@ class AuthenticationController extends AbstractController
             $user->setEmail($data['email']);
             $user->setPassword($hashedPassword);
 
+            if(isset($data['phonenumber'])){
+                $user->setPhonenumber($data['phonenumber']);
+            }
+            if(isset($data['country'])){
+                $user->setCountry($data['country']);
+            }
+            if(isset($data['postalcode'])){
+                $user->setPostalcode($data['postalcode']);
+            }
+            if(isset($data['city'])){
+                $user->setCity($data['city']);
+            }
+            if(isset($data['adress'])){
+                $user->setAdress($data['adress']);
+            }
 
-            return $this->json($user);
+            $userRepository->add($user, true);
+
+            return $this->json($user, Response::HTTP_CREATED);
 
         } catch (\Exception $error) {
             $response = ["error" => $error->getMessage()];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
-
-        // $user->setUsername($data['username']);
-        // $user->setFirstname($data['firstname']);
-        // $user->setLastname($data['lastname']);
-        // $user->setPassword($data['password']);
-
-
-        return $this->json($data);
     }
 }

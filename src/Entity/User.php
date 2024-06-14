@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
+#[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -24,7 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    private array $roles = ["ROLE_USER"];
+    public array $roles = ["ROLE_USER"];
 
     /**
      * @var string The hashed password
@@ -257,10 +258,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
-    public function PrePersist()
+    #[ORM\PrePersist]
+    public function prePersist()
     {
         $this->CreationDate = new \DateTime();
         $this->UpdatedDate = new \DateTime();
@@ -268,10 +267,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
-    public function PreUpdate()
+    #[ORM\PreUpdate]
+    public function preUpdate()
     {
         $this->UpdatedDate = new \DateTime();
 
