@@ -1,7 +1,9 @@
+Voici le nouveau README avec la route `/user/authenticate` ajoutée après la route `/user/register` :
+
 # Projet Symfony API
 
 ## Description
-Ce projet est une API construite avec le framework Symfony. Il fournit plusieurs endpoints pour la gestion des utilisateurs, incluant l'enregistrement des nouveaux utilisateurs.
+Ce projet est une API construite avec le framework Symfony. Il fournit plusieurs endpoints pour la gestion des utilisateurs, incluant l'enregistrement des nouveaux utilisateurs et l'authentification pour obtenir un token.
 
 ## Versions utilisées
 - Symfony CLI : 5.9.1
@@ -175,8 +177,6 @@ php -r "unlink('composer-setup.php');"
 - **111** : Erreur interne
 - **201** : Utilisateur créé avec succès
 
-### Exemples de requêtes et réponses
-
 #### Exemple de requête :
 
 ```json
@@ -209,6 +209,47 @@ POST /user/register/
 ```json
 {
   "status": 400,
+  "message": "Données obligatoires manquantes"
+}
+```
+
+### 2. Authentification de l'utilisateur
+
+- **Méthode :** POST
+- **URL :** `/user/authenticate/`
+- **Format des données :** JSON
+
+#### Données attendues :
+- `username` (string) ou `email` (string) : Obligatoire (un seul des deux)
+- `password` (string) : Obligatoire
+
+#### Réponses possibles :
+- **401** : Données obligatoires manquantes ou mot de passe incorrect ou présence à la fois de `username` et `email`
+- **200** : Authentification réussie, token renvoyé
+
+#### Exemple de requête :
+
+```json
+POST /user/authenticate/
+{
+  "username": "ArtR",
+  "password": "azerty"
+}
+```
+
+#### Exemple de réponse en cas de succès :
+
+```json
+{
+  "token": "drftegueghrugbfeibgruhrtfuirhdntf"
+}
+```
+
+#### Exemple de réponse en cas d'erreur :
+
+```json
+{
+  "status": 401,
   "message": "Données obligatoires manquantes"
 }
 ```

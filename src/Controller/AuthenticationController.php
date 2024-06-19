@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,5 +69,43 @@ class AuthenticationController extends AbstractController
             $response = ["error" => $error->getMessage()];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
+    }
+
+
+    #[Route('/user/authenticate', name: 'user_authenticate')]
+    public function authenticate(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, JWTTokenManagerInterface $tokenManger): JsonResponse
+    {
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        if (!isset($data['password']) || (!isset($data['email']) && !isset($data['username']))) {
+            $response = ["error" => "Missing informations"];
+            return $this->json($response, Response::HTTP_UNAUTHORIZED);
+        }
+
+        if(isset($data['email']) && isset($data['username'])){
+            $response = ["error" => "Email and Username detected, only one accepted"];
+            return $this->json($response, Response::HTTP_UNAUTHORIZED);
+        }
+        
+        if(isset($data['email']))
+        {
+            $user = $userRepository->findOneBy(['email' => $data['email']]);
+        }
+        elseif(isset($data['username']))
+        {
+            $user = $userRepository->findOneBy(['username' => $data['username']]);
+        }
+
+        if(!$passwordHasher->isPasswordValid($user, $data['password'])){
+            $response = ["error" => "Wrong password / username / email"];
+            return $this->json($response, Response::HTTP_UNAUTHORIZED);
+        }
+
+        $token = $tokenManger->create($user);
+
+        $response = ["token" => $token];
+
+        return $this->json($response, Response::HTTP_OK);
     }
 }
