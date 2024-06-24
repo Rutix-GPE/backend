@@ -241,7 +241,7 @@ POST /user/authenticate/
 
 ```json
 {
-  "token": "drftegueghrugbfeibgruhrtfuirhdntf"
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MTkyMzMwMTUsImV4cCI6MTcxOTIzNjMyMSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiQXJ0UiJ9.QPoTXJNzgMkbAsgHKdyDnb1ooF7q6k6m1MdlCFrjvgvFgXKw6zkiSKbEoTsj7Ns3oMrP13gkoUS2ssxkw_FrIOH3VOXOwgNie445ohijCYExJiFuz2KFcE6e_z17EN8_X5Kqxt_vbzov8vNVJ1IShT5XZxgd7zC4EkQ49-4YuO5fJjKvhX3ihUklDKTBrndsE07iSBuITDpjOY5xdaycSIdPqnV1nuLd29XVBt-49vJuhcSKus1b2-xhL8FebQdeXOBQ-4RonHo20ZiVq2aKWUimbFQoXkxFE_402PVghfOMo37-Z4NctBSVc9UB_XV1Xkea67Xh8HvVScoOx-cnUA"
 }
 ```
 
@@ -253,15 +253,3 @@ POST /user/authenticate/
   "message": "Données obligatoires manquantes"
 }
 ```
-
-## Licence
-
-Ce projet est sous licence [Nom de la licence]. Veuillez consulter le fichier LICENSE pour plus de détails.
-
-## Contribution
-
-Les contributions sont les bienvenues ! Veuillez soumettre une pull request ou ouvrir une issue pour discuter des changements que vous souhaitez apporter.
-
----
-
-Pour plus d'informations, veuillez consulter la documentation officielle de Symfony et Composer, ou contacter les mainteneurs du projet.
