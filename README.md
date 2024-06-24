@@ -1,4 +1,4 @@
-Voici le nouveau README avec la route `/user/authenticate` ajoutée après la route `/user/register` :
+Voici le README mis à jour avec les nouvelles routes ajoutées :
 
 # Projet Symfony API
 
@@ -251,5 +251,258 @@ POST /user/authenticate/
 {
   "status": 401,
   "message": "Données obligatoires manquantes"
+}
+```
+
+### 3. Affichage d'un utilisateur
+
+-
+
+ **Méthode :** GET
+- **URL :** `/user/show/{id}`
+- **Format des données :** JSON
+
+#### Réponses possibles :
+- **200** : Utilisateur trouvé, données de l'utilisateur renvoyées
+- **404** : Utilisateur non trouvé
+
+#### Exemple de requête :
+
+```sh
+GET /user/show/9
+```
+
+#### Exemple de réponse en cas de succès :
+
+```json
+{
+  "id": 9,
+  "username": "ArtR",
+  "firstname": "Arthur",
+  "lastname": "Rubiralta",
+  "email": "arthur@example.com",
+  "phonenumber": "07237845245",
+  "country": "France",
+  "postalcode": "75001",
+  "city": "Paris",
+  "adress": "1 Rue de Rivoli"
+}
+```
+
+#### Exemple de réponse en cas d'erreur :
+
+```json
+{
+  "msg": "Not found"
+}
+```
+
+### 4. Liste des utilisateurs
+
+- **Méthode :** GET
+- **URL :** `/user/list`
+- **Format des données :** JSON
+
+#### Réponses possibles :
+- **200** : Utilisateurs trouvés, liste des utilisateurs renvoyée
+- **404** : Aucun utilisateur trouvé
+
+#### Exemple de requête :
+
+```sh
+GET /user/list
+```
+
+#### Exemple de réponse en cas de succès :
+
+```json
+[
+  {
+    "id": 1,
+    "username": "johndoe",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "johndoe@example.com",
+    "phonenumber": "1234567890",
+    "country": "France",
+    "postalcode": "75001",
+    "city": "Paris",
+    "adress": "1 Rue de Rivoli"
+  },
+  {
+    "id": 2,
+    "username": "janedoe",
+    "firstname": "Jane",
+    "lastname": "Doe",
+    "email": "janedoe@example.com",
+    "phonenumber": "0987654321",
+    "country": "France",
+    "postalcode": "75002",
+    "city": "Paris",
+    "adress": "2 Rue de Rivoli"
+  }
+]
+```
+
+#### Exemple de réponse en cas d'erreur :
+
+```json
+{
+  "msg": "Zero users"
+}
+```
+
+### 5. Mise à jour d'un utilisateur
+
+- **Méthode :** PUT
+- **URL :** `/user/update/{id}`
+- **Format des données :** JSON
+
+#### Données attendues (optionnelles) :
+- `username` (string)
+- `firstname` (string)
+- `lastname` (string)
+- `email` (string)
+- `password` (string)
+- `phonenumber` (string)
+- `country` (string)
+- `postalcode` (string)
+- `city` (string)
+- `adress` (text)
+
+#### Réponses possibles :
+- **200** : Utilisateur mis à jour avec succès
+- **404** : Utilisateur non trouvé
+- **400** : Erreur lors de la mise à jour
+
+#### Exemple de requête :
+
+```json
+PUT /user/update/9
+{
+  "username": "ArtR",
+  "firstname": "ArthurTest",
+  "lastname": "RubiraltaTest",
+  "email": "testUpdate@gmail.com",
+  "password": "azerty",
+  "phonenumber": "07237845245",
+  "country": "EN",
+  "postalcode": "94130",
+  "city": "Nogent",
+  "adress": "54 rue du marché de nogent"
+}
+```
+
+#### Exemple de réponse en cas de succès :
+
+```json
+{
+  "id": 9,
+  "username": "ArtR",
+  "firstname": "ArthurTest",
+  "lastname": "RubiraltaTest",
+  "email": "testUpdate@gmail.com",
+  "phonenumber": "07237845245",
+  "country": "EN",
+  "postalcode": "94130",
+  "city": "Nogent",
+  "adress": "54 rue du marché de nogent"
+}
+```
+
+#### Exemple de réponse en cas d'erreur :
+
+```json
+{
+  "msg": "Not found"
+}
+```
+
+### 6. Mise à jour du rôle d'un utilisateur
+
+- **Méthode :** PUT
+- **URL :** `/user/update-role/{id}`
+- **Format des données :** JSON
+
+#### Données attendues :
+- `role` (string) : Obligatoire (valeurs possibles : `user`, `admin`)
+
+#### Réponses possibles :
+- **200** : Rôle mis à jour avec succès
+- **404** : Utilisateur non trouvé ou rôle incorrect
+
+#### Exemple de requête :
+
+```json
+PUT /user/update-role/6
+{
+  "role": "admin"
+}
+```
+
+#### Exemple de réponse en cas de succès :
+
+```json
+{
+  "id": 6,
+  "username": "janedoe",
+  "role": "admin"
+}
+```
+
+#### Exemple de réponse en cas d'erreur :
+
+```json
+{
+  "msg": "Not found"
+}
+```
+
+ou
+
+```json
+{
+  "msg": "Choose between role user or admin"
+}
+```
+
+### 7. Suppression d'un utilisateur
+
+- **Méthode :** DELETE
+- **URL :** `/user/delete/{id}`
+- **Format des données :** JSON
+
+#### Réponses possibles :
+- **200** : Utilisateur supprimé avec succès
+- **404** : Utilisateur non trouvé
+- **500** : Erreur interne lors de la suppression
+
+#### Exemple de requête :
+
+```sh
+DELETE /user/delete/6
+```
+
+#### Exemple de réponse en cas de succès :
+
+```json
+{
+  "success": true
+}
+```
+
+#### Exemple de réponse en cas d'erreur :
+
+```json
+{
+  "msg": "Not found"
+}
+```
+
+ou
+
+```json
+{
+  "success": false
 }
 ```
