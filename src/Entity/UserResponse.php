@@ -2,35 +2,32 @@
 
 namespace App\Entity;
 
-use App\Repository\TemplateQuestionRepository;
+use App\Repository\UserResponseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TemplateQuestionRepository::class)]
-class TemplateQuestion
+#[ORM\Entity(repositoryClass: UserResponseRepository::class)]
+class UserResponse
 {
-
-// TODO add page field 
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    public ?string $name = null;
+    private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    public ?string $content = null;
+    private ?string $content = null;
 
     #[ORM\Column(length: 50)]
-    public ?string $type = null;
+    private ?string $type = null;
 
     #[ORM\Column(nullable: true)]
-    public ?array $choice = null;
+    private ?array $choice = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
-    public ?int $page = 1;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $response = null;
 
     public function getId(): ?int
     {
@@ -85,26 +82,14 @@ class TemplateQuestion
         return $this;
     }
 
-
-    CONST TYPE_ARRAY = [
-        self::CODE_TEXT => self::LABEL_TEXT,
-        self::CODE_MULTIPLE_CHOICE => self::LABEL_MULTIPLE_CHOICE
-    ];
-
-    const CODE_TEXT = 1000;
-    CONST LABEL_TEXT = "text";
-
-    const CODE_MULTIPLE_CHOICE = 2000;
-    CONST LABEL_MULTIPLE_CHOICE = "multiple_choice";
-
-    public function getPage(): ?int
+    public function getResponse(): ?string
     {
-        return $this->page;
+        return $this->response;
     }
 
-    public function setPage(int $page): static
+    public function setResponse(?string $response): static
     {
-        $this->page = $page;
+        $this->response = $response;
 
         return $this;
     }

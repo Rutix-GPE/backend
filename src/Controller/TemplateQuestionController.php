@@ -38,6 +38,10 @@ class TemplateQuestionController extends AbstractController
             $question->setContent($data["content"]);            
             $question->setType($data["type"]);
 
+            if(isset($data['page'])){
+                $question->setPage($data['page']);
+            }
+
             $TQRepository->add($question, true);
 
             return $this->json($question, Response::HTTP_CREATED);
