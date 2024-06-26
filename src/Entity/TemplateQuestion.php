@@ -7,10 +7,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TemplateQuestionRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class TemplateQuestion
 {
-
-// TODO add page field 
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -31,6 +30,12 @@ class TemplateQuestion
 
     #[ORM\Column(type: Types::SMALLINT)]
     public ?int $page = 1;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public ?\DateTimeInterface $CreationDate = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public ?\DateTimeInterface $UpdatedDate = null;
 
     public function getId(): ?int
     {
@@ -105,6 +110,47 @@ class TemplateQuestion
     public function setPage(int $page): static
     {
         $this->page = $page;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->CreationDate;
+    }
+
+    public function setCreationDate(?\DateTimeInterface $CreationDate): static
+    {
+        $this->CreationDate = $CreationDate;
+
+        return $this;
+    }
+
+    public function getUpdatedDate(): ?\DateTimeInterface
+    {
+        return $this->UpdatedDate;
+    }
+
+    public function setUpdatedDate(?\DateTimeInterface $UpdatedDate): static
+    {
+        $this->UpdatedDate = $UpdatedDate;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->CreationDate = new \DateTime();
+        $this->UpdatedDate = new \DateTime();
+        
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->UpdatedDate = new \DateTime();
 
         return $this;
     }

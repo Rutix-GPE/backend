@@ -16,6 +16,24 @@ class UserResponseRepository extends ServiceEntityRepository
         parent::__construct($registry, UserResponse::class);
     }
 
+    public function add(UserResponse $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(UserResponse $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
 //    /**
 //     * @return UserResponse[] Returns an array of UserResponse objects
 //     */

@@ -7,27 +7,56 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserResponseRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class UserResponse
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    public ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
+    public ?string $content = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $type = null;
+    public ?string $type = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $choice = null;
+    public ?array $choice = null;
+
+    #[ORM\Column(type: Types::SMALLINT)]
+    public ?int $page = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $response = null;
+    public ?string $response = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    public ?User $User = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    public ?TemplateQuestion $Question = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $CreationDate = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $UpdatedDate = null;
+
+    public function duplicate(TemplateQuestion $question): static
+    {
+        $this->name = $question->getName();
+        $this->content = $question->getContent();
+        $this->type = $question->getType();
+        $this->choice = $question->getChoice();
+        $this->page = $question->getPage();        
+        
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -82,6 +111,18 @@ class UserResponse
         return $this;
     }
 
+    public function getPage(): ?int
+    {
+        return $this->page;
+    }
+
+    public function setPage(int $page): static
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
     public function getResponse(): ?string
     {
         return $this->response;
@@ -90,6 +131,72 @@ class UserResponse
     public function setResponse(?string $response): static
     {
         $this->response = $response;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
+
+        return $this;
+    }
+
+    public function getQuestion(): ?TemplateQuestion
+    {
+        return $this->Question;
+    }
+
+    public function setQuestion(?TemplateQuestion $Question): static
+    {
+        $this->Question = $Question;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->CreationDate;
+    }
+
+    public function setCreationDate(?\DateTimeInterface $CreationDate): static
+    {
+        $this->CreationDate = $CreationDate;
+
+        return $this;
+    }
+
+    public function getUpdatedDate(): ?\DateTimeInterface
+    {
+        return $this->UpdatedDate;
+    }
+
+    public function setUpdatedDate(?\DateTimeInterface $UpdatedDate): static
+    {
+        $this->UpdatedDate = $UpdatedDate;
+
+        return $this;
+    }
+
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->CreationDate = new \DateTime();
+        $this->UpdatedDate = new \DateTime();
+        
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->UpdatedDate = new \DateTime();
 
         return $this;
     }

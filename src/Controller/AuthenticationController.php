@@ -78,11 +78,12 @@ class AuthenticationController extends AbstractController
         $data = $request->getContent();
         $data = json_decode($data, true);
 
+        
         if (!isset($data['password']) || (!isset($data['email']) && !isset($data['username']))) {
             $response = ["error" => "Missing informations"];
             return $this->json($response, Response::HTTP_UNAUTHORIZED);
         }
-
+        
         if(isset($data['email']) && isset($data['username'])){
             $response = ["error" => "Email and Username detected, only one accepted"];
             return $this->json($response, Response::HTTP_UNAUTHORIZED);
@@ -97,9 +98,14 @@ class AuthenticationController extends AbstractController
             $user = $userRepository->findOneBy(['username' => $data['username']]);
         }
 
+        if(!$user){
+            $response = ["error" => "Wrong password / username / email"];
+            return $this->json($response, Response::HTTP_NOT_FOUND);
+        }
+        
         if(!$passwordHasher->isPasswordValid($user, $data['password'])){
             $response = ["error" => "Wrong password / username / email"];
-            return $this->json($response, Response::HTTP_UNAUTHORIZED);
+            return $this->json($response, Response::HTTP_NOT_FOUND);
         }
 
         $token = $tokenManger->create($user);
@@ -108,4 +114,5 @@ class AuthenticationController extends AbstractController
 
         return $this->json($response, Response::HTTP_OK);
     }
+
 }
