@@ -42,10 +42,10 @@ class UserResponse
     public ?TemplateQuestion $Question = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $CreationDate = null;
+    public ?\DateTimeInterface $CreationDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $UpdatedDate = null;
+    public   ?\DateTimeInterface $UpdatedDate = null;
 
     public function duplicate(TemplateQuestion $question): static
     {

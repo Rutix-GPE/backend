@@ -16,7 +16,7 @@ class TemplateQuestion
     #[ORM\Column]
     public ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     public ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
