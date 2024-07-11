@@ -78,7 +78,7 @@ class TemplateQuestionController extends AbstractController
         return $this->json($question, Response::HTTP_OK);
     }
 
-    #[Route('/template-question/list/page/{id}', name:'list_template_question', methods: ['GET'])]
+    #[Route('/template-question/page/{id}', name:'page_template_question', methods: ['GET'])]
     public function byPageQT($id, TemplateQuestionRepository $TQRepository): JsonResponse
     {
         $question = $TQRepository->findBy(['page' => $id]);
@@ -120,7 +120,7 @@ class TemplateQuestionController extends AbstractController
 
             $TQRepository->add($question, true);
 
-            return $this->json($question, Response::HTTP_CREATED);
+            return $this->json($question, Response::HTTP_OK);
 
         }catch(\Exception $error){
             $response = ["error" => $error->getMessage()];

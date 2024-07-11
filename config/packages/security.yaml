@@ -36,10 +36,30 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        # authController
         - { path: ^/user/register, roles: PUBLIC_ACCESS }
         - { path: ^/user/authenticate, roles: PUBLIC_ACCESS }
 
-        - { path: ^/user-response/new, roles: [ROLE_USER, ROLE_ADMIN] }
+        # userController
+        - { path: ^/user/show, roles: [ROLE_USER, ROLE_ADMIN], methods: [GET] }
+        - { path: ^/user/list, roles: [ROLE_ADMIN], methods: [GET] }
+        - { path: ^/user/update, roles: [ROLE_USER, ROLE_ADMIN], methods: [PUT] }
+        - { path: ^/user/update-role, roles: [ROLE_ADMIN], methods: [PUT] }
+        - { path: ^/user/delete, roles: [ROLE_ADMIN], methods: [DELETE] }
+
+        # templateQuestionController
+        - { path: ^/template-question/new, roles: [ROLE_ADMIN], methods: [POST]  }
+        - { path: ^/template-question/show, roles: [ROLE_ADMIN], methods: [GET]  }
+        - { path: ^/template-question/list, roles: [ROLE_ADMIN], methods: [GET]  }
+        - { path: ^/template-question/page, roles: [ROLE_ADMIN], methods: [GET]  }
+        - { path: ^/template-question/update, roles: [ROLE_ADMIN], methods: [PUT]  }
+        - { path: ^/template-question/delete, roles: [ROLE_ADMIN], methods: [DELETE]  }
+
+        # userResponseController
+        - { path: ^/user-response/new, roles: [ROLE_USER] }
+        - { path: ^/user-response/new/page, roles: [ROLE_USER] }
+        - { path: ^/user-response/response, roles: [ROLE_USER] }
+
 
 
 when@test:

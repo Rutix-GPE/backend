@@ -47,7 +47,7 @@ class UserResponseController extends AbstractController
 
             $userResponseRepository->add($response, true);
 
-            return $this->json($response);
+            return $this->json($response, Response::HTTP_CREATED);
 
         } catch (\Exception $error) {
             $response = ["error" => $error->getMessage()];
@@ -101,11 +101,10 @@ class UserResponseController extends AbstractController
         if(!$arrayResponse){
             $response = $userResponseRepository->findBy(["User" => $user, "page" => $id]);
 
-            // $response = ["error" => "Duplicate"];
-            return $this->json($response);
+            return $this->json($response, Response::HTTP_OK);
         }
         
-        return $this->json($arrayResponse);
+        return $this->json($arrayResponse, Response::HTTP_CREATED);
     }
 
     #[Route('/user-response/response/{id}', name: 'response_question')]
