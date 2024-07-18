@@ -27,45 +27,101 @@ class AuthenticationTest extends WebTestCase
         }
     }
 
-    public function testRegisterMissingFields()
+    public function testRegister()
     {
-        $json = [
-            "username" => "testuser"
-        ];
-        $json = json_encode($json);
-
-        $this->client->request('POST', '/user/register', [], [], ['CONTENT_TYPE' => 'application/json'], $json);
+        // test missing informations
+        $this->client->request('POST', '/user/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'username' => 'testuser',
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'john.doe@example.com',
+        ]));
 
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
         $this->assertJson($this->client->getResponse()->getContent());
 
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertArrayHasKey('error', $responseContent);
-        $this->assertEquals('Missing informations', $responseContent['error']);
+
+        // test create user
+        $this->client->request('POST', '/user/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'username' => 'testuser',
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'password' => 'password123'
+        ]));
+
+        $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
+        $this->assertJson($this->client->getResponse()->getContent());
+
+        
+        // test duplicate
+        $this->client->request('POST', '/user/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'username' => 'testuser',
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'password' => 'password123'
+        ]));
+
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $this->assertJson($this->client->getResponse()->getContent());
+
     }
 
-    public function testRegisterSuccess()
+    public function testAuthenticate()
     {
         $this->client->request('POST', '/user/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'username' => 'testuser',
             'firstname' => 'John',
             'lastname' => 'Doe',
             'email' => 'john.doe@example.com',
-            'password' => 'password123',
-            'phonenumber' => '123456789',
-            'country' => 'France',
-            'postalcode' => '75000',
-            'city' => 'Paris',
-            'adress' => '123 Rue de Paris'
+            'password' => 'password123'
         ]));
 
-        $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
-        $this->assertJson($this->client->getResponse()->getContent());
 
+        // test by username
+        $this->client->request('POST', '/user/authenticate', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'username' => 'testuser',
+            'password' => 'password123'
+        ]));
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertArrayHasKey('id', $responseContent);
-        $this->assertArrayHasKey('username', $responseContent);
-        $this->assertEquals('testuser', $responseContent['username']);
+        $this->assertIsString($responseContent['token']);
+
+        $this->client->request('POST', '/user/authenticate', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'username' => 'wrong',
+            'password' => 'password123'
+        ]));
+
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+
+
+        // test by email
+        $this->client->request('POST', '/user/authenticate', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'email' => 'john.doe@example.com',
+            'password' => 'password123'
+        ]));
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertIsString($responseContent['token']);
+    
+        $this->client->request('POST', '/user/authenticate', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'email' => 'wrong',
+            'password' => 'password123'
+        ]));
+
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+
+
+        // test missing informations
+        $this->client->request('POST', '/user/authenticate', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'password' => 'password123'
+        ]));
+
+        $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
+
     }
 
 }

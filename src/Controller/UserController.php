@@ -91,7 +91,7 @@ class UserController extends AbstractController
             
             $userRepository->add($user, true);
 
-            return $this->json($user);
+            return $this->json($user, Response::HTTP_OK);
         } catch (\Exception $error) {
             $response = ["error" => $error->getMessage()];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
