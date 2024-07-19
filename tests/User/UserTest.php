@@ -135,4 +135,53 @@ class UserTest extends WebTestCase
 
     }
 
+    public function testUpdateUserRole()
+    {
+        $firstUser = $this->getFirstUser();
+
+
+        // test first user - admin role
+        $this->client->request('PUT', '/user/update-role/'.$firstUser->id, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'role' => 'admin'
+        ]));
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals(['ROLE_ADMIN'], $responseContent['roles']);
+        
+
+        // test first user - admin role
+        $this->client->request('PUT', '/user/update-role/'.$firstUser->id, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'role' => 'user'
+        ]));
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals(['ROLE_USER'], $responseContent['roles']);
+
+
+        // test first user - not found role
+        $this->client->request('PUT', '/user/update-role/'.$firstUser->id, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'role' => 'hacker'
+        ]));
+
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testDeleteUser()
+    {
+        $firstUser = $this->getFirstUser();
+
+
+        // test not found user
+        $this->client->request('DELETE', '/user/delete/'.$firstUser->id + 5, [], [], ['CONTENT_TYPE' => 'application/json']);
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+
+
+        // test first user
+        $this->client->request('DELETE', '/user/delete/'.$firstUser->id, [], [], ['CONTENT_TYPE' => 'application/json']);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        
+    }
+
 }
