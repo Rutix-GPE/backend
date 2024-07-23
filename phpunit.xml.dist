@@ -24,7 +24,7 @@
         <!-- ###+ lexik/jwt-authentication-bundle ### -->
         <env name="JWT_SECRET_KEY" value="%kernel.project_dir%/config/jwt/private.pem"/>
         <env name="JWT_PUBLIC_KEY" value="%kernel.project_dir%/config/jwt/public.pem"/>
-        <env name="JWT_PASSPHRASE" value="136979ba9c2990f5481fd26d8ada033c7190021dd2b07d2ff1379429d81e8cb4"/>
+        <env name="JWT_PASSPHRASE" value="6a5b1d4ca1a88a0be0e1862e0180c3ac51e0a5bd8607680ad43682909c6d78c1"/>
         <!-- ###- lexik/jwt-authentication-bundle ### -->
 
         <!-- ###+ nelmio/cors-bundle ### -->

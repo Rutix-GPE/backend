@@ -20,6 +20,7 @@ class UserTest extends WebTestCase
         $this->createUsers();
     }
 
+
     private function removeAllUsers()
     {
         $users = $this->userRepository->findAll();
@@ -147,6 +148,7 @@ class UserTest extends WebTestCase
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+
         $this->assertEquals(['ROLE_ADMIN'], $responseContent['roles']);
         
 

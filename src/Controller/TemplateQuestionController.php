@@ -16,20 +16,22 @@ class TemplateQuestionController extends AbstractController
     #[Route('/template-question/new', name:'new_template_question', methods: ['POST'])]
     public function new(Request $request, TemplateQuestionRepository $TQRepository): JsonResponse
     {
+        
         $data = $request->getContent();
         $data = json_decode($data, true);
-
+        
         if(!isset($data['name']) || 
-            !isset($data['content']) ||
-            !isset($data['type'])) {
+        !isset($data['content']) ||
+        !isset($data['type'])) {
             $response = ["error" => "Missing informations"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
-
+        
         if(in_array($data["type"], [TemplateQuestion::CODE_TEXT, TemplateQuestion::CODE_MULTIPLE_CHOICE])) {
             $response = ["error" => "Choose beetwen type text or multiple_choice"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
+        // return $this->json("", 200);
 
         try{
             $question = new TemplateQuestion;
@@ -65,17 +67,17 @@ class TemplateQuestionController extends AbstractController
         return $this->json($question, Response::HTTP_OK);
     }
 
-    #[Route('/template-question/list', name:'list_template_question', methods: ['GET'])]
+    #[Route('/template-question/list', name: 'list_template_question', methods: ['GET'])]
     public function listQT(TemplateQuestionRepository $TQRepository): JsonResponse
     {
-        $question = $TQRepository->findAll();
+        $questions = $TQRepository->findAll();
 
-        if(!$question){
+        if (!$questions) {
             $response = ["msg" => "Zero questions"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
+            return $this->json($response, 404);
         }
 
-        return $this->json($question, Response::HTTP_OK);
+        return $this->json($questions, Response::HTTP_OK);
     }
 
     #[Route('/template-question/list/page/{id}', name:'list_template_question_by_page', methods: ['GET'])]
@@ -91,42 +93,42 @@ class TemplateQuestionController extends AbstractController
         return $this->json($question, Response::HTTP_OK);
     }
 
-    #[Route('/template-question/update/{id}', name: 'update_list_template', methods: ['PUT'])]
-    public function updateQT(Request $request, $id, TemplateQuestionRepository $TQRepository): JsonResponse
-    {
-        $question = $TQRepository->find($id);
+    // #[Route('/template-question/update/{id}', name: 'update_list_template', methods: ['PUT'])]
+    // public function updateQT(Request $request, $id, TemplateQuestionRepository $TQRepository): JsonResponse
+    // {
+    //     $question = $TQRepository->find($id);
 
-        if(!$question){
-            $response = ["msg" => "Not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
+    //     if(!$question){
+    //         $response = ["msg" => "Not found"];
+    //         return $this->json($response, Response::HTTP_NOT_FOUND);
+    //     }
 
-        $data = $request->getContent();
-        $data = json_decode($data, true);
+    //     $data = $request->getContent();
+    //     $data = json_decode($data, true);
 
-        try{
-            if(isset($data["name"])){
-                $question->setName($data["name"]);
-            }
-            if(isset($data["content"])){
-                $question->setContent($data["content"]);
-            }
-            if(isset($data["type"])){
-                $question->setType($data["type"]);
-            }
-            if(isset($data["choice"])){
-                $question->setChoice($data['choice']);
-            }
+    //     try{
+    //         if(isset($data["name"])){
+    //             $question->setName($data["name"]);
+    //         }
+    //         if(isset($data["content"])){
+    //             $question->setContent($data["content"]);
+    //         }
+    //         if(isset($data["type"])){
+    //             $question->setType($data["type"]);
+    //         }
+    //         if(isset($data["choice"])){
+    //             $question->setChoice($data['choice']);
+    //         }
 
-            $TQRepository->add($question, true);
+    //         $TQRepository->add($question, true);
 
-            return $this->json($question, Response::HTTP_CREATED);
+    //         return $this->json($question, Response::HTTP_CREATED);
 
-        }catch(\Exception $error){
-            $response = ["error" => $error->getMessage()];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }
-    }
+    //     }catch(\Exception $error){
+    //         $response = ["error" => $error->getMessage()];
+    //         return $this->json($response, Response::HTTP_BAD_REQUEST);
+    //     }
+    // }
 
     #[Route('/template-question/delete/{id}', name: 'delete_template-question', methods: ['DELETE'])]
     public function delete($id, Request $request, TemplateQuestionRepository $TQRepository): JsonResponse

@@ -56,7 +56,7 @@ class TemplateQuestionTest extends WebTestCase
     {
         // test without page
         $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
-            'name' => 'test_one',
+            'name' => 'one',
             'content' => 'First test',
             'type' => 'text'
         ]));
@@ -64,7 +64,7 @@ class TemplateQuestionTest extends WebTestCase
         $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
                 
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals("test_one", $responseContent['name']);
+        $this->assertEquals("one", $responseContent['name']);
         $this->assertEquals("First test", $responseContent['content']);
         $this->assertEquals("text", $responseContent['type']);
         $this->assertEquals(1, $responseContent['page']);
@@ -72,7 +72,7 @@ class TemplateQuestionTest extends WebTestCase
 
         // test duplicate
         $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
-            'name' => 'test_one',
+            'name' => 'one',
             'content' => 'First test',
             'type' => 'text'
         ]));
@@ -82,7 +82,7 @@ class TemplateQuestionTest extends WebTestCase
 
         // test without page
         $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
-            'name' => 'test_two',
+            'name' => 'two',
             'content' => 'Second test',
             'type' => 'text',
             'page' => 45
@@ -91,7 +91,7 @@ class TemplateQuestionTest extends WebTestCase
         $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
                 
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals("test_two", $responseContent['name']);
+        $this->assertEquals("two", $responseContent['name']);
         $this->assertEquals("Second test", $responseContent['content']);
         $this->assertEquals("text", $responseContent['type']);
         $this->assertEquals(45, $responseContent['page']);
@@ -119,7 +119,7 @@ class TemplateQuestionTest extends WebTestCase
     }
 
     public function testList()
-    {        
+    {                
         // test all user
         $this->client->request('GET', '/template-question/list', [], [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -144,5 +144,56 @@ class TemplateQuestionTest extends WebTestCase
         $this->removeQuestions();
         $this->client->request('GET', '/template-question/list', [], [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testListPage()
+    {        
+        // test first page
+        $this->client->request('GET', '/template-question/list/page/1', [], [], ['CONTENT_TYPE' => 'application/json']);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+
+        // dd($responseContent);
+        $questionOne = $responseContent[0];
+
+        $this->assertEquals("test_one", $questionOne['name']);
+        $this->assertEquals("First test", $questionOne['content']);
+        $this->assertEquals("text", $questionOne['type']);
+        $this->assertEquals(1, $questionOne['page']);
+
+
+        // test first page
+        $this->client->request('GET', '/template-question/list/page/45', [], [], ['CONTENT_TYPE' => 'application/json']);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());                
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+
+        $questionTwo = $responseContent[0];
+
+        $this->assertEquals("test_two", $questionTwo['name']);
+        $this->assertEquals("Second test", $questionTwo['content']);
+        $this->assertEquals("text", $questionTwo['type']);
+        $this->assertEquals(45, $questionTwo['page']);
+
+
+        // test not found user
+        $this->removeQuestions();
+        $this->client->request('GET', '/template-question/list/page/78', [], [], ['CONTENT_TYPE' => 'application/json']);
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testDelete()
+    {
+        $firstUser = $this->getFirstQuestion();
+
+
+        // test not found user
+        $this->client->request('DELETE', '/template-question/delete/'.$firstUser->id + 5, [], [], ['CONTENT_TYPE' => 'application/json']);
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+
+
+        // test first user
+        $this->client->request('DELETE', '/template-question/delete/'.$firstUser->id, [], [], ['CONTENT_TYPE' => 'application/json']);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        
     }
 }
