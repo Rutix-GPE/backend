@@ -157,4 +157,18 @@ class UserController extends AbstractController
         }
     }
 
+    #[Route('/user/me', name: 'user_me', methods: ['GET'])]
+    public function me(): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['msg' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        return $this->json($user, Response::HTTP_OK, [], [
+            'groups' => ['user:read']  // Assuming you have serialization groups set up
+        ]);
+    }
+
 }
