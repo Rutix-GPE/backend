@@ -19,6 +19,7 @@ class AuthenticationController extends AbstractController
     {
         $data = $request->getContent();
         $data = json_decode($data, true);
+
         $user = new User;
 
         if(!isset($data['username']) || 

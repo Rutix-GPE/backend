@@ -23,7 +23,7 @@ class AppFixtures extends Fixture
         $question2 = new TemplateQuestion();
         $question2->setName('Heures de réveil et de coucher habituelles');
         $question2->setContent('À quelle heure vous réveillez-vous et vous couchez-vous habituellement ?');
-        $question2->setType('time');
+        $question2->setType('text');
         $question2->setPage(1);
         $question2->setCreationDate(new \DateTime());
         $manager->persist($question2);
