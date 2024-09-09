@@ -27,8 +27,8 @@ class TemplateQuestionController extends AbstractController
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
         
-        if(in_array($data["type"], [TemplateQuestion::CODE_TEXT, TemplateQuestion::CODE_MULTIPLE_CHOICE])) {
-            $response = ["error" => "Choose beetwen type text or multiple_choice"];
+        if(!in_array($data["type"], [TemplateQuestion::LABEL_TEXT, TemplateQuestion::LABEL_MULTIPLE_CHOICE])) {
+            $response = ["error" => "Choose beetwen type 'text' or 'multiple_choice'"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
         // return $this->json("", 200);
@@ -39,6 +39,7 @@ class TemplateQuestionController extends AbstractController
             $question->setName($data["name"]);
             $question->setContent($data["content"]);            
             $question->setType($data["type"]);
+            $question->setChoice($data["choice"]);
 
             if(isset($data['page'])){
                 $question->setPage($data['page']);
