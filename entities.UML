@@ -1,0 +1,48 @@
+classDiagram
+
+   class Question{
+    id Int
+    name string
+    content text
+    type string
+    choice boolean
+    page Int
+    createdAt DateTime
+    updatedAt DateTime
+   }
+
+   class User{
+    id Int
+    username string
+    roles string[]
+    password string
+    firstname string
+    lastname string
+    email string
+    phoneNumber float
+    country string
+    postalcode string
+    city string
+    adress string
+    createdAt DateTime
+    updatedAt DateTime
+   }
+
+   class UserResponse{
+    id string
+    name string
+    content text
+    type string
+    choice boolean
+    page Int
+    response text
+    user User
+    question Question
+    createdAt DateTime
+    updatedAt DateTime
+   }
+
+    User "1" --> "0..*" UserResponse : fait
+    UserResponse "0..*" --> "0..*" Question: contient
+    
+
