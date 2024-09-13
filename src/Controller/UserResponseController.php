@@ -21,7 +21,7 @@ class UserResponseController extends AbstractController
         $questionId,
         JWTTokenManagerInterface $tokenManager,
         UserResponseRepository $userResponseRepository,
-        QuestionRepository $questionRepository
+        TemplateQuestionRepository $questionRepository
     ): JsonResponse
     {
         // Récupérer l'utilisateur authentifié via JWT
