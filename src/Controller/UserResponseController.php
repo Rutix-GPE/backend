@@ -18,32 +18,39 @@ class UserResponseController extends AbstractController
     //ToDo 
     #[Route('/user-response/question/{questionId}', name: 'get_response_by_question_id', methods: ['GET'])]
     public function getResponseByQuestionId(
-        $questionId, 
+        $questionId,
         JWTTokenManagerInterface $tokenManager,
-        UserResponseRepository $userResponseRepository
-    ): JsonResponse 
+        UserResponseRepository $userResponseRepository,
+        QuestionRepository $questionRepository
+    ): JsonResponse
     {
         // Récupérer l'utilisateur authentifié via JWT
         $user = $this->getUser();
-    
+
         if (!$user) {
             return $this->json(['error' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
-    
-        // Rechercher la réponse de l'utilisateur pour cette question (par questionId et idUser)
+
+        // Rechercher la question
+        $question = $questionRepository->find($questionId);
+        if (!$question) {
+            return $this->json(['error' => 'Question not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Rechercher la réponse de l'utilisateur pour cette question (par relations User et Question)
         $userResponse = $userResponseRepository->findOneBy([
-            'idUser' => $user->getId(),   // Utiliser idUser pour la recherche
-            'questionId' => $questionId
+            'user' => $user,        // Rechercher par l'entité User
+            'question' => $question // Rechercher par l'entité Question
         ]);
-    
+
         if (!$userResponse) {
             return $this->json(['error' => 'Response not found for this question'], Response::HTTP_NOT_FOUND);
         }
-    
+
         // Retourner la réponse si elle existe
         return $this->json($userResponse, Response::HTTP_OK);
     }
-    
+
 
     #[Route('/user-response/new/{id}', name: 'new_user_question')]
     public function duplicate($id, JWTTokenManagerInterface $tokenManager, UserResponseRepository $userResponseRepository, TemplateQuestionRepository $TQRepository): JsonResponse
