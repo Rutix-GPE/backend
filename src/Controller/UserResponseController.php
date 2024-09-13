@@ -52,45 +52,63 @@ class UserResponseController extends AbstractController
     }
 
 
-    #[Route('/user-response/new/{id}', name: 'new_user_question')]
-    public function duplicate($id, JWTTokenManagerInterface $tokenManager, UserResponseRepository $userResponseRepository, TemplateQuestionRepository $TQRepository): JsonResponse
-    {
+    #[Route('/user-response/new/{id}', name: 'new_user_question', methods: ['POST'])]
+    public function newUserQuestion(
+        $id,
+        Request $request,
+        JWTTokenManagerInterface $tokenManager,
+        UserResponseRepository $userResponseRepository,
+        TemplateQuestionRepository $TQRepository
+    ): JsonResponse {
         $user = $this->getUser();
 
-        if(!$user){
-            $response = ["error" => "User incorect"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
+        if (!$user) {
+            return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
         }
 
         $question = $TQRepository->find($id);
-
-        if(!$question){
-            $response = ["error" => "Question not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
+        if (!$question) {
+            return $this->json(['error' => 'Question not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $duplicate = $userResponseRepository->findBy(["User" => $user, "Question" => $question]);
+        // Vérification des doublons
+        $duplicate = $userResponseRepository->findBy([
+            'user' => $user,
+            'question' => $question
+        ]);
 
-        if($duplicate){
-            $response = ["error" => "Duplicate"];
-            return $this->json($response, Response::HTTP_UNAUTHORIZED);
+        if ($duplicate) {
+            return $this->json(['error' => 'Duplicate'], Response::HTTP_CONFLICT);
         }
 
-        try{
-            $response = new UserResponse;
+        try {
+            // Récupérer le champ 'response' envoyé dans la requête
+            $requestData = $request->toArray(); // On suppose que les données sont envoyées en JSON
+            $userResponseContent = $requestData['response'] ?? null;
 
-            $response->duplicate($question);
-            $response->setUser($user);
-            $response->setQuestion($question);
+            if (!$userResponseContent) {
+                return $this->json(['error' => 'Response content is missing'], Response::HTTP_BAD_REQUEST);
+            }
 
-            $userResponseRepository->add($response, true);
+            // Créer une nouvelle réponse utilisateur
+            $userResponse = new UserResponse();
 
-            return $this->json($response);
+            // Appel à la méthode duplicate avant de définir le reste
+            $userResponse->duplicate($question);
+
+            // Assigner l'utilisateur, la question et la réponse
+            $userResponse->setUser($user);
+            $userResponse->setQuestion($question);
+            $userResponse->setResponse($userResponseContent); // Stocker le champ 'response'
+
+            // Sauvegarder la réponse
+            $userResponseRepository->add($userResponse, true);
+
+            return $this->json($userResponse, Response::HTTP_CREATED);
 
         } catch (\Exception $error) {
-            $response = ["error" => $error->getMessage()];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }    
+            return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     #[Route('/user-response/new/page/{id}', name: 'new_user_question_page')]
