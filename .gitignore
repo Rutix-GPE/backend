@@ -24,7 +24,7 @@
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
-/composer.lock
+/.composer.lock
 /.idea/.gitignore
 /.idea/back-rutix.iml
 /.idea/codeception.xml
