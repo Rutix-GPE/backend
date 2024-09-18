@@ -38,17 +38,17 @@ class UserResponse
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    public ?User $User = null;
+    public ?User $user = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    public ?TemplateQuestion $Question = null;
+    public ?TemplateQuestion $question = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    public ?\DateTimeInterface $CreationDate = null;
+    public ?\DateTimeInterface $creationDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    public   ?\DateTimeInterface $UpdatedDate = null;
+    public   ?\DateTimeInterface $updatedDate = null;
 
     public function duplicate(TemplateQuestion $question): static
     {
@@ -140,48 +140,48 @@ class UserResponse
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
     public function setUser(?User $User): static
     {
-        $this->User = $User;
+        $this->user = $User;
 
         return $this;
     }
 
     public function getQuestion(): ?TemplateQuestion
     {
-        return $this->Question;
+        return $this->question;
     }
 
     public function setQuestion(?TemplateQuestion $Question): static
     {
-        $this->Question = $Question;
+        $this->question = $Question;
 
         return $this;
     }
 
     public function getCreationDate(): ?\DateTimeInterface
     {
-        return $this->CreationDate;
+        return $this->creationDate;
     }
 
-    public function setCreationDate(?\DateTimeInterface $CreationDate): static
+    public function setCreationDate(?\DateTimeInterface $creationDate): static
     {
-        $this->CreationDate = $CreationDate;
+        $this->creationDate = $creationDate;
 
         return $this;
     }
 
     public function getUpdatedDate(): ?\DateTimeInterface
     {
-        return $this->UpdatedDate;
+        return $this->updatedDate;
     }
 
-    public function setUpdatedDate(?\DateTimeInterface $UpdatedDate): static
+    public function setUpdatedDate(?\DateTimeInterface $updatedDate): static
     {
-        $this->UpdatedDate = $UpdatedDate;
+        $this->updatedDate = $updatedDate;
 
         return $this;
     }
@@ -190,8 +190,8 @@ class UserResponse
     #[ORM\PrePersist]
     public function prePersist()
     {
-        $this->CreationDate = new \DateTime();
-        $this->UpdatedDate = new \DateTime();
+        $this->creationDate = new \DateTime();
+        $this->updatedDate = new \DateTime();
         
         return $this;
     }
@@ -199,7 +199,7 @@ class UserResponse
     #[ORM\PreUpdate]
     public function preUpdate()
     {
-        $this->UpdatedDate = new \DateTime();
+        $this->updatedDate = new \DateTime();
 
         return $this;
     }

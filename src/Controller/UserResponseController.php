@@ -125,7 +125,7 @@ class UserResponseController extends AbstractController
         $question = $TQRepository->findBy(['page' => $id]);
 
         if(!$question){
-            $response = ["error" => "Question not found"];
+            $response = ["error" => "Question not found"." /id: ".$id];
             return $this->json($response, Response::HTTP_NOT_FOUND);
         }
 
