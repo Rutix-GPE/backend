@@ -15,41 +15,34 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 class UserResponseController extends AbstractController
 {
 
-    //ToDo 
-    #[Route('/user-response/question/{questionId}', name: 'get_response_by_question_id', methods: ['GET'])]
-    public function getResponseByQuestionId(
-        $questionId,
-        JWTTokenManagerInterface $tokenManager,
-        UserResponseRepository $userResponseRepository,
-        TemplateQuestionRepository $questionRepository
-    ): JsonResponse
-    {
-        // Récupérer l'utilisateur authentifié via JWT
-        $user = $this->getUser();
+    #[Route('/response/user/{userId}/question/{questionId}', name: 'get_user_response', methods: ['GET'])]
+public function getUserResponse(
+    int $userId,
+    int $questionId,
+    UserResponseRepository $userResponseRepository
+): JsonResponse {
+    // Récupérer la réponse pour l'utilisateur et la question spécifiés
+    $response = $userResponseRepository->findUserResponseByUserAndQuestion($userId, $questionId);
 
-        if (!$user) {
-            return $this->json(['error' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
-        }
-
-        // Rechercher la question
-        $question = $questionRepository->find($questionId);
-        if (!$question) {
-            return $this->json(['error' => 'Question not found'], Response::HTTP_NOT_FOUND);
-        }
-
-        // Rechercher la réponse de l'utilisateur pour cette question (par relations User et Question)
-        $userResponse = $userResponseRepository->findOneBy([
-            'user' => $user,        // Rechercher par l'entité User
-            'question' => $question // Rechercher par l'entité Question
-        ]);
-
-        if (!$userResponse) {
-            return $this->json(['error' => 'Response not found for this question'], Response::HTTP_NOT_FOUND);
-        }
-
-        // Retourner la réponse si elle existe
-        return $this->json($userResponse, Response::HTTP_OK);
+    // Vérifier si la réponse existe
+    if (!$response) {
+        return $this->json(['message' => 'No response found for this user and question'], Response::HTTP_NOT_FOUND);
     }
+
+    // Retourner la réponse en JSON
+    return $this->json([
+        'id' => $response->getId(),
+        'name' => $response->getName(),
+        'content' => $response->getContent(),
+        'type' => $response->getType(),
+        'choice' => $response->getChoice(),
+        'response' => $response->getResponse(),
+        'page' => $response->getPage(),
+        'CreationDate' => $response->getCreationDate()?->format('Y-m-d H:i:s'),
+        'UpdatedDate' => $response->getUpdatedDate()?->format('Y-m-d H:i:s'),
+    ], Response::HTTP_OK);
+}
+
 
 
     #[Route('/user-response/new/{id}', name: 'new_user_question', methods: ['POST'])]
