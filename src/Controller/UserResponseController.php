@@ -15,6 +15,39 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 class UserResponseController extends AbstractController
 {
 
+
+    #[Route('/response/user/{userId}', name: 'get_user_responses', methods: ['GET'])]
+public function getUserResponses(
+    int $userId,
+    UserResponseRepository $userResponseRepository
+): JsonResponse {
+    // Récupérer toutes les réponses pour l'utilisateur spécifié
+    $responses = $userResponseRepository->findBy(['user' => $userId]);
+
+    // Vérifier si des réponses existent
+    if (!$responses) {
+        return $this->json(['message' => 'No responses found for this user'], Response::HTTP_NOT_FOUND);
+    }
+
+    // Créer un tableau pour formater les réponses
+    $responseData = [];
+
+    foreach ($responses as $response) {
+        $responseData[] = [
+            'id' => $response->getId(),
+            'questionId' => $response->getQuestion()->getId(),
+            'questionName' => $response->getQuestion()->getName(),
+            'response' => $response->getResponse(),
+            'CreationDate' => $response->getCreationDate()?->format('Y-m-d H:i:s'),
+            'UpdatedDate' => $response->getUpdatedDate()?->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    // Retourner les réponses en JSON
+    return $this->json($responseData, Response::HTTP_OK);
+}
+
+
     #[Route('/response/user/{userId}/question/{questionId}', name: 'get_user_response', methods: ['GET'])]
 public function getUserResponse(
     int $userId,
