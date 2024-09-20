@@ -33,7 +33,17 @@ class UserResponseRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
+    public function findUserResponseByUserAndQuestion(int $userId, int $questionId): ?UserResponse
+    {
+        return $this->createQueryBuilder('ur')
+            ->andWhere('ur.user = :userId')
+            ->andWhere('ur.question = :questionId')
+            ->setParameter('userId', $userId)
+            ->setParameter('questionId', $questionId)
+            ->getQuery()
+            ->getOneOrNullResult(); // Renvoie null si aucune réponse n'est trouvée
+    }
+    
 //    /**
 //     * @return UserResponse[] Returns an array of UserResponse objects
 //     */
