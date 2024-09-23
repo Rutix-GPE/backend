@@ -24,7 +24,7 @@
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
-/.composer.lock
+.composer.lock
 /.idea/.gitignore
 /.idea/back-rutix.iml
 /.idea/codeception.xml
@@ -34,6 +34,7 @@
 /.idea/phpunit.xml
 /.idea/symfony2.xml
 /.idea/vcs.xml
-.idea
+.idea/*
 /config/packages/web_profiler.yaml
 /config/routes/web_profiler.yaml
+/composer.lock
