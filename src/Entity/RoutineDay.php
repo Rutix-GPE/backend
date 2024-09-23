@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RoutineDayRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RoutineDayRepository::class)]
@@ -17,8 +18,8 @@ class RoutineDay
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $dayOfWeek = null;
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $dayOfWeek = null;
 
     /**
      * @var Collection<int, Routine>

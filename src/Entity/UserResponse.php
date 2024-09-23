@@ -50,6 +50,9 @@ class UserResponse
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     public   ?\DateTimeInterface $UpdatedDate = null;
 
+    #[ORM\OneToOne(mappedBy: 'UserResponse', cascade: ['persist', 'remove'])]
+    private ?UserRoutine $userRoutine = null;
+
     public function duplicate(TemplateQuestion $question): static
     {
         $this->name = $question->getName();
@@ -200,6 +203,23 @@ class UserResponse
     public function preUpdate()
     {
         $this->UpdatedDate = new \DateTime();
+
+        return $this;
+    }
+
+    public function getUserRoutine(): ?UserRoutine
+    {
+        return $this->userRoutine;
+    }
+
+    public function setUserRoutine(UserRoutine $userRoutine): static
+    {
+        // set the owning side of the relation if necessary
+        if ($userRoutine->getUserResponse() !== $this) {
+            $userRoutine->setUserResponse($this);
+        }
+
+        $this->userRoutine = $userRoutine;
 
         return $this;
     }

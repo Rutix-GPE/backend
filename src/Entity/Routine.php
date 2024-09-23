@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RoutineRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -40,6 +42,17 @@ class Routine
 
     #[ORM\ManyToOne(inversedBy: 'routine')]
     private ?RoutineDay $routineDay = null;
+
+    /**
+     * @var Collection<int, UserRoutine>
+     */
+    #[ORM\OneToMany(targetEntity: UserRoutine::class, mappedBy: 'Routine', orphanRemoval: true)]
+    private Collection $userRoutines;
+
+    public function __construct()
+    {
+        $this->userRoutines = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -138,6 +151,36 @@ class Routine
     public function setRoutineDay(?RoutineDay $routineDay): static
     {
         $this->routineDay = $routineDay;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserRoutine>
+     */
+    public function getUserRoutines(): Collection
+    {
+        return $this->userRoutines;
+    }
+
+    public function addUserRoutine(UserRoutine $userRoutine): static
+    {
+        if (!$this->userRoutines->contains($userRoutine)) {
+            $this->userRoutines->add($userRoutine);
+            $userRoutine->setRoutine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserRoutine(UserRoutine $userRoutine): static
+    {
+        if ($this->userRoutines->removeElement($userRoutine)) {
+            // set the owning side to null (unless already changed)
+            if ($userRoutine->getRoutine() === $this) {
+                $userRoutine->setRoutine(null);
+            }
+        }
 
         return $this;
     }
