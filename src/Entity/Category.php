@@ -41,10 +41,20 @@ class Category
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'category')]
     private Collection $tasks;
 
+    /**
+     * @var Collection<int, ConditionRoutine>
+     */
+    #[ORM\OneToMany(targetEntity: ConditionRoutine::class, mappedBy: 'category')]
+    private Collection $conditionRoutines;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $hexColor = null;
+
     public function __construct()
     {
         $this->routines = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->conditionRoutines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -132,6 +142,48 @@ class Category
                 $task->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ConditionRoutine>
+     */
+    public function getConditionRoutines(): Collection
+    {
+        return $this->conditionRoutines;
+    }
+
+    public function addConditionRoutine(ConditionRoutine $conditionRoutine): static
+    {
+        if (!$this->conditionRoutines->contains($conditionRoutine)) {
+            $this->conditionRoutines->add($conditionRoutine);
+            $conditionRoutine->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConditionRoutine(ConditionRoutine $conditionRoutine): static
+    {
+        if ($this->conditionRoutines->removeElement($conditionRoutine)) {
+            // set the owning side to null (unless already changed)
+            if ($conditionRoutine->getCategory() === $this) {
+                $conditionRoutine->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getHexColor(): ?string
+    {
+        return $this->hexColor;
+    }
+
+    public function setHexColor(?string $hexColor): static
+    {
+        $this->hexColor = $hexColor;
 
         return $this;
     }

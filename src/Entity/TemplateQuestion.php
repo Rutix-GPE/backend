@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TemplateQuestionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TemplateQuestionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ApiResource]
 class TemplateQuestion
 {
 
@@ -36,6 +40,17 @@ class TemplateQuestion
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     public ?\DateTimeInterface $UpdatedDate = null;
+
+    /**
+     * @var Collection<int, ConditionRoutine>
+     */
+    #[ORM\OneToMany(targetEntity: ConditionRoutine::class, mappedBy: 'Question')]
+    private Collection $conditionRoutines;
+
+    public function __construct()
+    {
+        $this->conditionRoutines = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -151,6 +166,36 @@ class TemplateQuestion
     public function preUpdate()
     {
         $this->UpdatedDate = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ConditionRoutine>
+     */
+    public function getConditionRoutines(): Collection
+    {
+        return $this->conditionRoutines;
+    }
+
+    public function addConditionRoutine(ConditionRoutine $conditionRoutine): static
+    {
+        if (!$this->conditionRoutines->contains($conditionRoutine)) {
+            $this->conditionRoutines->add($conditionRoutine);
+            $conditionRoutine->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConditionRoutine(ConditionRoutine $conditionRoutine): static
+    {
+        if ($this->conditionRoutines->removeElement($conditionRoutine)) {
+            // set the owning side to null (unless already changed)
+            if ($conditionRoutine->getQuestion() === $this) {
+                $conditionRoutine->setQuestion(null);
+            }
+        }
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RoutineRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: RoutineRepository::class)]
+#[ApiResource]
 class Routine
 {
     #[ORM\Id]
@@ -25,10 +27,7 @@ class Routine
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $routineTime = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $status = null;
+    private ?\DateTimeInterface $taskTime = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
@@ -40,19 +39,11 @@ class Routine
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'routine')]
-    private ?RoutineDay $routineDay = null;
+    #[ORM\Column]
+    private array $days = [];
 
-    /**
-     * @var Collection<int, UserRoutine>
-     */
-    #[ORM\OneToMany(targetEntity: UserRoutine::class, mappedBy: 'Routine', orphanRemoval: true)]
-    private Collection $userRoutines;
-
-    public function __construct()
-    {
-        $this->userRoutines = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'routines')]
+    private ?User $User = null;
 
     public function getId(): ?int
     {
@@ -83,26 +74,14 @@ class Routine
         return $this;
     }
 
-    public function getRoutineTime(): ?\DateTimeInterface
+    public function getTaskTime(): ?\DateTimeInterface
     {
-        return $this->routineTime;
+        return $this->taskTime;
     }
 
-    public function setRoutineTime(\DateTimeInterface $routineTime): static
+    public function setTaskTime(\DateTimeInterface $taskTime): static
     {
-        $this->routineTime = $routineTime;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
+        $this->taskTime = $taskTime;
 
         return $this;
     }
@@ -143,44 +122,26 @@ class Routine
         return $this;
     }
 
-    public function getRoutineDay(): ?RoutineDay
+    public function getDays(): array
     {
-        return $this->routineDay;
+        return $this->days;
     }
 
-    public function setRoutineDay(?RoutineDay $routineDay): static
+    public function setDays(array $days): static
     {
-        $this->routineDay = $routineDay;
+        $this->days = $days;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserRoutine>
-     */
-    public function getUserRoutines(): Collection
+    public function getUser(): ?User
     {
-        return $this->userRoutines;
+        return $this->User;
     }
 
-    public function addUserRoutine(UserRoutine $userRoutine): static
+    public function setUser(?User $User): static
     {
-        if (!$this->userRoutines->contains($userRoutine)) {
-            $this->userRoutines->add($userRoutine);
-            $userRoutine->setRoutine($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserRoutine(UserRoutine $userRoutine): static
-    {
-        if ($this->userRoutines->removeElement($userRoutine)) {
-            // set the owning side to null (unless already changed)
-            if ($userRoutine->getRoutine() === $this) {
-                $userRoutine->setRoutine(null);
-            }
-        }
+        $this->User = $User;
 
         return $this;
     }
