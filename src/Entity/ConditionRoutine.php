@@ -7,6 +7,7 @@ use App\Repository\CategoryRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\ConditionRoutineRepository;
 use App\Repository\RoutineRepository;
+use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -171,15 +172,13 @@ class ConditionRoutine
         return $this;
     }
 
-    public function createRoutine($question, $response, ConditionRoutineRepository $conditionRepository, RoutineRepository $routineRepository, CategoryRepository $categoryRepository)
+    public function createRoutine($question, $response, ConditionRoutineRepository $conditionRepository, RoutineRepository $routineRepository, User $user, TaskRepository $taskRepository)
     {
         $condition = $conditionRepository->findOneBy(['Question' => $question, 'responseCondition' => $response]);
 
         if($condition) {
 
-            $category = $categoryRepository->findOneBy(['name' => "Personnel"]);
-
-            $routine = new Routine($condition, $category);
+            $routine = new Routine($condition, $user, $taskRepository);
 
             $routineRepository->add($routine, true);
         }

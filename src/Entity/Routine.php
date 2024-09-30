@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RoutineRepository;
+use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -37,7 +38,7 @@ class Routine
     private ?\DateTimeInterface $updatedDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'routines')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Category $category = null;
 
     #[ORM\Column]
@@ -47,15 +48,18 @@ class Routine
     private ?User $User = null;
 
 
-    public function __construct(ConditionRoutine $condition, $category)
+    private $taskRepository;
+
+    public function __construct(ConditionRoutine $condition, $user, TaskRepository $taskRepository)
     {
         $this->setName($condition->getName());
         $this->setDescription($condition->getDescription());
         $this->setTaskTime($condition->getTaskTime());
-        $this->setDays($condition->getDays());
-        
-        
-        $this->setCategory($category);
+        $this->setDays($condition->getDays());        
+        $this->setUser($user);
+
+        $task = new Task;
+        $task->createList($this, $taskRepository);
     }
 
     public function getId(): ?int

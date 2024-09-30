@@ -4,10 +4,12 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TaskRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Task
 {
@@ -38,7 +40,7 @@ class Task
     private ?\DateTimeInterface $updatedDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
@@ -155,5 +157,53 @@ class Task
         $this->User = $User;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->creationDate = new \DateTime();
+        $this->updatedDate = new \DateTime();
+        
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->updatedDate = new \DateTime();
+
+        return $this;
+    }
+
+    public function createList(Routine $routine, TaskRepository $taskRepository)
+    {
+        $today = new DateTime();
+
+        $nextWeek = new DateTime('+1 week');
+
+        while ($today <= $nextWeek) {
+            // $dateArray[] = $today->format('Y-m-d'); 
+            $this->createOne($routine, $today->format('Y-m-d'), $taskRepository);
+
+            $today->modify('+1 day'); 
+        }
+    }
+
+    public function createOne(Routine $routine, $date, TaskRepository $taskRepository)
+    {
+        $task = new Task;
+
+        $task->setName($routine->getName());
+        $task->setDescription($routine->getDescription());
+        $task->setTaskTime($routine->getTaskTime());
+        if (is_string($date)) {
+            $date = DateTime::createFromFormat('Y-m-d', $date); // Adapter le format à ton besoin (par exemple 'Y-m-d')
+        }
+        $task->setTaskDate($date);
+        $task->setStatus("Not finish");
+        $task->setUser($routine->getUser());
+
+        $taskRepository->add($task, true);
     }
 }

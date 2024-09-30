@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use App\Repository\ConditionRoutineRepository;
 use App\Repository\RoutineRepository;
+use App\Repository\TaskRepository;
 
 class UserResponseController extends AbstractController
 {
@@ -91,7 +92,7 @@ public function getUserResponse(
         TemplateQuestionRepository $TQRepository,
         ConditionRoutineRepository $conditionRepository,
         RoutineRepository $routineRepository,
-        CategoryRepository $categoryRepository
+        TaskRepository $taskRepository
     ): JsonResponse {
         $user = $this->getUser();
 
@@ -139,7 +140,7 @@ public function getUserResponse(
 
             $condition = new ConditionRoutine;
 
-            $condition->createRoutine($question, $userResponseContent, $conditionRepository, $routineRepository, $categoryRepository);
+            $condition->createRoutine($question, $userResponseContent, $conditionRepository, $routineRepository, $user, $taskRepository);
 
             return $this->json($userResponse, Response::HTTP_CREATED);
 
