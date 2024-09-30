@@ -50,11 +50,23 @@ class ConditionRoutineController extends AbstractController
 
             $conditionRepository->add($condition, true);
 
-            return $this->json($condition, Response::HTTP_CREATED);
+            // return $this->json($condition, Response::HTTP_CREATED);
+
+            return $this->json($condition, Response::HTTP_CREATED, [], [
+                'groups' => 'condition_routine:read'
+            ]);
 
         } catch (\Exception $error) {
             $response = ["error" => $error->getMessage()];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    #[Route('/condition-routine/question_response', name:'question_response', methods: ['GET'])]
+    public function getQuestionResponse(Request $request, ConditionRoutineRepository $conditionRepository): JsonResponse
+    {
+        $res = $conditionRepository->findOneBy(['Question' => 34, 'responseCondition' => 'YES']);
+
+        return $this->json($res, Response::HTTP_BAD_REQUEST);
     }
 }

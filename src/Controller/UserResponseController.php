@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\ConditionRoutine;
 use App\Entity\UserResponse;
+use App\Repository\CategoryRepository;
 use App\Repository\UserResponseRepository;
 use App\Repository\TemplateQuestionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use App\Repository\ConditionRoutineRepository;
+use App\Repository\RoutineRepository;
 
 class UserResponseController extends AbstractController
 {
@@ -84,7 +88,10 @@ public function getUserResponse(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
         UserResponseRepository $userResponseRepository,
-        TemplateQuestionRepository $TQRepository
+        TemplateQuestionRepository $TQRepository,
+        ConditionRoutineRepository $conditionRepository,
+        RoutineRepository $routineRepository,
+        CategoryRepository $categoryRepository
     ): JsonResponse {
         $user = $this->getUser();
 
@@ -129,6 +136,10 @@ public function getUserResponse(
 
             // Sauvegarder la réponse
             $userResponseRepository->add($userResponse, true);
+
+            $condition = new ConditionRoutine;
+
+            $condition->createRoutine($question, $userResponseContent, $conditionRepository, $routineRepository, $categoryRepository);
 
             return $this->json($userResponse, Response::HTTP_CREATED);
 

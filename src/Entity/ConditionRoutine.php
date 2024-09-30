@@ -3,47 +3,59 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Repository\CategoryRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\ConditionRoutineRepository;
+use App\Repository\RoutineRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ConditionRoutineRepository::class)]
+#[ApiResource]
 class ConditionRoutine
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
     private ?\DateTimeInterface $taskTime = null;
 
     #[ORM\ManyToOne(inversedBy: 'conditionRoutines')]
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
     private ?Category $category = null;
 
     #[ORM\Column(type: Types::JSON)]
-    private array $days = [1,2,3,4,5];
-
-
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
+    private array $days = [1, 2, 3, 4, 5];
 
     #[ORM\Column(length: 255)]
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
     private ?string $responseCondition = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
     private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
     private ?\DateTimeInterface $updatedDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'conditionRoutines')]
+    #[Groups(['condition_routine:read', 'condition_routine:write'])]
     private ?TemplateQuestion $Question = null;
 
     public function getId(): ?int
@@ -157,5 +169,19 @@ class ConditionRoutine
         $this->Question = $Question;
 
         return $this;
+    }
+
+    public function createRoutine($question, $response, ConditionRoutineRepository $conditionRepository, RoutineRepository $routineRepository, CategoryRepository $categoryRepository)
+    {
+        $condition = $conditionRepository->findOneBy(['Question' => $question, 'responseCondition' => $response]);
+
+        if($condition) {
+
+            $category = $categoryRepository->findOneBy(['name' => "Personnel"]);
+
+            $routine = new Routine($condition, $category);
+
+            $routineRepository->add($routine, true);
+        }
     }
 }

@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: RoutineRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Routine
 {
@@ -44,6 +45,18 @@ class Routine
 
     #[ORM\ManyToOne(inversedBy: 'routines')]
     private ?User $User = null;
+
+
+    public function __construct(ConditionRoutine $condition, $category)
+    {
+        $this->setName($condition->getName());
+        $this->setDescription($condition->getDescription());
+        $this->setTaskTime($condition->getTaskTime());
+        $this->setDays($condition->getDays());
+        
+        
+        $this->setCategory($category);
+    }
 
     public function getId(): ?int
     {
@@ -142,6 +155,23 @@ class Routine
     public function setUser(?User $User): static
     {
         $this->User = $User;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->creationDate = new \DateTime();
+        $this->updatedDate = new \DateTime();
+        
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->updatedDate = new \DateTime();
 
         return $this;
     }
