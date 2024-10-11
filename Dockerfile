@@ -1,9 +1,12 @@
 # Utiliser l'image officielle PHP avec Apache
 FROM php:8.3-apache
+# persistent / runtime deps
+# hadolint ignore=DL3008
 
-
+ENV COMPOSER_ALLOW_SUPERUSER=1
 # Installer les extensions PHP nécessaires
 RUN docker-php-ext-install mysqli pdo pdo_mysql
+
 
 # Installer les extensions nécessaires pour Symfony
 RUN apt-get update && apt-get install -y libicu-dev git unzip && \
@@ -29,7 +32,13 @@ WORKDIR /var/www/html
 # Copier le code source de l'application dans le conteneur
 COPY . /var/www/html/
 
+# Copier le script d'entrée
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
+# Rendre le script exécutable
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Définir le point d'entrée
 
 # Donner les permissions et installer les dépendances
 RUN chown -R www-data:www-data /var/www/html && \
@@ -40,4 +49,5 @@ RUN chown -R www-data:www-data /var/www/html && \
 EXPOSE 80
 
 # Attendre que MySQL soit prêt avant d'exécuter les commandes Symfony
-CMD ["wait-for-it.sh", "db:3306", "--", "apache2-foreground"]
+CMD ["/usr/local/bin/wait-for-it.sh","db:3306" ,"--", "entrypoint.sh","--","apache2-foreground"]
+
