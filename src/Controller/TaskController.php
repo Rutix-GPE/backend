@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\TaskRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -36,6 +37,37 @@ class TaskController extends AbstractController
         try {
 
             $tasks = $taskRepository->findBy(['User' => $user->id]);
+
+            return $this->json($tasks, Response::HTTP_OK);
+
+            // return $this->json($userResponse, Response::HTTP_CREATED);
+
+        } catch (\Exception $error) {
+            return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/task/get-by-user-and-time/{time}', name: 'task_by_user_and_time', methods: ['GET'])]
+    public function getTasksByUserAndTime(
+        Request $request,
+        JWTTokenManagerInterface $tokenManager,
+        TaskRepository $taskRepository,
+        $time
+    ): JsonResponse {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $time = new DateTime($time);
+        // $result = $date->format('Y-m-d H:i:s');
+
+        // return $this->json($time);
+
+        try {
+
+            $tasks = $taskRepository->findBy(['User' => $user->id, 'taskDate' => $time]);
 
             return $this->json($tasks, Response::HTTP_OK);
 
