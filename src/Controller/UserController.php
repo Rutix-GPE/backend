@@ -170,7 +170,7 @@ class UserController extends AbstractController
         return $this->json($user, Response::HTTP_OK);
     }
     #[Route('/user/update-memo', name: 'update_memo', methods: ['PUT'])]
-    public function updateMemo(Request $request, UserRepository $userRepository, JWTTokenManagerInterface $tokenManager,): JsonResponse
+    public function updateMemo(Request $request, UserRepository $userRepository, JWTTokenManagerInterface $tokenManager): JsonResponse
     {
         $user = $this->getUser();
         if (!$user) {
