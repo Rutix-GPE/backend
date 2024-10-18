@@ -68,6 +68,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     public ?\DateTimeInterface $UpdatedDate = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    public ?string $Memo = null;
+
     /**
      * @var Collection<int, Task>
      */
@@ -280,6 +283,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getMemo(): ?string
+    {
+        return $this->Memo;
+    }
+
+    public function setMemo(string $Memo): static
+    {
+        $this->Memo = $Memo;
+
+        return $this;
+    }
 
     #[ORM\PrePersist]
     public function prePersist()
@@ -297,6 +311,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    
 
     /**
      * @return Collection<int, Task>

@@ -168,4 +168,25 @@ class UserController extends AbstractController
 
         return $this->json($user, Response::HTTP_OK);
     }
+    #[Route('/user/Update/memo/add', name: 'add_memo', methods: ['PUT'])]
+    public function AddMemo(Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['msg' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
+        }
+        $data = $request->getContent();
+        try{
+            if(isset($data['Memo'])){
+                $user->setMemo($data['Memo']);
+            }
+            $userRepository->add($user, true);
+            return $this->json($user, Response::HTTP_OK);
+        } catch (\Exception $error) {
+            $response = ["error" => $error->getMessage()];
+            return $this->json($response, Response::HTTP_BAD_REQUEST);
+        }
+    }  
+    
+
 }
