@@ -183,8 +183,12 @@ class Task
         $nextWeek = new DateTime('+1 week');
 
         while ($today <= $nextWeek) {
-            // $dateArray[] = $today->format('Y-m-d'); 
-            $this->createOne($routine, $today->format('Y-m-d'), $taskRepository);
+            $todayF = $today->format('N');
+
+            if( in_array($todayF, $routine->getDays()) ) {
+
+                $this->createOne($routine, $today->format('Y-m-d'), $taskRepository);
+            } 
 
             $today->modify('+1 day'); 
         }

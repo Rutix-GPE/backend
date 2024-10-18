@@ -61,9 +61,6 @@ class TaskController extends AbstractController
         }
 
         $time = new DateTime($time);
-        // $result = $date->format('Y-m-d H:i:s');
-
-        // return $this->json($time);
 
         try {
 
