@@ -7,30 +7,40 @@ use App\Repository\TaskRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['task:read']],
+    denormalizationContext: ['groups' => ['task:write']]
+)]
 class Task
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['task:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['task:read', 'task:write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['task:read', 'task:write'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['task:read', 'task:write'])]
     private ?\DateTimeInterface $taskDate = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups(['task:read', 'task:write'])]
     private ?\DateTimeInterface $taskTime = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['task:read', 'task:write'])]
     private ?string $status = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -44,6 +54,7 @@ class Task
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[Groups(['task:read', 'task:write'])]
     private ?User $User = null;
 
     public function getId(): ?int
@@ -183,8 +194,12 @@ class Task
         $nextWeek = new DateTime('+1 week');
 
         while ($today <= $nextWeek) {
-            // $dateArray[] = $today->format('Y-m-d'); 
-            $this->createOne($routine, $today->format('Y-m-d'), $taskRepository);
+            $todayF = $today->format('N');
+
+            if( in_array($todayF, $routine->getDays()) ) {
+
+                $this->createOne($routine, $today->format('Y-m-d'), $taskRepository);
+            } 
 
             $today->modify('+1 day'); 
         }

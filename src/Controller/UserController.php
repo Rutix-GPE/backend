@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -168,4 +169,29 @@ class UserController extends AbstractController
 
         return $this->json($user, Response::HTTP_OK);
     }
+    #[Route('/user/update-memo', name: 'update_memo', methods: ['PUT'])]
+    public function updateMemo(Request $request, UserRepository $userRepository, JWTTokenManagerInterface $tokenManager): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['msg' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
+        }
+
+
+        $data = $request->getContent();
+        $data = json_decode($data, true);  
+
+        try{
+            $user->setMemo($data['memo']);
+
+            $userRepository->add($user, true);
+
+            return $this->json($user, Response::HTTP_OK);
+        } catch (\Exception $error) {
+            $response = ["error" => $error->getMessage()];
+            return $this->json($response, Response::HTTP_BAD_REQUEST);
+        }
+    }  
+    
+
 }
