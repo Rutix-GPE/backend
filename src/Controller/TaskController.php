@@ -46,8 +46,8 @@ class TaskController extends AbstractController
             $task->setDescription($data['description']);
 
 
-            $date = new DateTime($data['date']);
-            $time = new DateTime($data['time']);
+            $date = new DateTime($data['taskDate']);
+            $time = new DateTime($data['taskTime']);
             $task->setTaskDate($date);
             $task->setTaskTime($time);
 
