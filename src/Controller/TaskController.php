@@ -75,7 +75,7 @@ class TaskController extends AbstractController
 
     }
 
-    #[Route('/task/update/{task}', name: 'update_task', methods: ['PUT'])]
+    #[Route('/task/update/{task}', name: 'update_task', methods: ['PATCH'])]
     public function updateTask(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
@@ -118,6 +118,17 @@ class TaskController extends AbstractController
                 return $this->json($task, Response::HTTP_NOT_FOUND);
             }
 
+            if(isset($data['name'])){
+
+                $task->setName($data['name']);
+            }
+
+            if(isset($data['taskTime'])){
+                $time = new DateTime($data['taskTime']);
+                $task->setTaskTime($time);
+            }
+
+            $taskRepository->add($task, true);
 
             return $this->json($task, Response::HTTP_OK);
 
