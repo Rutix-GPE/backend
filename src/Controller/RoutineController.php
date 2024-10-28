@@ -38,8 +38,6 @@ class RoutineController extends AbstractController
 
             return $this->json($tasks, Response::HTTP_OK);
 
-            // return $this->json($userResponse, Response::HTTP_CREATED);
-
         } catch (\Exception $error) {
             return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
         }
