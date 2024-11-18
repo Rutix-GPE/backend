@@ -20,18 +20,28 @@ class TemplateQuestionController extends AbstractController
         $data = $request->getContent();
         $data = json_decode($data, true);
         
+        // return $this->json('');
+
         if(!isset($data['name']) || 
         !isset($data['content']) ||
         !isset($data['type'])) {
             $response = ["error" => "Missing informations"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
+
+        
         
         if(!in_array($data["type"], [TemplateQuestion::LABEL_TEXT, TemplateQuestion::LABEL_MULTIPLE_CHOICE])) {
             $response = ["error" => "Choose beetwen type 'text' or 'multiple_choice'"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
+
+        
+
+        // echo "here";
+        
         // return $this->json("", 200);
+
 
         try{
             $question = new TemplateQuestion;
@@ -39,11 +49,15 @@ class TemplateQuestionController extends AbstractController
             $question->setName($data["name"]);
             $question->setContent($data["content"]);            
             $question->setType($data["type"]);
-            $question->setChoice($data["choice"]);
+
+            if(isset($data['choice'])){
+                $question->setChoice($data["choice"]);
+            }
 
             if(isset($data['page'])){
                 $question->setPage($data['page']);
             }
+
 
             $TQRepository->add($question, true);
 
