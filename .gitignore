@@ -38,3 +38,5 @@
 /config/packages/web_profiler.yaml
 /config/routes/web_profiler.yaml
 /composer.lock
+
+/docker_command_errors.log
