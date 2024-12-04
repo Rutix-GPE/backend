@@ -1,6 +1,6 @@
 # pour utilisé docker les commandes à executer
 
-Installer docker ( vaut mieux suivre les commandes sur le site officel)
+Installer docker ( vaut mieux suivre les commandes sur le sites officel)
  # sous windows
  https://docs.docker.com/desktop/setup/install/windows-install/
  # sous linux / debian 
