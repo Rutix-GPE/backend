@@ -35,15 +35,13 @@ class AuthenticationController extends AbstractController
             $duplicateMsg = "";
 
             // username
-            $username = $userRepository->findOneBy(['username' => $data['username']]);
-            
+            $username = $userRepository->findOneBy(['username' => $data['username']]);            
             if($username){
                 $duplicateMsg .= " username ";
             }
 
             // email
             $email = $userRepository->findOneBy(['email' => $data['email']]);
-
             if($email){
                 $duplicateMsg .= " email ";
             }
@@ -51,7 +49,6 @@ class AuthenticationController extends AbstractController
             // phoneNumber
             if(isset($data['phonenumber'])){
                 $phonenumber = $userRepository->findOneBy(['phonenumber' => $data['phonenumber']]);
-
                 if($phonenumber){
                     $duplicateMsg .= " phonenumber ";
                 }
@@ -62,7 +59,6 @@ class AuthenticationController extends AbstractController
                 return $this->json($duplicateMsg, Response::HTTP_CONFLICT);
             }
 
-            // return $this->json("", Response::HTTP_OK);
         try {
             $user = new User;
 
