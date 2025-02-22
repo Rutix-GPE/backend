@@ -178,7 +178,7 @@ class ConditionRoutine
 
         if($condition) {
 
-            $routine = new Routine($condition, $user, $taskRepository);
+            $routine = new Routine($condition, $user);
 
             $routineRepository->add($routine, true);
         }
