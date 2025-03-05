@@ -57,6 +57,7 @@ class Routine
         $this->setTaskTime($condition->getTaskTime());
         $this->setDays($condition->getDays());        
         $this->setUser($user);
+        // add condition id 
 
         $task = new Task;
         $task->createList($this, $taskRepository);
