@@ -9,14 +9,14 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
-class TaskFactory 
+class TaskService 
 {
-    private EntityManagerInterface $entityManager;
+    private TaskRepository $taskRepository;
 
     
-    public function __construct(EntityManagerInterface $entityManager) 
+    public function __construct(TaskRepository $taskRepository) 
     {
-        $this->entityManager = $entityManager;
+        $this->taskRepository = $taskRepository;
     }
 
     public function createList(Routine $routine)
@@ -52,7 +52,9 @@ class TaskFactory
         $task->setUser($routine->getUser());
 
 
-        $this->entityManager->persist($task);
-        $this->entityManager->flush();
+        // $this->entityManager->persist($task);
+        // $this->entityManager->flush();
+
+        $this->taskRepository->add($task, true);
     }
 } 

@@ -16,6 +16,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use App\Repository\ConditionRoutineRepository;
 use App\Repository\RoutineRepository;
 use App\Repository\TaskRepository;
+use App\Service\ConditionService;
 
 class UserResponseController extends AbstractController
 {
@@ -90,9 +91,7 @@ public function getUserResponse(
         JWTTokenManagerInterface $tokenManager,
         UserResponseRepository $userResponseRepository,
         TemplateQuestionRepository $TQRepository,
-        ConditionRoutineRepository $conditionRepository,
-        RoutineRepository $routineRepository,
-        TaskRepository $taskRepository
+        ConditionService $conditionService
     ): JsonResponse {
         $user = $this->getUser();
 
@@ -138,9 +137,8 @@ public function getUserResponse(
             // Sauvegarder la réponse
             $userResponseRepository->add($userResponse, true);
 
-            $condition = new ConditionRoutine;
-
-            $condition->createRoutine($question, $userResponseContent, $conditionRepository, $routineRepository, $user, $taskRepository);
+            // Utilisation de ConditionService pour la création de la routine
+            $conditionService->createRoutineByCondition($question, $userResponseContent, $user);
 
             return $this->json($userResponse, Response::HTTP_CREATED);
 

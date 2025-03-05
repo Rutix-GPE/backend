@@ -172,15 +172,15 @@ class ConditionRoutine
         return $this;
     }
 
-    public function createRoutine($question, $response, ConditionRoutineRepository $conditionRepository, RoutineRepository $routineRepository, User $user, TaskRepository $taskRepository)
-    {
-        $condition = $conditionRepository->findOneBy(['Question' => $question, 'responseCondition' => $response]);
+    // public function createRoutine($question, $response, ConditionRoutineRepository $conditionRepository, RoutineRepository $routineRepository, User $user, TaskRepository $taskRepository)
+    // {
+    //     $condition = $conditionRepository->findOneBy(['Question' => $question, 'responseCondition' => $response]);
 
-        if($condition) {
+    //     if($condition) {
 
-            $routine = new Routine($condition, $user);
+    //         $routine = new Routine($condition, $user, $taskRepository);
 
-            $routineRepository->add($routine, true);
-        }
-    }
+    //         $routineRepository->add($routine, true);
+    //     }
+    // }
 }
