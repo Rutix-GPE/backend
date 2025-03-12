@@ -21,69 +21,63 @@ use App\Service\ConditionService;
 class UserResponseController extends AbstractController
 {
 
-
     #[Route('/response/user/{userId}', name: 'get_user_responses', methods: ['GET'])]
-public function getUserResponses(
-    int $userId,
-    UserResponseRepository $userResponseRepository
-): JsonResponse {
-    // Récupérer toutes les réponses pour l'utilisateur spécifié
-    $responses = $userResponseRepository->findBy(['user' => $userId]);
+    public function getUserResponses($userId, UserResponseRepository $userResponseRepository): JsonResponse 
+    {
+        // Récupérer toutes les réponses pour l'utilisateur spécifié
+        $responses = $userResponseRepository->findBy(['user' => $userId]);
 
-    // Vérifier si des réponses existent
-    if (!$responses) {
-        return $this->json(['message' => 'No responses found for this user'], Response::HTTP_NOT_FOUND);
+        // Vérifier si des réponses existent
+        if (!$responses) {
+            return $this->json(['message' => 'No responses found for this user'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Créer un tableau pour formater les réponses
+        $responseData = [];
+
+        foreach ($responses as $response) {
+            $responseData[] = [
+                'id' => $response->getId(),
+                'questionId' => $response->getQuestion()->getId(),
+                'questionName' => $response->getQuestion()->getName(),
+                'response' => $response->getResponse(),
+                'CreationDate' => $response->getCreationDate()?->format('Y-m-d H:i:s'),
+                'UpdatedDate' => $response->getUpdatedDate()?->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        // Retourner les réponses en JSON
+        return $this->json($responseData, Response::HTTP_OK);
     }
-
-    // Créer un tableau pour formater les réponses
-    $responseData = [];
-
-    foreach ($responses as $response) {
-        $responseData[] = [
-            'id' => $response->getId(),
-            'questionId' => $response->getQuestion()->getId(),
-            'questionName' => $response->getQuestion()->getName(),
-            'response' => $response->getResponse(),
-            'CreationDate' => $response->getCreationDate()?->format('Y-m-d H:i:s'),
-            'UpdatedDate' => $response->getUpdatedDate()?->format('Y-m-d H:i:s'),
-        ];
-    }
-
-    // Retourner les réponses en JSON
-    return $this->json($responseData, Response::HTTP_OK);
-}
 
 
     #[Route('/response/user/{userId}/question/{questionId}', name: 'get_user_response', methods: ['GET'])]
-public function getUserResponse(
-    int $userId,
-    int $questionId,
-    UserResponseRepository $userResponseRepository
-): JsonResponse {
-    // Récupérer la réponse pour l'utilisateur et la question spécifiés
-    $response = $userResponseRepository->findUserResponseByUserAndQuestion($userId, $questionId);
+    public function getUserResponse($userId, $questionId, UserResponseRepository $userResponseRepository): JsonResponse 
+    {
+        // Récupérer la réponse pour l'utilisateur et la question spécifiés
+        $response = $userResponseRepository->findUserResponseByUserAndQuestion($userId, $questionId);
 
-    // Vérifier si la réponse existe
-    if (!$response) {
-        return $this->json(['message' => 'No response found for this user and question'], Response::HTTP_NOT_FOUND);
+        // Vérifier si la réponse existe
+        if (!$response) {
+            return $this->json(['message' => 'No response found for this user and question'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Retourner la réponse en JSON
+        return $this->json([
+            'id' => $response->getId(),
+            'name' => $response->getName(),
+            'content' => $response->getContent(),
+            'type' => $response->getType(),
+            'choice' => $response->getChoice(),
+            'response' => $response->getResponse(),
+            'page' => $response->getPage(),
+            'CreationDate' => $response->getCreationDate()?->format('Y-m-d H:i:s'),
+            'UpdatedDate' => $response->getUpdatedDate()?->format('Y-m-d H:i:s'),
+        ], Response::HTTP_OK);
     }
 
-    // Retourner la réponse en JSON
-    return $this->json([
-        'id' => $response->getId(),
-        'name' => $response->getName(),
-        'content' => $response->getContent(),
-        'type' => $response->getType(),
-        'choice' => $response->getChoice(),
-        'response' => $response->getResponse(),
-        'page' => $response->getPage(),
-        'CreationDate' => $response->getCreationDate()?->format('Y-m-d H:i:s'),
-        'UpdatedDate' => $response->getUpdatedDate()?->format('Y-m-d H:i:s'),
-    ], Response::HTTP_OK);
-}
 
-
-
+    // USED
     #[Route('/user-response/new/{id}', name: 'new_user_question', methods: ['POST'])]
     public function newUserQuestion(
         $id,

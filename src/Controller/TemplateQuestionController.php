@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\TemplateQuestion;
 use App\Repository\TemplateQuestionRepository;
+use App\Service\TemplateQuestionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,7 @@ class TemplateQuestionController extends AbstractController
 {
 
     #[Route('/template-question/new', name:'new_template_question', methods: ['POST'])]
-    public function new(Request $request, TemplateQuestionRepository $TQRepository): JsonResponse
+    public function new(Request $request, TemplateQuestionService $templateQuestionService/*TemplateQuestionRepository $TQRepository*/): JsonResponse
     {
         
         $data = $request->getContent();
@@ -34,18 +35,19 @@ class TemplateQuestionController extends AbstractController
         // return $this->json("", 200);
 
         try{
-            $question = new TemplateQuestion;
+            $question = $templateQuestionService->controllerNew($data);
+            // $question = new TemplateQuestion;
 
-            $question->setName($data["name"]);
-            $question->setContent($data["content"]);            
-            $question->setType($data["type"]);
-            $question->setChoice($data["choice"]);
+            // $question->setName($data["name"]);
+            // $question->setContent($data["content"]);            
+            // $question->setType($data["type"]);
+            // $question->setChoice($data["choice"]);
 
-            if(isset($data['page'])){
-                $question->setPage($data['page']);
-            }
+            // if(isset($data['page'])){
+            //     $question->setPage($data['page']);
+            // }
 
-            $TQRepository->add($question, true);
+            // $TQRepository->add($question, true);
 
             return $this->json($question, Response::HTTP_CREATED);
 
@@ -55,10 +57,12 @@ class TemplateQuestionController extends AbstractController
         }
     }
 
+    // USED
     #[Route('/template-question/show/{id}', name:'show_template_question', methods: ['GET'])]
-    public function show($id, TemplateQuestionRepository $TQRepository): JsonResponse
+    public function show($id, TemplateQuestionService $templateQuestionService/*TemplateQuestionRepository $TQRepository*/): JsonResponse
     {
-        $question = $TQRepository->find($id);
+        $question = $templateQuestionService->controllerShow($id);
+        // $question = $TQRepository->find($id);
 
         if(!$question){
             $response = ["msg" => "Not found"];
@@ -68,10 +72,13 @@ class TemplateQuestionController extends AbstractController
         return $this->json($question, Response::HTTP_OK);
     }
 
+    // USED
     #[Route('/template-question/list', name: 'list_template_question', methods: ['GET'])]
-    public function listQT(TemplateQuestionRepository $TQRepository): JsonResponse
+    public function listQT(TemplateQuestionService $templateQuestionService/*TemplateQuestionRepository $TQRepository*/): JsonResponse
     {
-        $questions = $TQRepository->findAll();
+        $questions = $templateQuestionService->controllerList();
+
+        // $questions = $TQRepository->findAll();
 
         if (!$questions) {
             $response = ["msg" => "Zero questions"];
@@ -82,9 +89,10 @@ class TemplateQuestionController extends AbstractController
     }
 
     #[Route('/template-question/list/page/{id}', name:'list_template_question_by_page', methods: ['GET'])]
-    public function byPageQT($id, TemplateQuestionRepository $TQRepository): JsonResponse
+    public function byPageQT($id, TemplateQuestionService $templateQuestionService/*TemplateQuestionRepository $TQRepository*/): JsonResponse
     {
-        $question = $TQRepository->findBy(['page' => $id]);
+        $question = $templateQuestionService->controllerByPageQT($id);
+        // $question = $TQRepository->findBy(['page' => $id]);
 
         if(!$question){
             $response = ["msg" => "Zero questions"];
@@ -131,26 +139,26 @@ class TemplateQuestionController extends AbstractController
     //     }
     // }
 
-    #[Route('/template-question/delete/{id}', name: 'delete_template-question', methods: ['DELETE'])]
-    public function delete($id, Request $request, TemplateQuestionRepository $TQRepository): JsonResponse
-    {
-        $question = $TQRepository->find($id);
+    // #[Route('/template-question/delete/{id}', name: 'delete_template-question', methods: ['DELETE'])]
+    // public function delete($id, Request $request, TemplateQuestionRepository $TQRepository): JsonResponse
+    // {
+    //     $question = $TQRepository->find($id);
 
-        if(!$question){
-            $response = ["msg" => "Not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
+    //     if(!$question){
+    //         $response = ["msg" => "Not found"];
+    //         return $this->json($response, Response::HTTP_NOT_FOUND);
+    //     }
 
-        $TQRepository->remove($question, true);
+    //     $TQRepository->remove($question, true);
 
-        $question = $TQRepository->find($id);
+    //     $question = $TQRepository->find($id);
 
-        if($question){
-            $response = ["success" => false];
-            return $this->json($response, Response::HTTP_INTERNAL_SERVER_ERROR);
-        } else {
-            $response = ["success" => true];
-            return $this->json($response, Response::HTTP_OK);
-        }
-    }
+    //     if($question){
+    //         $response = ["success" => false];
+    //         return $this->json($response, Response::HTTP_INTERNAL_SERVER_ERROR);
+    //     } else {
+    //         $response = ["success" => true];
+    //         return $this->json($response, Response::HTTP_OK);
+    //     }
+    // }
 }
