@@ -7,6 +7,7 @@ use App\Entity\UserResponse;
 use App\Repository\ConditionRoutineRepository;
 use App\Repository\UserResponseRepository;
 use App\Repository\TemplateQuestionRepository;
+use App\Service\ConditionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +16,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ConditionRoutineController extends AbstractController
 {
+    // NOT USED => to update
     #[Route('/condition-routine/new', name:'new_condition_routine', methods: ['POST'])]
-    public function new(Request $request, ConditionRoutineRepository $conditionRepository, TemplateQuestionRepository $TQRepository): JsonResponse
+    public function new(Request $request, ConditionService $conditionService/*, ConditionRoutineRepository $conditionRepository, TemplateQuestionRepository $TQRepository*/): JsonResponse
     {
         
         $data = $request->getContent();
@@ -34,23 +36,25 @@ class ConditionRoutineController extends AbstractController
         // return $this->json("", 200);
 
         try{
-            $condition = new ConditionRoutine;
+            $condition = $conditionService->controllerCreateCondition($data);
 
-            $condition->setName($data["name"]);
-            $condition->setDescription($data["description"]); 
+            // $condition = new ConditionRoutine;
+
+            // $condition->setName($data["name"]);
+            // $condition->setDescription($data["description"]); 
             
-            $dateTime = \DateTime::createFromFormat('H:i:s', $data["time"]);
-            $condition->setTaskTime($dateTime);
+            // $dateTime = \DateTime::createFromFormat('H:i:s', $data["time"]);
+            // $condition->setTaskTime($dateTime);
 
-            $question = $TQRepository->find($data["question"]);
-            $condition->setQuestion($question);
-            $condition->setResponseCondition($data["response"]);
+            // $question = $TQRepository->find($data["question"]);
+            // $condition->setQuestion($question);
+            // $condition->setResponseCondition($data["response"]);
 
-            // return $this->json($condition, Response::HTTP_NOT_FOUND);
+            // // return $this->json($condition, Response::HTTP_NOT_FOUND);
 
-            $conditionRepository->add($condition, true);
+            // $conditionRepository->add($condition, true);
 
-            // return $this->json($condition, Response::HTTP_CREATED);
+            // // return $this->json($condition, Response::HTTP_CREATED);
 
             return $this->json($condition, Response::HTTP_CREATED, [], [
                 'groups' => 'condition_routine:read'
@@ -62,6 +66,7 @@ class ConditionRoutineController extends AbstractController
         }
     }
 
+    // NOT USED 
     #[Route('/condition-routine/question_response', name:'question_response', methods: ['GET'])]
     public function getQuestionResponse(Request $request, ConditionRoutineRepository $conditionRepository): JsonResponse
     {
