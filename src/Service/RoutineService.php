@@ -41,18 +41,9 @@ class RoutineService
     }
 
 
-    // public function __construct(ConditionRoutine $condition, $user, TaskRepository $taskRepository)
-    // {
-    //     $this->setName($condition->getName());
-    //     $this->setDescription($condition->getDescription());
-    //     $this->setTaskTime($condition->getTaskTime());
-    //     $this->setDays($condition->getDays());        
-    //     $this->setUser($user);
-
-    //     $task = new Task;
-    //     // $taskFactory = new TaskFactory;
-
-    //     $task->createList($this, $taskRepository);
-    // }
+    public function controllerGetRoutineByUser($userId)
+    {
+        return $this->routineRepository->findBy(['User' => $userId]);
+    }
 
 }

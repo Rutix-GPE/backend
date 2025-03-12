@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Repository\TaskRepository;
+use App\Service\TaskService;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,8 @@ class TaskController extends AbstractController
     public function createTask(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
-        TaskRepository $taskRepository
+        // TaskRepository $taskRepository
+        TaskService $taskService
     ): JsonResponse { 
         $user = $this->getUser();
 
@@ -39,22 +41,23 @@ class TaskController extends AbstractController
         $data = json_decode($data, true);
 
         try {
+            $task = $taskService->controllerCreateTask($data, $user);
 
-            $task = new Task;
+            // $task = new Task;
 
-            $task->setName($data['name']);
-            $task->setDescription($data['description']);
+            // $task->setName($data['name']);
+            // $task->setDescription($data['description']);
 
 
-            $date = new DateTime($data['date']);
-            $time = new DateTime($data['time']);
-            $task->setTaskDate($date);
-            $task->setTaskTime($time);
+            // $date = new DateTime($data['date']);
+            // $time = new DateTime($data['time']);
+            // $task->setTaskDate($date);
+            // $task->setTaskTime($time);
 
-            $task->setUser($user);
-            $task->setStatus("Not finish");
+            // $task->setUser($user);
+            // $task->setStatus("Not finish");
 
-            $taskRepository->add($task, true);
+            // $taskRepository->add($task, true);
 
             return $this->json($task, Response::HTTP_CREATED);
 
@@ -68,7 +71,8 @@ class TaskController extends AbstractController
     public function updateTask(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
-        TaskRepository $taskRepository,
+        // TaskRepository $taskRepository,
+        TaskService $taskService,
         $task
     ): JsonResponse { 
         $user = $this->getUser();
@@ -81,29 +85,36 @@ class TaskController extends AbstractController
         $data = json_decode($data, true);
 
         try {
+            $task = $taskService->controllerUpdateTask($task, $data);
 
-            $task = $taskRepository->find($task);
+            // $task = $taskRepository->find($task);
+
+            // if(!$task) {
+            //     return $this->json($task, Response::HTTP_NOT_FOUND);
+            // }
+
+            // if(isset($data['name'])){
+
+            //     $task->setName($data['name']);
+            // }
+
+            // if(isset($data['time'])){
+            //     $time = new DateTime($data['time']);
+            //     $task->setTaskTime($time);
+            // }
+
+            // $taskRepository->add($task, true);
+
 
             if(!$task) {
                 return $this->json($task, Response::HTTP_NOT_FOUND);
             }
 
-            if(isset($data['name'])){
-
-                $task->setName($data['name']);
-            }
-
-            if(isset($data['time'])){
-                $time = new DateTime($data['time']);
-                $task->setTaskTime($time);
-            }
-
-            $taskRepository->add($task, true);
 
             return $this->json($task, Response::HTTP_OK);
 
         } catch (\Exception $error) {
-            return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => $error->getMessage() . " à la ligne " . $error->getLine() . " dans " . $error->getFile()], Response::HTTP_BAD_REQUEST);
         }
 
     }
@@ -112,7 +123,8 @@ class TaskController extends AbstractController
     public function getTasksByUser(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
-        TaskRepository $taskRepository
+        // TaskRepository $taskRepository
+        TaskService $taskService
     ): JsonResponse {
         $user = $this->getUser();
 
@@ -121,8 +133,9 @@ class TaskController extends AbstractController
         }
 
         try {
+            $tasks = $taskService->controllerGetTasksByUser($user->id);
 
-            $tasks = $taskRepository->findBy(['User' => $user->id]);
+            // $tasks = $taskRepository->findBy(['User' => $user->id]);
 
             return $this->json($tasks, Response::HTTP_OK);
 
@@ -137,7 +150,8 @@ class TaskController extends AbstractController
     public function getTasksByUserAndTime(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
-        TaskRepository $taskRepository,
+        // TaskRepository $taskRepository,
+        TaskService $taskService,
         $time
     ): JsonResponse {
         $user = $this->getUser();
@@ -149,8 +163,8 @@ class TaskController extends AbstractController
         $time = new DateTime($time);
 
         try {
-
-            $tasks = $taskRepository->findBy(['User' => $user->id, 'taskDate' => $time]);
+            $tasks = $taskService->controllerGetTasksByUserAndTime($user, $time);
+            // $tasks = $taskRepository->findBy(['User' => $user->id, 'taskDate' => $time]);
 
             return $this->json($tasks, Response::HTTP_OK);
 

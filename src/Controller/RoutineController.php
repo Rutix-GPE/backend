@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\RoutineRepository;
+use App\Service\RoutineService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RoutineController extends AbstractController
 {
+    // NOT USED
     #[Route('/routine', name: 'app_routine')]
     public function index(): Response
     {
@@ -20,11 +22,13 @@ class RoutineController extends AbstractController
         ]);
     }
 
+    // USED
     #[Route('/routine/get-by-user', name: 'routine_by_user', methods: ['GET'])]
-    public function getTasksByUser(
+    public function getRoutinesByUser(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
-        RoutineRepository $routineRepository
+        // RoutineRepository $routineRepository,
+        RoutineService $routineService
     ): JsonResponse {
         $user = $this->getUser();
 
@@ -33,8 +37,9 @@ class RoutineController extends AbstractController
         }
 
         try {
+            $tasks = $routineService->controllerGetRoutineByUser($user->id);
 
-            $tasks = $routineRepository->findBy(['User' => $user->id]);
+            // $tasks = $routineRepository->findBy(['User' => $user->id]);
 
             return $this->json($tasks, Response::HTTP_OK);
 
