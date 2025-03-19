@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ConditionRoutineController extends AbstractController
 {
-    // NOT USED => to update
+    // NOT USED => to update with form
     #[Route('/condition-routine/new', name:'new_condition_routine', methods: ['POST'])]
     public function new(Request $request, ConditionService $conditionService/*, ConditionRoutineRepository $conditionRepository, TemplateQuestionRepository $TQRepository*/): JsonResponse
     {
@@ -66,7 +66,7 @@ class ConditionRoutineController extends AbstractController
         }
     }
 
-    // NOT USED 
+    // NOT USED => to update with service
     #[Route('/condition-routine/question_response', name:'question_response', methods: ['GET'])]
     public function getQuestionResponse(Request $request, ConditionRoutineRepository $conditionRepository): JsonResponse
     {

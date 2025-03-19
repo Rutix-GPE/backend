@@ -21,7 +21,8 @@ use App\Service\ConditionService;
 class UserResponseController extends AbstractController
 {
 
-    #[Route('/response/user/{userId}', name: 'get_user_responses', methods: ['GET'])]
+    // USED 
+    #[Route('/user-response/user/{userId}', name: 'get_user_responses', methods: ['GET'])]
     public function getUserResponses($userId, UserResponseRepository $userResponseRepository): JsonResponse 
     {
         // Récupérer toutes les réponses pour l'utilisateur spécifié
@@ -50,8 +51,8 @@ class UserResponseController extends AbstractController
         return $this->json($responseData, Response::HTTP_OK);
     }
 
-
-    #[Route('/response/user/{userId}/question/{questionId}', name: 'get_user_response', methods: ['GET'])]
+    // USED
+    #[Route('/user-response/user/{userId}/question/{questionId}', name: 'get_user_response', methods: ['GET'])]
     public function getUserResponse($userId, $questionId, UserResponseRepository $userResponseRepository): JsonResponse 
     {
         // Récupérer la réponse pour l'utilisateur et la question spécifiés
@@ -141,6 +142,7 @@ class UserResponseController extends AbstractController
         }
     }
 
+    // NOT USED
     #[Route('/user-response/new/page/{id}', name: 'new_user_question_page')]
     public function duplicateByPage($id, JWTTokenManagerInterface $tokenManager, UserResponseRepository $userResponseRepository, TemplateQuestionRepository $TQRepository)
     {
@@ -194,6 +196,7 @@ class UserResponseController extends AbstractController
         return $this->json($arrayResponse);
     }
 
+    // NOT USED
     #[Route('/user-response/response/{id}', name: 'response_question')]
     public function response($id, Request $request, JWTTokenManagerInterface $tokenManager, UserResponseRepository $userResponseRepository)
     {

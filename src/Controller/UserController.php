@@ -14,6 +14,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
+    // USED => update with service
     #[Route('/user/show/{id}', name: 'show_user', methods: ['GET'])]
     public function showUser($id, UserRepository $userRepository): JsonResponse
     {
@@ -27,6 +28,7 @@ class UserController extends AbstractController
         return $this->json($user, Response::HTTP_OK);
     }
 
+    // NOT USED => update with service
     #[Route('/user/list', name: 'list_user', methods: ['GET'])]
     public function listUser(UserRepository $userRepository): JsonResponse
     {
@@ -40,6 +42,7 @@ class UserController extends AbstractController
         return $this->json($users, Response::HTTP_OK);
     }
 
+    // NOT USED => updayte with service
     #[Route('/user/update/{id}', name: 'update_user', methods: ['PUT'])]
     public function updateUser($id, Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
@@ -99,6 +102,7 @@ class UserController extends AbstractController
         }
     }
 
+    // NOT USED => update with role 
     #[Route('/user/update-role/{id}', name: 'update_role_user', methods: ['PUT'])]
     public function updateRole($id, Request $request, UserRepository $userRepository): JsonResponse
     {
@@ -135,6 +139,7 @@ class UserController extends AbstractController
         return $this->json($user);
     }
 
+    // NOT USED => update with service
     #[Route('/user/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
     public function delete($id, Request $request, UserRepository $userRepository): JsonResponse
     {
@@ -158,6 +163,7 @@ class UserController extends AbstractController
         }
     }
 
+    // USED => update with service
     #[Route('/user/me', name: 'user_me', methods: ['GET'])]
     public function me(): JsonResponse
     {
@@ -169,6 +175,8 @@ class UserController extends AbstractController
 
         return $this->json($user, Response::HTTP_OK);
     }
+
+    // NOT USED => update with 
     #[Route('/user/update-memo', name: 'update_memo', methods: ['PUT'])]
     public function updateMemo(Request $request, UserRepository $userRepository, JWTTokenManagerInterface $tokenManager): JsonResponse
     {

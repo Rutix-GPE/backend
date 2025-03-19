@@ -16,14 +16,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TaskController extends AbstractController
 {
-    #[Route('/task', name: 'app_task')]
-    public function index(): Response
-    {
-        return $this->render('task/index.html.twig', [
-            'controller_name' => 'TaskController',
-        ]);
-    }
 
+    // #[Route('/task', name: 'app_task')]
+    // public function index(): Response
+    // {
+    //     return $this->render('task/index.html.twig', [
+    //         'controller_name' => 'TaskController',
+    //     ]);
+    // }
+
+    // USED
     #[Route('/task/create', name: 'create_task', methods: ['POST'])]
     public function createTask(
         Request $request,
@@ -67,6 +69,7 @@ class TaskController extends AbstractController
 
     }
 
+    // USED
     #[Route('/task/update/{task}', name: 'update_task', methods: ['PUT'])]
     public function updateTask(
         Request $request,
@@ -119,6 +122,7 @@ class TaskController extends AbstractController
 
     }
 
+    // USED
     #[Route('/task/get-by-user', name: 'task_by_user', methods: ['GET'])]
     public function getTasksByUser(
         Request $request,
@@ -146,6 +150,7 @@ class TaskController extends AbstractController
         }
     }
 
+    // USED
     #[Route('/task/get-by-user-and-time/{time}', name: 'task_by_user_and_time', methods: ['GET'])]
     public function getTasksByUserAndTime(
         Request $request,

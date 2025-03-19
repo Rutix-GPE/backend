@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AuthenticationController extends AbstractController
 {
+    // USED => to update with service
     #[Route('/user/register', name: 'user_register')]
     public function register(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
@@ -71,7 +72,7 @@ class AuthenticationController extends AbstractController
         }
     }
 
-
+    // USED => to update in service
     #[Route('/user/authenticate', name: 'user_authenticate')]
     public function authenticate(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, JWTTokenManagerInterface $tokenManger): JsonResponse
     {

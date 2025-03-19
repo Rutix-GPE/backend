@@ -14,13 +14,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class RoutineController extends AbstractController
 {
     // NOT USED
-    #[Route('/routine', name: 'app_routine')]
-    public function index(): Response
-    {
-        return $this->render('routine/index.html.twig', [
-            'controller_name' => 'RoutineController',
-        ]);
-    }
+    // #[Route('/routine', name: 'app_routine')]
+    // public function index(): Response
+    // {
+    //     return $this->render('routine/index.html.twig', [
+    //         'controller_name' => 'RoutineController',
+    //     ]);
+    // }
 
     // USED
     #[Route('/routine/get-by-user', name: 'routine_by_user', methods: ['GET'])]
