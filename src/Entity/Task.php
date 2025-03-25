@@ -11,36 +11,33 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource(
-    normalizationContext: ['groups' => ['task:read']],
-    denormalizationContext: ['groups' => ['task:write']]
-)]
+#[ApiResource]
 class Task
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['task:read'])]
+    // #[Groups(['task:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['task:read', 'task:write'])]
+    // #[Groups(['task:read', 'task:write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['task:read', 'task:write'])]
+    // #[Groups(['task:read', 'task:write'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['task:read', 'task:write'])]
+    // #[Groups(['task:read', 'task:write'])]
     private ?\DateTimeInterface $taskDate = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    #[Groups(['task:read', 'task:write'])]
+    // #[Groups(['task:read', 'task:write'])]
     private ?\DateTimeInterface $taskTime = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['task:read', 'task:write'])]
+    // #[Groups(['task:read', 'task:write'])]
     private ?string $status = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -187,38 +184,38 @@ class Task
         return $this;
     }
 
-    public function createList(Routine $routine, TaskRepository $taskRepository)
-    {
-        $today = new DateTime();
+    // public function createList(Routine $routine, TaskRepository $taskRepository)
+    // {
+    //     $today = new DateTime();
 
-        $nextWeek = new DateTime('+1 week');
+    //     $nextWeek = new DateTime('+1 week');
 
-        while ($today <= $nextWeek) {
-            $todayF = $today->format('N');
+    //     while ($today <= $nextWeek) {
+    //         $todayF = $today->format('N');
 
-            if( in_array($todayF, $routine->getDays()) ) {
+    //         if( in_array($todayF, $routine->getDays()) ) {
 
-                $this->createOne($routine, $today->format('Y-m-d'), $taskRepository);
-            } 
+    //             $this->createOne($routine, $today->format('Y-m-d'), $taskRepository);
+    //         } 
 
-            $today->modify('+1 day'); 
-        }
-    }
+    //         $today->modify('+1 day'); 
+    //     }
+    // }
 
-    public function createOne(Routine $routine, $date, TaskRepository $taskRepository)
-    {
-        $task = new Task;
+    // public function createOne(Routine $routine, $date, TaskRepository $taskRepository)
+    // {
+    //     $task = new Task;
 
-        $task->setName($routine->getName());
-        $task->setDescription($routine->getDescription());
-        $task->setTaskTime($routine->getTaskTime());
-        if (is_string($date)) {
-            $date = DateTime::createFromFormat('Y-m-d', $date); // Adapter le format à ton besoin (par exemple 'Y-m-d')
-        }
-        $task->setTaskDate($date);
-        $task->setStatus("Not finish");
-        $task->setUser($routine->getUser());
+    //     $task->setName($routine->getName());
+    //     $task->setDescription($routine->getDescription());
+    //     $task->setTaskTime($routine->getTaskTime());
+    //     if (is_string($date)) {
+    //         $date = DateTime::createFromFormat('Y-m-d', $date); // Adapter le format à ton besoin (par exemple 'Y-m-d')
+    //     }
+    //     $task->setTaskDate($date);
+    //     $task->setStatus("Not finish");
+    //     $task->setUser($routine->getUser());
 
-        $taskRepository->add($task, true);
-    }
+    //     $taskRepository->add($task, true);
+    // }
 }
