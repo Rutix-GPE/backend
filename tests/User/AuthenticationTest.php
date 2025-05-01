@@ -63,7 +63,7 @@ class AuthenticationTest extends WebTestCase
             'password' => 'password123'
         ]));
 
-        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(409, $this->client->getResponse()->getStatusCode());
         $this->assertJson($this->client->getResponse()->getContent());
 
     }

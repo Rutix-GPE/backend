@@ -31,6 +31,29 @@ class AuthenticationController extends AbstractController
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
 
+        $duplicateUsername = $userRepository->findBy([
+            'username' => $data['username']
+        ]);
+        if($duplicateUsername) {
+            return $this->json(['error' => 'Duplicate'], Response::HTTP_CONFLICT);
+        }
+
+        $duplicateEmail = $userRepository->findBy([
+            'email' => $data['email']
+        ]);
+        if($duplicateEmail) {
+            return $this->json(['error' => 'Duplicate'], Response::HTTP_CONFLICT);
+        }
+
+        if(isset($data['phonenumber'])){
+            $duplicatePhoneNumber = $userRepository->findBy([
+                'phonenumber' => $data['phonenumber']
+            ]);
+            if($duplicatePhoneNumber) {
+                return $this->json(['error' => 'Duplicate'], Response::HTTP_CONFLICT);
+            }
+        }
+
         try {
             $user = new User;
 
