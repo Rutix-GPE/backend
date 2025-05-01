@@ -29,7 +29,7 @@ class AuthenticationTest extends WebTestCase
 
     public function testRegister()
     {
-        // test missing informations
+        // test missing password
         $this->client->request('POST', '/user/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'username' => 'testuser',
             'firstname' => 'John',
@@ -79,7 +79,7 @@ class AuthenticationTest extends WebTestCase
         ]));
 
 
-        // test by username
+        // test by username 
         $this->client->request('POST', '/user/authenticate', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'username' => 'testuser',
             'password' => 'password123'

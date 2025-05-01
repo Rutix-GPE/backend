@@ -177,9 +177,9 @@ class UserController extends AbstractController
             return new JsonResponse(['msg' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
 
-
         $data = $request->getContent();
         $data = json_decode($data, true);  
+
 
         try{
             $user->setMemo($data['memo']);
@@ -189,6 +189,7 @@ class UserController extends AbstractController
             return $this->json($user, Response::HTTP_OK);
         } catch (\Exception $error) {
             $response = ["error" => $error->getMessage()];
+
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
     }  
