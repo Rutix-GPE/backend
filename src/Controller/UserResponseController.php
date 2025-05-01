@@ -143,6 +143,7 @@ public function getUserResponse(
             return $this->json($userResponse, Response::HTTP_CREATED);
 
         } catch (\Exception $error) {
+            echo($error->getMessage());
             return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\Repository\ConditionRoutineRepository;
 use App\Repository\TemplateQuestionRepository;
 use App\Repository\UserRepository;
 use App\Service\TestService;
@@ -11,21 +12,36 @@ class TemplateQuestionTest extends WebTestCase
 {
     
     private $templateQuestionRepository;
+    private $conditionRoutineRepository;
+
     private $client;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
         $this->templateQuestionRepository = $this->client->getContainer()->get(TemplateQuestionRepository::class);
+        $this->conditionRoutineRepository = $this->client->getContainer()->get(ConditionRoutineRepository::class);
+
         $this->removeQuestions();
         $this->createQuestions();
     }
 
     private function removeQuestions()
     {
-        $users = $this->templateQuestionRepository->findAll();
-        foreach ($users as $user) {
-            $this->templateQuestionRepository->remove($user, true);
+        // $users = $this->templateQuestionRepository->findAll();
+        // foreach ($users as $user) {
+        //     $this->templateQuestionRepository->remove($user, true);
+        // }
+
+        $conditionRoutines = $this->conditionRoutineRepository->findAll();
+
+        foreach ($conditionRoutines as $condition) {
+            $this->conditionRoutineRepository->remove($condition, true);
+        }
+
+        $questions = $this->templateQuestionRepository->findAll();
+        foreach ($questions as $question) {
+            $this->templateQuestionRepository->remove($question, true);
         }
     }
 

@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\Repository\UserRepository;
+use App\Repository\UserResponseRepository;
 use App\Service\TestService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -10,6 +11,7 @@ class AuthenticationTest extends WebTestCase
 {
 
     private $userRepository;
+    private $userResponseRepository;
     private $client;
 
     protected function setUp(): void
@@ -17,6 +19,17 @@ class AuthenticationTest extends WebTestCase
         $this->client = static::createClient();
         $this->userRepository = $this->client->getContainer()->get(UserRepository::class);
         $this->removeAllUsers();
+        $this->userResponseRepository = $this->client->getContainer()->get(UserResponseRepository::class);
+
+        // $this->removeAllUserResponse();
+    }
+
+    private function removeAllUserResponse()
+    {
+        $userResponse = $this->userResponseRepository->findAll();
+        foreach ($userResponse as $data) {
+            $this->userResponseRepository->remove($data, true);
+        }
     }
 
     private function removeAllUsers()
