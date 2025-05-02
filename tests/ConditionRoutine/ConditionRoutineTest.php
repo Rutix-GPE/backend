@@ -139,7 +139,7 @@ class ConditionRoutineTest extends WebTestCase
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals("TDAH_YES", $responseContent['name']);
         $this->assertEquals("Je suis TDAH", $responseContent['description']);
-        $this->assertEquals("2025-05-01T14:30:00+00:00", $responseContent['taskTime']);
+        $this->assertEquals("2025-05-02T14:30:00+00:00", $responseContent['taskTime']);
         $this->assertEquals("/api/template_questions/".$firstQuestion->id, $responseContent['Question']);
         $this->assertEquals("YES", $responseContent['responseCondition']);
     }

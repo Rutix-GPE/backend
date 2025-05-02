@@ -18,10 +18,11 @@ class AuthenticationTest extends WebTestCase
     {
         $this->client = static::createClient();
         $this->userRepository = $this->client->getContainer()->get(UserRepository::class);
-        $this->removeAllUsers();
         $this->userResponseRepository = $this->client->getContainer()->get(UserResponseRepository::class);
 
-        // $this->removeAllUserResponse();
+        $this->removeAllUserResponse();
+        $this->removeAllUsers();
+
     }
 
     private function removeAllUserResponse()
