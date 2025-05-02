@@ -2,10 +2,12 @@
 
 namespace App\Tests;
 
+use App\Repository\RoutineRepository;
 use App\Repository\TemplateQuestionRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserResponseRepository;
 use App\Service\TestService;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserResponseTest extends WebTestCase
@@ -14,6 +16,7 @@ class UserResponseTest extends WebTestCase
     private $userRepository;
     private $templateQuestionRepository;
     private $userResponseRepository;
+    private $routineRepository;
     private $client;
 
     protected function setUp(): void
@@ -22,7 +25,10 @@ class UserResponseTest extends WebTestCase
         $this->userRepository = $this->client->getContainer()->get(UserRepository::class);
         $this->templateQuestionRepository = $this->client->getContainer()->get(TemplateQuestionRepository::class);
         $this->userResponseRepository = $this->client->getContainer()->get(UserResponseRepository::class);
-        
+
+        $this->routineRepository = $this->client->getContainer()->get(RoutineRepository::class);
+
+
         $this->removeAllUserResponse();
 
         $this->removeAllUsers();
@@ -191,29 +197,58 @@ class UserResponseTest extends WebTestCase
         // ** condition create routine ** //
 
         $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
-            "name" => "Fréquence de l'exercice physique",
-            "content" => "Combien de fois par semaine faites-vous de l'exercice physique ?",
+            "name" => "Type de repas préféré",
+            "content" => "Quel type de repas préférez-vous pour vos routines alimentaires ?",
             "type" => "multiple_choice",
-            "choice" => ["1-2-3","4-5-6","7+"]
+            "choice" => ["Petit-déjeuner léger","Déjeuner équilibré","Diner copieux","Collation saine"]
         ]));
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         
 
 
         $this->client->request('POST', '/condition-routine/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
-            "name" => "TDAH_YES",
-            "description" => "Je suis TDAH",
+            "name" => "Petit-déjeuner léger",
+            "description" => "Je prend un petit-déjeuner léger",
             "time" => "14:30:00",
             "question" => $responseContent['id'],
-            "response" => "YES"
+            "response" => "Petit-déjeuner léger"
+        ]));
+        $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
+        
+        $this->client->request('POST', '/condition-routine/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            "name" => "Déjeuner équilibré",
+            "description" => "Je prend un déjeuner équilibré",
+            "time" => "12:30:00",
+            "question" => $responseContent['id'],
+            "response" => "Déjeuner équilibré"
+        ]));
+        $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
+        
+
+        $this->client->request('POST', '/user-response/new/' . $responseContent['id'], [], [], [
+            'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
+            'CONTENT_TYPE' => 'application/json',
+        ], json_encode([
+            'response' => 'Déjeuner équilibré',
         ]));
         $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
 
 
-        // TODO mettre à jour les template_question et condition_routine pour que des routines tasks soient crées 
-        // TODO enlever removeAllUserResponse() si non utilisé dans les autre files de test
+        // test created routine
+        $routine = $this->routineRepository->findBy([
+            "User" => $firstUser->id,
+            "name" => "Déjeuner équilibré"
+        ]);
 
-        // Tous les tests ne marche pas si ils sont lancé tous en même temps, voir comment faire pour résoudre
+        $date = new \DateTime("1970-01-01, 12:30");
+
+        $this->assertEquals(1, sizeof($routine));
+        $this->assertEquals("Déjeuner équilibré", $routine[0]->getName());
+        $this->assertEquals("Je prend un déjeuner équilibré", $routine[0]->getDescription());
+        $this->assertEquals($date, $routine[0]->getTaskTime());
+        
+        // test created tasks
+        
     }
 
 }

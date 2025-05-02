@@ -43,6 +43,7 @@ class ConditionService
 
     public function controllerCreateCondition($data)
     {
+        // TODO rajouter le setDays
         $condition = new ConditionRoutine;
 
         $condition->setName($data["name"]);
