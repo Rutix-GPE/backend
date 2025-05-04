@@ -56,17 +56,15 @@ class ConditionService
         $condition->setQuestion($question);
         $condition->setResponseCondition($data["response"]);
 
-        // return $this->json($condition, Response::HTTP_NOT_FOUND);
+        if(isset($data['days'])){
+            $condition->setDays($data['days']);
+        }
+
 
         $this->conditionRepository->add($condition, true);
 
-        // return $this->json($condition, Response::HTTP_CREATED);
 
         return $condition;
-
-        // return $this->json($condition, Response::HTTP_CREATED, [], [
-        //     'groups' => 'condition_routine:read'
-        // ]);
     }
 
 }

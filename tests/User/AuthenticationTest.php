@@ -2,6 +2,9 @@
 
 namespace App\Tests;
 
+use App\Repository\ConditionRoutineRepository;
+use App\Repository\RoutineRepository;
+use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserResponseRepository;
 use App\Service\TestService;
@@ -12,6 +15,11 @@ class AuthenticationTest extends WebTestCase
 
     private $userRepository;
     private $userResponseRepository;
+    private $conditionRepository;
+
+    private $routineRepository;
+    private $taskRepository;
+
     private $client;
 
     protected function setUp(): void
@@ -19,10 +27,43 @@ class AuthenticationTest extends WebTestCase
         $this->client = static::createClient();
         $this->userRepository = $this->client->getContainer()->get(UserRepository::class);
         $this->userResponseRepository = $this->client->getContainer()->get(UserResponseRepository::class);
+        $this->conditionRepository = $this->client->getContainer()->get(ConditionRoutineRepository::class);
+
+        $this->routineRepository = $this->client->getContainer()->get(RoutineRepository::class);
+        $this->taskRepository = $this->client->getContainer()->get(TaskRepository::class);
+
+        $this->removeAllRoutines();
+        $this->removeAllTasks();
+
 
         $this->removeAllUserResponse();
         $this->removeAllUsers();
 
+
+        
+    }
+
+    private function removeAllRoutines()
+    {
+        $routines = $this->routineRepository->findAll();
+        foreach ($routines as $routine) {
+            $this->routineRepository->remove($routine, true);
+        }
+    }
+    private function removeAllTasks()
+    {
+        $tasks = $this->taskRepository->findAll();
+        foreach ($tasks as $task) {
+            $this->taskRepository->remove($task, true);
+        }
+    }
+
+    private function removeAllConditions()
+    {
+        $conditions = $this->conditionRepository->findAll();
+        foreach ($conditions as $condition) {
+            $this->conditionRepository->remove($condition, true);
+        }
     }
 
     private function removeAllUserResponse()
