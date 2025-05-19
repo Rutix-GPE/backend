@@ -5,6 +5,10 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\AvatarService;
+use App\Dto\UserResponseDTO;
+use App\Dto\UserInputDTO;
+use App\Service\UserService;
+
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,91 +16,58 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+
+
 
 class UserController extends AbstractController
 {
     #[Route('/user/show/{id}', name: 'show_user', methods: ['GET'])]
-    public function showUser($id, UserRepository $userRepository): JsonResponse
+    public function showUser(int $id, UserService $userService): JsonResponse
     {
-        $user = $userRepository->findOneBy(['id' => $id]);
-
-        if(!$user){
-            $response = ["msg" => "Not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
+        try {
+            $userDTO = $userService->getUserById($id);
+            return $this->json($userDTO, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_NOT_FOUND);
         }
-
-        return $this->json($user, Response::HTTP_OK);
     }
 
     #[Route('/user/list', name: 'list_user', methods: ['GET'])]
-    public function listUser(UserRepository $userRepository): JsonResponse
+    public function listUser(UserService $userService): JsonResponse
     {
-        $users = $userRepository->findAll();
-
-        if(!$users){
-            $response = ["msg" => "Zero users"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
-
-        return $this->json($users, Response::HTTP_OK);
+        $usersDTO = $userService->getAllUsers();
+        return $this->json($usersDTO, Response::HTTP_OK);
     }
-
     #[Route('/user/update/{id}', name: 'update_user', methods: ['PUT'])]
-    public function updateUser($id, Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    public function updateUser(
+        int $id,
+        Request $request, 
+        UserService $userService,
+        ValidatorInterface $validator,
+        SerializerInterface $serializer,
+
+    ): JsonResponse
     {
-        $user = $userRepository->findOneBy(['id' => $id]);
+        try {
+            $inputDto = $serializer->deserialize($request->getContent(), UserInputDTO::class, 'json');
+            $errors = $validator->validate($inputDto);
 
-        if(!$user){
-            $response = ["msg" => "Not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
+            if (count($errors) > 0) {
+                $errorMessages = [];
+                foreach ($errors as $error) {
+                    $errorMessages[$error->getPropertyPath()] = $error->getMessage();
+                }
+    
+                return new JsonResponse(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
+            }
 
-        $data = $request->getContent();
-        $data = json_decode($data, true);        
-        
-        try{
-            if(isset($data['username'])){
-                $user->setUsername($data['username']);
-            }
-            if(isset($data['password'])){
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $data['password']
-                );
-
-                $user->setPassword($hashedPassword);
-            }
-            if(isset($data['firstname'])){
-                $user->setFirstname($data['firstname']);
-            }
-            if(isset($data['lastname'])){
-                $user->setLastname($data['lastname']);
-            }
-            if(isset($data['email'])){
-                $user->setEmail($data['email']);
-            }
-            if(isset($data['phonenumber'])){
-                $user->setPhonenumber($data['phonenumber']);
-            }
-            if(isset($data['country'])){
-                $user->setCountry($data['country']);
-            }
-            if(isset($data['postalcode'])){
-                $user->setPostalcode($data['postalcode']);
-            }
-            if(isset($data['city'])){
-                $user->setCity($data['city']);
-            }
-            if(isset($data['adress'])){
-                $user->setAdress($data['adress']);
-            }
-            
-            $userRepository->add($user, true);
-
-            return $this->json($user, Response::HTTP_OK);
-        } catch (\Exception $error) {
-            $response = ["error" => $error->getMessage()];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
+            $userDTO = $userService->updateUser($id, $inputDto);
+            return $this->json($userDTO, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
