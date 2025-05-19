@@ -6,7 +6,6 @@ use App\Repository\UserRepository;
 use App\Dto\Auth\UserRegisterDTO;
 use App\Dto\Auth\UserLoginDTO;
 use App\Dto\UserResponseDTO;
-use App\Service\RegisterService;
 use App\Service\AuthService;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -26,11 +25,10 @@ class AuthenticationController extends AbstractController
         Request $request,
         SerializerInterface $serializer,
         ValidatorInterface $validator,
-        RegisterService $registerService
+        AuthService $authService
     ): JsonResponse
     {
         try {
-            /** @var ConstraintViolationListInterface $errors */
             $dto = $serializer->deserialize($request->getContent(), UserRegisterDTO::class, 'json');
             $errors = $validator->validate($dto);
 
@@ -45,7 +43,7 @@ class AuthenticationController extends AbstractController
                 return new JsonResponse(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
             }
         
-            $user = $registerService->register($dto);
+            $user = $authService->register($dto);
             $userDto = new UserResponseDTO($user);
     
             return $this->json($userDto, Response::HTTP_CREATED);
