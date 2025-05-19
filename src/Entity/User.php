@@ -310,6 +310,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     #[ORM\PrePersist]
     public function prePersist()
     {
