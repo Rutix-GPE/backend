@@ -14,7 +14,6 @@ class UserService
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $passwordHasher,
-
     ) {}
 
     public function getUserById(int $id): UserResponseDTO
