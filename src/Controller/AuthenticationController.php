@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use App\Dto\Auth\UserRegisterDTO;
 use App\Dto\Auth\UserLoginDTO;
 use App\Dto\UserResponseDTO;
+use App\Service\RegisterService;
 use App\Service\AuthService;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
