@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\AvatarService;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -130,6 +131,22 @@ class UserController extends AbstractController
             $user->setRoles(["ROLE_ADMIN"]);
         }
 
+        $userRepository->add($user, true);
+
+        return $this->json($user);
+    }
+
+    #[Route('/user/update-avatar/{avatar}', name: 'update_avatar', methods: ['PUT'])]
+    public function updateAvatarV1($avatar, Request $request, UserRepository $userRepository, AvatarService $avatarService): JsonResponse
+    {
+        $user = $this->getUser();
+        $projectDir = $this->getParameter('kernel.project_dir');
+
+        if(!$avatarService->checkExistAvatarFile($avatar, $projectDir)){
+            return $this->json("File not found", Response::HTTP_NOT_FOUND);
+        }
+        
+        $user->setAvatarFile($avatar);
         $userRepository->add($user, true);
 
         return $this->json($user);
