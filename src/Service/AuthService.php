@@ -9,8 +9,11 @@ use App\Dto\UserResponseDTO;
 use App\Dto\Auth\UserRegisterDTO;
 use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\DependencyInjection\Attribute\AsService;
 
 
 class AuthService
@@ -18,8 +21,32 @@ class AuthService
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $passwordHasher,
-        private JWTTokenManagerInterface $jwtManager
-    ) {}
+        private JWTTokenManagerInterface $jwtManager,
+
+        private SerializerInterface $serializer,
+        private ValidatorInterface $validator
+    ) {
+        
+    }
+
+    public function controllerRegister($request)
+    {
+        $dto = $this->serializer->deserialize($request->getContent(), UserRegisterDTO::class, 'json');
+        $errors = $this->validator->validate($dto);
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[$error->getPropertyPath()] = $error->getMessage();
+            }
+
+            return new JsonResponse(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    
+        $user = $this->register($dto);
+        $userDto = new UserResponseDTO($user);
+
+        return $userDto;
+    }
 
     public function authenticate(UserLoginDTO $dto): array
     {

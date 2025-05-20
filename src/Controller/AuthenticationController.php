@@ -23,28 +23,32 @@ class AuthenticationController extends AbstractController
     #[Route('/user/register', name: 'user_register', methods: ['POST'])]
     public function register(
         Request $request,
-        SerializerInterface $serializer,
-        ValidatorInterface $validator,
+        // SerializerInterface $serializer,
+        // ValidatorInterface $validator,
         AuthService $authService
     ): JsonResponse
     {
         try {
-            $dto = $serializer->deserialize($request->getContent(), UserRegisterDTO::class, 'json');
-            $errors = $validator->validate($dto);
+            $userDto = $authService->controllerRegister($request);
 
-            $errors = $validator->validate($dto);
 
-            if (count($errors) > 0) {
-                $errorMessages = [];
-                foreach ($errors as $error) {
-                    $errorMessages[$error->getPropertyPath()] = $error->getMessage();
-                }
+
+            // $dto = $serializer->deserialize($request->getContent(), UserRegisterDTO::class, 'json');
+            // $errors = $validator->validate($dto);
+
+            // $errors = $validator->validate($dto);
+
+            // if (count($errors) > 0) {
+            //     $errorMessages = [];
+            //     foreach ($errors as $error) {
+            //         $errorMessages[$error->getPropertyPath()] = $error->getMessage();
+            //     }
     
-                return new JsonResponse(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
-            }
+            //     return new JsonResponse(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
+            // }
         
-            $user = $authService->register($dto);
-            $userDto = new UserResponseDTO($user);
+            // $user = $authService->register($dto);
+            // $userDto = new UserResponseDTO($user);
     
             return $this->json($userDto, Response::HTTP_CREATED);
     
