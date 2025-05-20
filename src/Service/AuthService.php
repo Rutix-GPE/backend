@@ -8,6 +8,7 @@ use App\Dto\Auth\UserLoginDto;
 use App\Dto\UserResponseDTO;
 use App\Dto\Auth\UserRegisterDTO;
 use App\Repository\UserRepository;
+<<<<<<< HEAD
 use Exception;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -16,6 +17,14 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+=======
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\DependencyInjection\Attribute\AsService;
+>>>>>>> 3776082 (modif authService)
 
 
 class AuthService
@@ -24,6 +33,7 @@ class AuthService
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $passwordHasher,
         private JWTTokenManagerInterface $jwtManager,
+<<<<<<< HEAD
         private readonly SerializerInterface $serializer,
         private readonly ValidatorInterface $validator,
         
@@ -33,6 +43,44 @@ class AuthService
         $errors = $this->validator->validate($dto); 
         if (count($errors) > 0) {
             throw new BadRequestHttpException("Données invalides.");
+=======
+
+        private SerializerInterface $serializer,
+        private ValidatorInterface $validator
+    ) {
+        
+    }
+
+    public function controllerRegister($request)
+    {
+        $dto = $this->serializer->deserialize($request->getContent(), UserRegisterDTO::class, 'json');
+        $errors = $this->validator->validate($dto);
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[$error->getPropertyPath()] = $error->getMessage();
+            }
+
+            return new JsonResponse(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    
+        $user = $this->register($dto);
+        $userDto = new UserResponseDTO($user);
+
+        return $userDto;
+    }
+
+    public function authenticate(UserLoginDTO $dto): array
+    {
+        $criteria = $dto->isUsingEmail()
+            ? ['email' => $dto->getIdentifier()]
+            : ['username' => $dto->getIdentifier()];
+
+        $user = $this->userRepository->findOneBy($criteria);
+
+        if (!$user || !$this->passwordHasher->isPasswordValid($user, $dto->password)) {
+            throw new \Exception("Invalid credentials");
+>>>>>>> 3776082 (modif authService)
         }
         $user = $this->register($dto);  
         $userDto = new UserResponseDTO($user);
