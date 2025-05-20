@@ -1,7 +1,7 @@
 <?php
 
 // src/DTO/UserReponseDTO.php
-namespace App\Dto;
+namespace App\Dto\User;
 
 use App\Entity\User;
 
