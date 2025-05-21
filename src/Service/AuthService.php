@@ -5,7 +5,7 @@ namespace App\Service;
 // src/Service/AuthService.php
 use App\Entity\User;
 use App\Dto\Auth\UserLoginDto;
-use App\Dto\UserResponseDTO;
+use App\Dto\User\UserResponseDTO;
 use App\Dto\Auth\UserRegisterDTO;
 use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\DependencyInjection\Attribute\AsService;
 
 
 class AuthService

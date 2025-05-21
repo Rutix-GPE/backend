@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\AvatarService;
 use App\Dto\UserResponseDTO;
 use App\Dto\UserInputDTO;
 use App\Service\UserService;
@@ -106,6 +107,22 @@ class UserController extends AbstractController
         return $this->json($user);
     }
 
+    #[Route('/user/update-avatar/{avatar}', name: 'update_avatar', methods: ['PUT'])]
+    public function updateAvatarV1($avatar, Request $request, UserRepository $userRepository, AvatarService $avatarService): JsonResponse
+    {
+        $user = $this->getUser();
+        $projectDir = $this->getParameter('kernel.project_dir');
+
+        if(!$avatarService->checkExistAvatarFile($avatar, $projectDir)){
+            return $this->json("File not found", Response::HTTP_NOT_FOUND);
+        }
+        
+        $user->setAvatarFile($avatar);
+        $userRepository->add($user, true);
+
+        return $this->json($user);
+    }
+
     #[Route('/user/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
     public function delete($id, Request $request, UserRepository $userRepository): JsonResponse
     {
@@ -148,9 +165,9 @@ class UserController extends AbstractController
             return new JsonResponse(['msg' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
 
-
         $data = $request->getContent();
         $data = json_decode($data, true);  
+
 
         try{
             $user->setMemo($data['memo']);
@@ -160,6 +177,7 @@ class UserController extends AbstractController
             return $this->json($user, Response::HTTP_OK);
         } catch (\Exception $error) {
             $response = ["error" => $error->getMessage()];
+
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
     }  

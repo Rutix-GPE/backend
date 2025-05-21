@@ -62,6 +62,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $adress = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $avatarFile = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     public ?\DateTimeInterface $CreationDate = null;
 
@@ -256,6 +259,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdress(?string $adress): static
     {
         $this->adress = $adress;
+
+        return $this;
+    }
+
+    public function getAvatarFile(): ?string
+    {
+        return $this->avatarFile;
+    }
+
+    public function setAvatarFile(?string $avatarFile): static
+    {
+        $this->avatarFile = $avatarFile;
 
         return $this;
     }

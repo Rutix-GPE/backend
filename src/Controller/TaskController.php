@@ -28,7 +28,7 @@ class TaskController extends AbstractController
     public function createTask(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
-        // TaskRepository $taskRepository
+        // TaskRepository $taskRepository,
         TaskService $taskService
     ): JsonResponse { 
         $user = $this->getUser();
@@ -39,6 +39,14 @@ class TaskController extends AbstractController
 
         $data = $request->getContent();
         $data = json_decode($data, true);
+
+        if(!isset($data['name']) || 
+        !isset($data['description']) ||
+        !isset($data['date']) ||
+        !isset($data['time'])) {
+            $response = ["error" => "Missing informations"];
+            return $this->json($response, Response::HTTP_BAD_REQUEST);
+        }
 
         try {
             $task = $taskService->controllerCreateTask($data, $user);
