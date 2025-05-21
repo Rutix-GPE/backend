@@ -27,7 +27,7 @@ final class AvatarController extends AbstractController
 
         $imageUrls = [];
         foreach ($images as $key ) {
-            $imageUrls[$key] = 'https://localhost:8090/img/avatar/' . $key;
+            array_push($imageUrls,  '/img/avatar/' . $key);
         }
 
         return $this->json($imageUrls);
