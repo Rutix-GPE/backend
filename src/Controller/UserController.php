@@ -148,7 +148,7 @@ class UserController extends AbstractController
         if(!isset($data['avatar'])){
             return $this->json("Missing informations", Response::HTTP_NOT_FOUND);
         }
-        print($data['avatar']);
+        
         $avatar = $data['avatar'];
 
         if(!$avatarService->checkExistAvatarFile($avatar, $projectDir)){
