@@ -1,34 +1,42 @@
-<?php
+<?php 
 namespace App\Dto\Auth;
 
-class UserLoginDTO
+use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Serializer\Attribute\MapFrom;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+final readonly class UserLoginDTO
 {
-    public ?string $email = null;
-    public ?string $username = null;
+    #[Assert\Email(message: "Format d'email invalide")]
+    public ?string $email;
+
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9]+$/',
+        message: "Le nom d'utilisateur doit être alphanumérique"
+    )]
+    public ?string $username;
+
+    #[Assert\NotBlank(message: "Le mot de passe est requis.")]
     public string $password;
 
-    public function __construct(array $data)
-    {
-        $this->email = $data['email'] ?? null;
-        $this->username = $data['username'] ?? null;
-        $this->password = $data['password'] ?? '';
-
-        if (empty($this->password) || (empty($this->email) && empty($this->username))) {
-            throw new \InvalidArgumentException('Missing credentials');
-        }
-
-        if (!empty($this->email) && !empty($this->username)) {
-            throw new \InvalidArgumentException('Provide either email or username, not both.');
-        }
+    public function __construct(
+        ?string $email = null,
+        ?string $username = null,
+        string $password = ''
+    ) {
+        $this->email = $email;
+        $this->username = $username;
+        $this->password = $password;
     }
 
-    public function isUsingEmail(): bool
-    {
-        return !empty($this->email);
-    }
 
     public function getIdentifier(): string
     {
         return $this->email ?? $this->username;
     }
+    public function isUsingEmail():bool{
+        return $this->email !== null;
+    }
+
 }

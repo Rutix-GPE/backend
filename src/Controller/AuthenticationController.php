@@ -1,61 +1,25 @@
 <?php
 
 namespace App\Controller;
-use App\Entity\User;
-use App\Repository\UserRepository;
-use App\Dto\Auth\UserRegisterDTO;
-use App\Dto\Auth\UserLoginDTO;
-use App\Dto\UserResponseDTO;
 use App\Service\AuthService;
-
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AuthenticationController extends AbstractController
 {
+    public function __construct(
+        private readonly AuthService $authService,
+    ) {}
     #[Route('/user/register', name: 'user_register', methods: ['POST'])]
-    public function register(
-        Request $request,
-        // SerializerInterface $serializer,
-        // ValidatorInterface $validator,
-        AuthService $authService
-    ): JsonResponse
+    public function register(Request $request): JsonResponse
     {
-        try {
-            $userDto = $authService->controllerRegister($request);
-
-
-
-            // $dto = $serializer->deserialize($request->getContent(), UserRegisterDTO::class, 'json');
-            // $errors = $validator->validate($dto);
-
-            // $errors = $validator->validate($dto);
-
-            // if (count($errors) > 0) {
-            //     $errorMessages = [];
-            //     foreach ($errors as $error) {
-            //         $errorMessages[$error->getPropertyPath()] = $error->getMessage();
-            //     }
-    
-            //     return new JsonResponse(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
-            // }
-        
-            // $user = $authService->register($dto);
-            // $userDto = new UserResponseDTO($user);
-    
-            return $this->json($userDto, Response::HTTP_CREATED);
-    
-        } catch (\Throwable $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        $userDto = $this->authService->controllerRegister($request);
+        return $this->json($userDto, Response::HTTP_CREATED);
     }
+<<<<<<< Updated upstream
     
     /*
     #[Route('/user/register', name: 'user_register')]
@@ -137,23 +101,17 @@ class AuthenticationController extends AbstractController
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
     }*/
+=======
+>>>>>>> Stashed changes
     #[Route('/user/authenticate', name: 'user_authenticate', methods: ['POST'])]
-    public function authenticate(Request $request, AuthService $authService): JsonResponse
+    public function authenticate(Request $request): JsonResponse
     {
-        try {
-            $data = json_decode($request->getContent(), true);
-            $dto = new UserLoginDTO($data);
-
-            $authResult = $authService->authenticate($dto);
-
-            return $this->json([
-                'token' => $authResult['token'],
-                'user' => get_object_vars($authResult['user']) // ou $this->normalizer->normalize(...)
-            ], Response::HTTP_OK);
-        } catch (\InvalidArgumentException $e) {
-            return $this->json(["error" => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-        } catch (\Exception $e) {
-            return $this->json(["error" => "Invalid email/username or password"], Response::HTTP_UNAUTHORIZED);
-        }
+        
+        $authResult = $this->authService->controllerAuthenticate($request);
+        return $this->json([
+            'token' => $authResult['token'],
+            'user' => get_object_vars($authResult['user']),
+        ], Response::HTTP_OK);
     }
+    
 }

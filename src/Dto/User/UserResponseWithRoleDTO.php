@@ -1,11 +1,10 @@
 <?php
 
-// src/DTO/UserReponseDTO.php
 namespace App\Dto\User;
 
 use App\Entity\User;
 
-class UserResponseDTO
+class UserResponseWithRoleDTO
 {
     public string $username;
     public string $firstname;
@@ -17,6 +16,9 @@ class UserResponseDTO
     public ?string $city;
     public ?string $adress;
     public ?string $memo;
+
+    /** @var string[] */
+    public array $roles; // <- ici on passe de ?string à array (plus logique vu que User::getRoles() retourne un array)
 
     public function __construct(User $user)
     {
@@ -31,6 +33,6 @@ class UserResponseDTO
         $this->adress = $user->getAdress();
         $this->memo = $user->getMemo();
 
-
+        $this->roles = $user->getRoles();
     }
 }
