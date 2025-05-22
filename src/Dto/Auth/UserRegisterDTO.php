@@ -27,4 +27,6 @@ class UserRegisterDTO
     public ?string $adress = null;
     public ?string $memo = null;
 
+
+
 }
