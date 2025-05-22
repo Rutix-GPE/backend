@@ -136,7 +136,7 @@ class UserController extends AbstractController
         return $this->json($user);
     }
 
-    #[Route('/user/update-avatar/{avatar}', name: 'update_avatar', methods: ['PUT'])]
+    #[Route('/user/update-avatar/{avatar}', name: 'update_avatar', methods: ['PATCH'])]
     public function updateAvatarV1($avatar, Request $request, UserRepository $userRepository, AvatarService $avatarService): JsonResponse
     {
         $user = $this->getUser();
