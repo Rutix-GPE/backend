@@ -1,42 +1,52 @@
 <?php 
 namespace App\Dto\Auth;
-
-use Symfony\Component\Serializer\Annotation\SerializedName;
-use Symfony\Component\Serializer\Attribute\MapFrom;
-use Symfony\Component\Validator\Constraints as Assert;
+use Assert\Callback;
+use Assert\NotBlank;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-final readonly class UserLoginDTO
+  class UserLoginDto
 {
-    #[Assert\Email(message: "Format d'email invalide")]
-    public ?string $email;
-
-    #[Assert\Regex(
-        pattern: '/^[a-zA-Z0-9]+$/',
-        message: "Le nom d'utilisateur doit être alphanumérique"
-    )]
-    public ?string $username;
-
-    #[Assert\NotBlank(message: "Le mot de passe est requis.")]
-    public string $password;
-
     public function __construct(
-        ?string $email = null,
-        ?string $username = null,
-        string $password = ''
-    ) {
-        $this->email = $email;
-        $this->username = $username;
-        $this->password = $password;
+        public ?string $email = null,
+        public ?string $username = null,
+        #[NotBlank(message: "Le mot de passe est requis.")]
+        public string $password = ''
+    ) {}
+
+    #[Callback]
+    public function validate(ExecutionContextInterface $context): void
+    {
+        if (empty($this->email) && empty($this->username)) {
+            $context->buildViolation("L'email ou le nom d'utilisateur est requis.")
+                ->atPath('email')
+                ->addViolation();
+        }
+
+        if ($this->email && !filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            $context->buildViolation("Format de l'email invalide.")
+                ->atPath('email')
+                ->addViolation();
+        }
+
+        if ($this->username && !preg_match('/^[a-zA-Z0-9]+$/', $this->username)) {
+            $context->buildViolation("Le nom d'utilisateur doit être alphanumérique.")
+                ->atPath('username')
+                ->addViolation();
+        }
     }
 
+    public function isUsingEmail(): bool
+    {
+        return !empty($this->email);
+    }
 
     public function getIdentifier(): string
     {
         return $this->email ?? $this->username;
     }
-    public function isUsingEmail():bool{
-        return $this->email !== null;
-    }
 
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
 }

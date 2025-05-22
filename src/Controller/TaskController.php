@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Controller;
-
-use App\Entity\Task;
 use App\Repository\TaskRepository;
 use App\Service\TaskService;
 use DateTime;

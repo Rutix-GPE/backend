@@ -62,7 +62,9 @@ class AuthService
         $this->userRepository->add($user, true);
         return $user;
         
+
     }
+    /*
     public function controllerAuthenticate($request): array {
     
         $dto = $this->serializer->deserialize($request->getContent(), UserLoginDTO::class, 'json');
@@ -81,22 +83,58 @@ class AuthService
         ];
 
     }
-    public function authenticate(UserLoginDTO $dto): User
+
+*/
+    public function controllerAuthenticate( $request): array
     {
+        $data = json_decode($request->getContent(), true);
 
-        $criteria = $dto->isUsingEmail()
-            ? ['email' => $dto->getIdentifier()]
-            : ['username' => $dto->getIdentifier()];
-    
-        $user = $this->userRepository->findOneBy($criteria);
-
-        if (!$user || !$this->passwordHasher->isPasswordValid($user,$dto->password )) {
-
-            throw new UnauthorizedHttpException('Bearer', 'identifiant/email ou mot de passe invalide.');
+        if (!is_array($data)) {
+            throw new BadRequestHttpException("Le format du JSON est invalide.");
         }
-    
-        return $user;
+
+        // Hydratation manuelle du DTO
+        $dto = new UserLoginDTO(
+            email: $data['email'] ?? null,
+            username: $data['username'] ?? null,
+            password: $data['password'] ?? ''
+        );
+
+        // Validation
+        $errors = $this->validator->validate($dto);
+        if (count($errors) > 0) {
+            $messages = [];
+            foreach ($errors as $error) {
+                $messages[] = $error->getPropertyPath() . ' : ' . $error->getMessage();
+            }
+            throw new BadRequestHttpException(implode("\n", $messages));
+        }
+
+        // Authentification
+        $user = $this->authenticate($dto);
+        $token = $this->jwtManager->create($user);
+        $userDto = new UserResponseDTO($user);
+
+        return [
+            'token' => $token,
+            'user' => $userDto
+        ];
+    }
+        
+public function authenticate(UserLoginDTO $dto): User
+{
+
+    $criteria = $dto->isUsingEmail()
+        ? ['email' => $dto->getIdentifier()]
+        : ['username' => $dto->getIdentifier()];
+
+    $user = $this->userRepository->findOneBy($criteria);
+
+    if (!$user || !$this->passwordHasher->isPasswordValid($user,$dto->password )) {
+
+        throw new UnauthorizedHttpException('Bearer', 'identifiant/email ou mot de passe invalide.');
     }
 
-    
+    return $user;
+}
 }
