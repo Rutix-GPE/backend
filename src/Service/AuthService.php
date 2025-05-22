@@ -59,30 +59,9 @@ class AuthService
         $user->setAdress($dto->adress);
         $this->userRepository->add($user, true);
         return $user;
-        
 
     }
-    /*
-    public function controllerAuthenticate($request): array {
-    
-        $dto = $this->serializer->deserialize($request->getContent(), UserLoginDTO::class, 'json');
-        //dd($dto);
-        $errors = $this->validator->validate($dto); 
-        if (count($errors) > 0) {
-            throw new BadRequestHttpException("Données invalides.");
-        }
-
-        $user = $this->authenticate($dto);
-        $token = $this->jwtManager->create($user);
-        $userDto = new UserResponseDTO($user);
-        return [
-            'token' => $token,
-            'user' => $userDto
-        ];
-
-    }
-
-*/
+   
     public function controllerAuthenticate( $request): array
     {
         $data = json_decode($request->getContent(), true);

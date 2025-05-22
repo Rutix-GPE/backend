@@ -1,11 +1,8 @@
 <?php
 namespace App\Dto\Task;
-
-use App\Dto\Category\CategoryDTO;
-use App\Dto\User\UserResponseDTO;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class TaskInputDto
+class TaskInputDTO
 {
     #[Assert\NotBlank()]
     public string $name;
@@ -20,7 +17,4 @@ class TaskInputDto
     #[Assert\NotBlank()]
     #[Assert\Time()]
     public string $taskTime;
-    #[Assert\NotBlank()]
-    public int $user;
-    public ?CategoryDTO $category = null;
 }
