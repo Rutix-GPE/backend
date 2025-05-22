@@ -42,13 +42,11 @@ class RebuildDatabaseCommand extends Command
 
         $baseCommand = ['php', 'bin/console'];
 
-        // Commandes à exécuter
         $commands = [
             array_merge($baseCommand, ['doctrine:database:drop', '--force', '--if-exists', '--env=' . $env]),
             array_merge($baseCommand, ['doctrine:database:create', '--env=' . $env]),
         ];
 
-        // Supprimer les anciens fichiers de migration
         if ($filesystem->exists(self::MIGRATIONS_PATH)) {
             $io->section('Suppression des anciens fichiers de migration...');
             $filesystem->remove(glob(self::MIGRATIONS_PATH . '/Version*.php'));
@@ -57,7 +55,6 @@ class RebuildDatabaseCommand extends Command
         $commands[] = array_merge($baseCommand, ['doctrine:migrations:diff', '--env=' . $env]);
         $commands[] = array_merge($baseCommand, ['doctrine:migrations:migrate', '--no-interaction', '--env=' . $env]);
 
-        // Exécution
         foreach ($commands as $cmd) {
             $process = new Process($cmd);
             $io->section('Exécution : ' . implode(' ', $cmd));
