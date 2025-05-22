@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\User\UserResponseDTO;
-use App\Dto\User\UserInputDTO;
 use App\Dto\User\UserResponseWithRoleDTO;
-
 use App\Repository\UserRepository;
 use App\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,8 +13,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class UserController extends AbstractController
