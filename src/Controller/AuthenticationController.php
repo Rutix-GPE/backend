@@ -19,6 +19,7 @@ class AuthenticationController extends AbstractController
         $userDto = $this->authService->controllerRegister($request);
         return $this->json($userDto, Response::HTTP_CREATED);
     }
+
     #[Route('/user/authenticate', name: 'user_authenticate', methods: ['POST'])]
     public function authenticate(Request $request): JsonResponse
     {
