@@ -79,7 +79,7 @@ class TaskController extends AbstractController
     public function updateTask(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
-        // TaskRepository $taskRepository,
+        TaskRepository $taskRepository,
         TaskService $taskService,
         $task
     ): JsonResponse { 

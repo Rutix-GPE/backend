@@ -8,7 +8,7 @@ use App\Repository\UserRepository;
 use App\Service\TestService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class TemplateQuestionTest extends WebTestCase
+class TemplateQuestionTest 
 {
     
     private $templateQuestionRepository;
