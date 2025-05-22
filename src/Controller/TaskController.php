@@ -14,6 +14,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TaskController extends AbstractController
 {
+
+    public function __construct(
+        private readonly TaskService $taskService,
+    ) {}
     #[Route('/task', name: 'app_task')]
     public function index(): Response
     {
@@ -21,16 +25,9 @@ class TaskController extends AbstractController
             'controller_name' => 'TaskController',
         ]);
     }
-
     #[Route('/task/create', name: 'create_task', methods: ['POST'])]
-    public function createTask(
-        Request $request,
-        JWTTokenManagerInterface $tokenManager,
-        // TaskRepository $taskRepository,
-        TaskService $taskService
-    ): JsonResponse { 
+    public function createTask(Request $request,): JsonResponse { 
         $user = $this->getUser();
-
         if (!$user) {
             return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
         }
@@ -45,31 +42,16 @@ class TaskController extends AbstractController
             $response = ["error" => "Missing informations"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
+        $task = $this->taskService->controllerCreateTask($data, $user);
 
-        try {
-            $task = $taskService->controllerCreateTask($data, $user);
+        $date = new DateTime($data['taskDate']);
+        $time = new DateTime($data['taskTime']);
+        $task->setTaskDate($date);
+        $task->setTaskTime($time);
 
-            // $task = new Task;
+        
 
-            // $task->setName($data['name']);
-            // $task->setDescription($data['description']);
-
-
-            $date = new DateTime($data['taskDate']);
-            $time = new DateTime($data['taskTime']);
-            $task->setTaskDate($date);
-            $task->setTaskTime($time);
-
-            // $task->setUser($user);
-            // $task->setStatus("Not finish");
-
-            // $taskRepository->add($task, true);
-
-            return $this->json($task, Response::HTTP_CREATED);
-
-        } catch (\Exception $error) {
-            return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
-        }
+        return $this->json($task, Response::HTTP_CREATED);
 
     }
 

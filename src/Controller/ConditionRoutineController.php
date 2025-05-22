@@ -38,23 +38,6 @@ class ConditionRoutineController extends AbstractController
         try{
             $condition = $conditionService->controllerCreateCondition($data);
 
-            // $condition = new ConditionRoutine;
-
-            // $condition->setName($data["name"]);
-            // $condition->setDescription($data["description"]); 
-            
-            // $dateTime = \DateTime::createFromFormat('H:i:s', $data["time"]);
-            // $condition->setTaskTime($dateTime);
-
-            // $question = $TQRepository->find($data["question"]);
-            // $condition->setQuestion($question);
-            // $condition->setResponseCondition($data["response"]);
-
-            // // return $this->json($condition, Response::HTTP_NOT_FOUND);
-
-            // $conditionRepository->add($condition, true);
-
-            // // return $this->json($condition, Response::HTTP_CREATED);
 
             return $this->json($condition, Response::HTTP_CREATED, [], [
                 'groups' => 'condition_routine:read'
