@@ -29,4 +29,8 @@ faire un `chmod +x command_docker.sh` pour donner les droits d'exec le fichier
  
  # projet lancer 
 
+<<<<<<< HEAD
  une fois le projet lancer depuis un moment vous pouvez tjr exec le fichier sa permet de crée de nouvelles migrations entre autre comme ça si y a des changements dans les db ça permet d'etre à jour 
+=======
+ une fois le projet lancer depuis un moment vous pouvez tjr exec le fichier sa permet de crée de nouvelles migrations entre autre comme ça si y a des changements dans les db ça permet d'etre à jour 
+>>>>>>> 465435bf2355eab1b2496157ce15eb8e31b4b52c
