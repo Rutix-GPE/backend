@@ -37,7 +37,7 @@ class RoutineService
     public function controllerGetRoutineByUser($userId)
     {
         $routines =  $this->routineRepository->findBy(['User' => $userId]);
-        array_map(fn($routine) => new RoutineOutputDTO($routine), $routines);
+       return( array_map(fn($routine) => new RoutineOutputDTO($routine), $routines));
     }
 
 }
