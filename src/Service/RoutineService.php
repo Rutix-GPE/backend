@@ -2,12 +2,10 @@
 
 namespace App\Service;
 
+use App\Dto\Routine\RoutineOutputDTO;
 use App\Entity\ConditionRoutine;
 use App\Entity\Routine;
-use App\Entity\User;
-use App\Repository\ConditionRoutineRepository;
 use App\Repository\RoutineRepository;
-use App\Repository\TaskRepository;
 
 class RoutineService 
 {
@@ -31,19 +29,15 @@ class RoutineService
         $routine->setTaskTime($condition->getTaskTime());
         $routine->setDays($condition->getDays());
         $routine->setUser($user);
-
-        // TODO check si cette routine existe déjà pour cette user 
         $this->routineRepository->add($routine, true);
-
-        // TODO mettre ici un système d'état de création des tâches pour refresh le front
-
         $this->taskService->createList($routine);
     }
 
 
     public function controllerGetRoutineByUser($userId)
     {
-        return $this->routineRepository->findBy(['User' => $userId]);
+        $routines =  $this->routineRepository->findBy(['User' => $userId]);
+        array_map(fn($routine) => new RoutineOutputDTO($routine), $routines);
     }
 
 }
