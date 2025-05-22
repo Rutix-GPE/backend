@@ -1,10 +1,9 @@
 <?php
-namespace App\Dto;
+namespace App\Dto\Task;
 
-use App\Dto\Category\CategoryDTO;
-use App\Dto\User\UserResponseDTO;
+use App\Entity\Task;
 
-class TaskOutputDto
+class TaskOutputDTO
 {
     public int $id;
     public string $name;
@@ -16,4 +15,17 @@ class TaskOutputDto
     public string $updatedDate;
     public int $user; 
     public ?int $category; 
+    public function __construct(Task $task)
+    {
+        $this->id = $task->getId();
+        $this->name = $task->getName();
+        $this->description = $task->getDescription();
+        $this->taskDate = $task->getTaskDate()->format('Y-m-d');
+        $this->taskTime = $task->getTaskTime()->format('H:i:s');
+        $this->status = $task->getStatus();
+        $this->creationDate = $task->getCreationDate()->format('Y-m-d');
+        $this->updatedDate = $task->getUpdatedDate()->format('Y-m-d');
+        $this->user = $task->getUser()->getId();
+        $category = $task->getCategory()?->getId();
+    }
 }

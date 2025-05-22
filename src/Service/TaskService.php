@@ -2,22 +2,29 @@
 
 namespace App\Service;
 
+use App\Dto\Task\TaskInputUpdateDTO;
+use DateTime;
 use App\Entity\Task;
 use App\Entity\Routine;
+use App\Dto\Task\TaskInputDTO;
+use App\Dto\Task\TaskOutputDTO;
 use App\Repository\TaskRepository;
-use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Serializer\SerializerInterface;
+
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
 
 class TaskService 
 {
-    private TaskRepository $taskRepository;
-
     
-    public function __construct(TaskRepository $taskRepository) 
-    {
-        $this->taskRepository = $taskRepository;
-    }
+    public function __construct(
+        private TaskRepository $taskRepository,
+        private readonly SerializerInterface $serializer,
+        private readonly ValidatorInterface $validator,
+    ) 
+    {}
 
     public function createList(Routine $routine)
     {
@@ -58,57 +65,69 @@ class TaskService
         $this->taskRepository->add($task, true);
     }
 
-    public function controllerCreateTask($data, $user)
+    public function controllerCreateTask($request, $user)
     {
+       // die($this->serializer->deserialize($request->getContent(), TaskInputDTO::class, 'json'));
+
+        $dto = $this->serializer->deserialize($request->getContent(), TaskInputDTO::class, 'json');
+        $errors = $this->validator->validate($dto); 
+        if (count($errors) > 0) {
+            throw new BadRequestHttpException("Données invalides.");
+        }
         $task = new Task;
-
-        $task->setName($data['name']);
-        $task->setDescription($data['description']);
-
-
-        $date = new DateTime($data['taskDate']);
-        $time = new DateTime($data['taskTime']);
+        $task->setName($dto->name);
+        $task->setDescription($dto->description);
+        $date = new DateTime($dto->taskDate);
+        $time = new DateTime($dto->taskTime);
         $task->setTaskDate($date);
         $task->setTaskTime($time);
-
         $task->setUser($user);
         $task->setStatus("Not finish");
-
         $this->taskRepository->add($task, true);
-
-        return $task;
+        $taskDto = new TaskOutputDTO($task);
+        return $taskDto;
     }
 
-    public function controllerUpdateTask($taskId, $data)
+    public function controllerUpdateTask($taskId, $request): TaskOutputDTO
     {
+        $inputDto = $this->serializer->deserialize($request->getContent(), TaskInputUpdateDTO::class, 'json');
+        $errors = $this->validator->validate($inputDto);
+        if (count($errors) > 0) {
+            throw new BadRequestHttpException("Données invalides.");
+        }
+        return (new TaskOutputDTO($this->updateTask($inputDto, $taskId)));
+    }
+
+    public function updateTask($inputDto, $taskId){
         $task = $this->taskRepository->find($taskId);
-
         if(!$task) {
-            return $task;
+            throw new NotFoundHttpException("Not Found");
         }
-
-        if(isset($data['name'])){
-
-            $task->setName($data['name']);
+        if ($inputDto->name)        $task->setName($inputDto->name);
+        if($inputDto->description)  $task->setDescription($inputDto->description);
+        if($inputDto->taskDate) {
+            $date = \DateTime::createFromFormat('Y-m-d', $inputDto->taskDate);
+            if (!$date) throw new BadRequestHttpException("Format de date invalide : attendu 'Y-m-d'");
+            $task->setTaskDate($date);
         }
-
-        if(isset($data['time'])){
-            $time = new DateTime($data['time']);
+        
+        if($inputDto->taskTime) {
+            $time = \DateTime::createFromFormat('H:i:s', $inputDto->taskTime);
+            if (!$time) throw new BadRequestHttpException("Format d'heure invalide : attendu 'H:i:s'");
             $task->setTaskTime($time);
         }
-
+        if($inputDto->status)       $task->setStatus($inputDto->status);
         $this->taskRepository->add($task, true);
-
         return $task;
     }
-
     public function controllerGetTasksByUser($user)
     {
-        return $this->taskRepository->findBy(['User' => $user]);
-    }
+        $tasks = $this->taskRepository->findBy(['User' => $user]);
+        return array_map(fn($task) => new TaskOutputDTO($task), $tasks);    }
 
     public function controllerGetTasksByUserAndTime($user, $time)
     {
-        return $this->taskRepository->findBy(['User' => $user->id, 'taskDate' => $time]);
+        $tasks = $this->taskRepository->findBy(['User' => $user->id, 'taskDate' => $time]);
+        return array_map(fn($task) => new TaskOutputDTO($task), $tasks);  
     }
 } 
