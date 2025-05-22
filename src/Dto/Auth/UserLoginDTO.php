@@ -4,7 +4,7 @@ use Assert\Callback;
 use Assert\NotBlank;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-  class UserLoginDto
+  class UserLoginDTO
 {
     public function __construct(
         public ?string $email = null,

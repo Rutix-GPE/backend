@@ -4,7 +4,7 @@ namespace App\Service;
 
 // src/Service/AuthService.php
 use App\Entity\User;
-use App\Dto\Auth\UserLoginDto;
+use App\Dto\Auth\UserLoginDTO;
 use App\Dto\User\UserResponseDTO;
 use App\Dto\Auth\UserRegisterDTO;
 use App\Repository\UserRepository;

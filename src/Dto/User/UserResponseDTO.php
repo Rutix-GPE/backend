@@ -17,7 +17,7 @@ class UserResponseDTO
     public ?string $city;
     public ?string $adress;
     public ?string $memo;
-
+    public ?string $avatarFile;
     public function __construct(User $user)
     {
         $this->username = $user->getUsername();
@@ -30,6 +30,8 @@ class UserResponseDTO
         $this->city = $user->getCity();
         $this->adress = $user->getAdress();
         $this->memo = $user->getMemo();
+        $this->avatarFile = $user->getAvatarFile();
+
 
 
     }

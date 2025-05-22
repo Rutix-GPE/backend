@@ -19,4 +19,5 @@ class UserInputDTO
     public ?string $city = null;
     public ?string $adress = null;
     public ?string $memo = null;
+    public ?string $avatarFile = null;
 }
