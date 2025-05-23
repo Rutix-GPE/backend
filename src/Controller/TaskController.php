@@ -42,8 +42,8 @@ class TaskController extends AbstractController
 
         if(!isset($data['name']) || 
         !isset($data['description']) ||
-        !isset($data['date']) ||
-        !isset($data['time'])) {
+        !isset($data['taskDate']) ||
+        !isset($data['taskTime'])) {
             $response = ["error" => "Missing informations"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
