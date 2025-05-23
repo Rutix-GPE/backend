@@ -86,10 +86,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Routine::class, mappedBy: 'User')]
     private Collection $routines;
 
+    /**
+     * @var Collection<int, UserRoutineV2>
+     */
+    #[ORM\OneToMany(targetEntity: UserRoutineV2::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $userRoutineV2s;
+
+    /**
+     * @var Collection<int, UserTaskV2>
+     */
+    #[ORM\OneToMany(targetEntity: UserTaskV2::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $userTaskV2s;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
         $this->routines = new ArrayCollection();
+        $this->userRoutineV2s = new ArrayCollection();
+        $this->userTaskV2s = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -382,6 +396,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($routine->getUser() === $this) {
                 $routine->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserRoutineV2>
+     */
+    public function getUserRoutineV2s(): Collection
+    {
+        return $this->userRoutineV2s;
+    }
+
+    public function addUserRoutineV2(UserRoutineV2 $userRoutineV2): static
+    {
+        if (!$this->userRoutineV2s->contains($userRoutineV2)) {
+            $this->userRoutineV2s->add($userRoutineV2);
+            $userRoutineV2->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserRoutineV2(UserRoutineV2 $userRoutineV2): static
+    {
+        if ($this->userRoutineV2s->removeElement($userRoutineV2)) {
+            // set the owning side to null (unless already changed)
+            if ($userRoutineV2->getUser() === $this) {
+                $userRoutineV2->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserTaskV2>
+     */
+    public function getUserTaskV2s(): Collection
+    {
+        return $this->userTaskV2s;
+    }
+
+    public function addUserTaskV2(UserTaskV2 $userTaskV2): static
+    {
+        if (!$this->userTaskV2s->contains($userTaskV2)) {
+            $this->userTaskV2s->add($userTaskV2);
+            $userTaskV2->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserTaskV2(UserTaskV2 $userTaskV2): static
+    {
+        if ($this->userTaskV2s->removeElement($userTaskV2)) {
+            // set the owning side to null (unless already changed)
+            if ($userTaskV2->getUser() === $this) {
+                $userTaskV2->setUser(null);
             }
         }
 
