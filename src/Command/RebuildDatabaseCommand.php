@@ -1,17 +1,15 @@
-<?php 
+<?php
 
-// src/Command/RebuildDatabaseCommand.php
 namespace App\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[AsCommand(
     name: 'app:db:rebuild',
@@ -21,22 +19,16 @@ class RebuildDatabaseCommand extends Command
 {
     private const MIGRATIONS_PATH = 'migrations';
 
-    protected function configure(): void
-    {
-        $this
-            ->addOption(
-                'env',
-                'e',
-                InputOption::VALUE_REQUIRED,
-                'Environnement à utiliser (ex: dev, test, prod)',
-                'dev'
-            );
+    public function __construct(
+        private KernelInterface $kernel
+    ) {
+        parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $env = $input->getOption('env');
+        $env = $this->kernel->getEnvironment();
 
         $filesystem = new Filesystem();
 
