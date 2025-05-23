@@ -63,7 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $adress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    public ?string $avatarFile = null;
+    public ?string $avatarFile = "avatar_par_defaut.png";
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     public ?\DateTimeInterface $CreationDate = null;

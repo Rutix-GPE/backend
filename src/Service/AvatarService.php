@@ -11,7 +11,7 @@ class AvatarService extends WebTestCase
     
     public function checkExistAvatarFile($fileName, $projectDir)
     {
-        $imagePath = $projectDir .= "\\public\\img\\avatar\\" . $fileName;
+        $imagePath = $projectDir .= "/public/img/avatar/" . $fileName;
         
         return file_exists($imagePath) && is_file($imagePath);
     }

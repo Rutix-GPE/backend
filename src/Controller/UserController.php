@@ -136,11 +136,20 @@ class UserController extends AbstractController
         return $this->json($user);
     }
 
-    #[Route('/user/update-avatar/{avatar}', name: 'update_avatar', methods: ['PUT'])]
-    public function updateAvatarV1($avatar, Request $request, UserRepository $userRepository, AvatarService $avatarService): JsonResponse
+    #[Route('/user/update-avatar', name: 'update_avatar', methods: ['PATCH'])]
+    public function updateAvatarV1(Request $request, UserRepository $userRepository, AvatarService $avatarService): JsonResponse
     {
         $user = $this->getUser();
         $projectDir = $this->getParameter('kernel.project_dir');
+
+        $data = $request->getContent();
+        $data = json_decode($data, true);  
+
+        if(!isset($data['avatar'])){
+            return $this->json("Missing informations", Response::HTTP_NOT_FOUND);
+        }
+        
+        $avatar = $data['avatar'];
 
         if(!$avatarService->checkExistAvatarFile($avatar, $projectDir)){
             return $this->json("File not found", Response::HTTP_NOT_FOUND);
