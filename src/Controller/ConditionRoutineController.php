@@ -16,37 +16,17 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ConditionRoutineController extends AbstractController
 {
+    public function __construct(
+        private readonly ConditionService $conditionService,
+    ) {}
     // NOT USED => to update
     #[Route('/condition-routine/new', name:'new_condition_routine', methods: ['POST'])]
-    public function new(Request $request, ConditionService $conditionService/*, ConditionRoutineRepository $conditionRepository, TemplateQuestionRepository $TQRepository*/): JsonResponse
-    {
-        
-        $data = $request->getContent();
-        $data = json_decode($data, true);
-        
-        if(!isset($data['name']) || 
-        !isset($data['description']) ||
-        !isset($data['time']) ||
-        !isset($data['question']) ||
-        !isset($data['response'])) {
-            $response = ["error" => "Missing informations"];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }
-        
-        // return $this->json("", 200);
-
-        try{
-            $condition = $conditionService->controllerCreateCondition($data);
-
-
-            return $this->json($condition, Response::HTTP_CREATED, [], [
-                'groups' => 'condition_routine:read'
-            ]);
-
-        } catch (\Exception $error) {
-            $response = ["error" => $error->getMessage()];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }
+    public function newCondtionRoutine(Request $request): JsonResponse
+    {   
+        $condtionRoutineDto = $this->conditionService->controllerCreateCondition($request);
+        return $this->json($condtionRoutineDto, Response::HTTP_CREATED, [], [
+            'groups' => 'condition_routine:read'
+        ]);
     }
 
     // NOT USED 
