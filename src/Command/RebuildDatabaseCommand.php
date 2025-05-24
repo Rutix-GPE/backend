@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 #[AsCommand(
     name: 'app:db:rebuild',
-    description: 'Supprime et recrée la BDD, régénère les migrations, et les exécute.',
+    description: 'Supprime et recrée la BDD, régénère les migrations, les exécute, et charge une fixture spécifique.',
 )]
 class RebuildDatabaseCommand extends Command
 {
@@ -31,7 +31,6 @@ class RebuildDatabaseCommand extends Command
         $env = $this->kernel->getEnvironment();
 
         $filesystem = new Filesystem();
-
         $baseCommand = ['php', 'bin/console'];
 
         $commands = [
@@ -47,6 +46,13 @@ class RebuildDatabaseCommand extends Command
         $commands[] = array_merge($baseCommand, ['doctrine:migrations:diff', '--env=' . $env]);
         $commands[] = array_merge($baseCommand, ['doctrine:migrations:migrate', '--no-interaction', '--env=' . $env]);
 
+        $commands[] = array_merge($baseCommand, [
+            'doctrine:fixtures:load',
+            '--group=v2',
+            '--no-interaction',
+            '--env=' . $env
+        ]);
+
         foreach ($commands as $cmd) {
             $process = new Process($cmd);
             $io->section('Exécution : ' . implode(' ', $cmd));
@@ -60,7 +66,7 @@ class RebuildDatabaseCommand extends Command
             }
         }
 
-        $io->success("Base de données reconstruite avec succès pour l'environnement \"$env\".");
+        $io->success("Base de données reconstruite avec succès et fixture spéciale chargée.");
         return Command::SUCCESS;
     }
 }
