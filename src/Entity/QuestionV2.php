@@ -27,17 +27,23 @@ class QuestionV2
     #[ORM\Column]
     private ?bool $isQuickQuestion = null;
 
-    /**
-     * @var Collection<int, RelationV2>
-     */
-    #[ORM\OneToMany(targetEntity: RelationV2::class, mappedBy: 'source')]
-    private Collection $allSources;
+    // /**
+    //  * @var Collection<int, RelationV2>
+    //  */
+    // #[ORM\OneToMany(targetEntity: RelationV2::class, mappedBy: 'source')]
+    // private Collection $allSources;
 
-    /**
-     * @var Collection<int, RelationV2>
-     */
-    #[ORM\OneToMany(targetEntity: RelationV2::class, mappedBy: 'targetQuestion')]
-    private Collection $allTargetQuestions;
+    // /**
+    //  * @var Collection<int, RelationV2>
+    //  */
+    // #[ORM\OneToMany(targetEntity: RelationV2::class, mappedBy: 'targetQuestion')]
+    // private Collection $allTargetQuestions;
+
+    // /**
+    //  * @var Collection<int, RelationV2>
+    //  */
+    // #[ORM\OneToMany(targetEntity: RelationV2::class, mappedBy: 'targetRoutine')]
+    // private Collection $allTargetRoutines;
 
     public function __construct()
     {
@@ -98,63 +104,93 @@ class QuestionV2
         return $this;
     }
 
-    /**
-     * @return Collection<int, RelationV2>
-     */
-    public function getSources(): Collection
-    {
-        return $this->allSources;
-    }
+    // /**
+    //  * @return Collection<int, RelationV2>
+    //  */
+    // public function getSources(): Collection
+    // {
+    //     return $this->allSources;
+    // }
 
-    public function addSources(RelationV2 $allSources): static
-    {
-        if (!$this->allSources->contains($allSources)) {
-            $this->allSources->add($allSources);
-            $allSources->setSource($this);
-        }
+    // public function addSources(RelationV2 $allSources): static
+    // {
+    //     if (!$this->allSources->contains($allSources)) {
+    //         $this->allSources->add($allSources);
+    //         $allSources->setSource($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeSources(RelationV2 $allSources): static
-    {
-        if ($this->allSources->removeElement($allSources)) {
-            // set the owning side to null (unless already changed)
-            if ($allSources->getSource() === $this) {
-                $allSources->setSource(null);
-            }
-        }
+    // public function removeSources(RelationV2 $allSources): static
+    // {
+    //     if ($this->allSources->removeElement($allSources)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($allSources->getSource() === $this) {
+    //             $allSources->setSource(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * @return Collection<int, RelationV2>
-     */
-    public function getAllTargetQuestions(): Collection
-    {
-        return $this->allTargetQuestions;
-    }
+    // /**
+    //  * @return Collection<int, RelationV2>
+    //  */
+    // public function getAllTargetQuestions(): Collection
+    // {
+    //     return $this->allTargetQuestions;
+    // }
 
-    public function addAllTargetQuestions(RelationV2 $allTargetQuestions): static
-    {
-        if (!$this->allTargetQuestions->contains($allTargetQuestions)) {
-            $this->allTargetQuestions->add($allTargetQuestions);
-            $allTargetQuestions->setTargetQuestion($this);
-        }
+    // public function addAllTargetQuestions(RelationV2 $allTargetQuestions): static
+    // {
+    //     if (!$this->allTargetQuestions->contains($allTargetQuestions)) {
+    //         $this->allTargetQuestions->add($allTargetQuestions);
+    //         $allTargetQuestions->setTargetQuestion($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeAllTargetQuestions(RelationV2 $allTargetQuestions): static
-    {
-        if ($this->allTargetQuestions->removeElement($allTargetQuestions)) {
-            // set the owning side to null (unless already changed)
-            if ($allTargetQuestions->getTargetQuestion() === $this) {
-                $allTargetQuestions->setTargetQuestion(null);
-            }
-        }
+    // public function removeAllTargetQuestions(RelationV2 $allTargetQuestions): static
+    // {
+    //     if ($this->allTargetQuestions->removeElement($allTargetQuestions)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($allTargetQuestions->getTargetQuestion() === $this) {
+    //             $allTargetQuestions->setTargetQuestion(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
+
+    // /**
+    //  * @return Collection<int, RelationV2>
+    //  */
+    // public function getAllTargetRoutines(): Collection
+    // {
+    //     return $this->allTargetRoutines;
+    // }
+
+    // public function addAllTargetRoutines(RelationV2 $allTargetRoutines): static
+    // {
+    //     if (!$this->allTargetRoutines->contains($allTargetRoutines)) {
+    //         $this->allTargetRoutines->add($allTargetRoutines);
+    //         $allTargetRoutines->setTargetQuestion($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeAllTargetRoutines(RelationV2 $allTargetRoutines): static
+    // {
+    //     if ($this->allTargetRoutines->removeElement($allTargetRoutines)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($allTargetRoutines->getTargetQuestion() === $this) {
+    //             $allTargetRoutines->setTargetQuestion(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
 }

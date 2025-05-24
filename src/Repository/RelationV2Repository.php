@@ -16,6 +16,24 @@ class RelationV2Repository extends ServiceEntityRepository
         parent::__construct($registry, RelationV2::class);
     }
 
+        public function add(RelationV2 $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(RelationV2 $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
     //    /**
     //     * @return RelationV2[] Returns an array of RelationV2 objects
     //     */

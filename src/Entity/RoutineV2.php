@@ -28,11 +28,11 @@ class RoutineV2
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $taskTime = null;
 
-    /**
-     * @var Collection<int, RelationV2>
-     */
-    #[ORM\OneToMany(targetEntity: RelationV2::class, mappedBy: 'targetRoutine')]
-    private Collection $relationV2s;
+    // /**
+    //  * @var Collection<int, RelationV2>
+    //  */
+    // #[ORM\OneToMany(targetEntity: RelationV2::class, mappedBy: 'targetRoutine')]
+    // private Collection $relationV2s;
 
     public function __construct()
     {
@@ -92,33 +92,33 @@ class RoutineV2
         return $this;
     }
 
-    /**
-     * @return Collection<int, RelationV2>
-     */
-    public function getRelationV2s(): Collection
-    {
-        return $this->relationV2s;
-    }
+    // /**
+    //  * @return Collection<int, RelationV2>
+    //  */
+    // public function getRelationV2s(): Collection
+    // {
+    //     return $this->relationV2s;
+    // }
 
-    public function addRelationV2(RelationV2 $relationV2): static
-    {
-        if (!$this->relationV2s->contains($relationV2)) {
-            $this->relationV2s->add($relationV2);
-            $relationV2->setTargetRoutine($this);
-        }
+    // public function addRelationV2(RelationV2 $relationV2): static
+    // {
+    //     if (!$this->relationV2s->contains($relationV2)) {
+    //         $this->relationV2s->add($relationV2);
+    //         $relationV2->setTargetRoutine($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeRelationV2(RelationV2 $relationV2): static
-    {
-        if ($this->relationV2s->removeElement($relationV2)) {
-            // set the owning side to null (unless already changed)
-            if ($relationV2->getTargetRoutine() === $this) {
-                $relationV2->setTargetRoutine(null);
-            }
-        }
+    // public function removeRelationV2(RelationV2 $relationV2): static
+    // {
+    //     if ($this->relationV2s->removeElement($relationV2)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($relationV2->getTargetRoutine() === $this) {
+    //             $relationV2->setTargetRoutine(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }
