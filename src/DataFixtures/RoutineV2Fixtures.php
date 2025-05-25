@@ -23,7 +23,8 @@ class RoutineV2Fixtures extends Fixture implements FixtureGroupInterface
         $routine->setTaskTime(new \DateTime('07:30:00')); 
         
         $manager->persist($routine);
-        $manager->flush();
+        $this->addReference("reveil_stimulant", $routine);
+        // $manager->flush();
 
         // -----------------------------------------------------
 
@@ -34,7 +35,8 @@ class RoutineV2Fixtures extends Fixture implements FixtureGroupInterface
         $routine->setTaskTime(new \DateTime('13:30:00')); 
         
         $manager->persist($routine);
-        $manager->flush();
+        $this->addReference("pause_sensorielle", $routine);
+        // $manager->flush();
 
         // -----------------------------------------------------
 
@@ -45,6 +47,9 @@ class RoutineV2Fixtures extends Fixture implements FixtureGroupInterface
         $routine->setTaskTime(new \DateTime('20:00:00')); 
         
         $manager->persist($routine);
+        $this->addReference("deconnexion_numerique", $routine);
+
+
         $manager->flush();
 
     }

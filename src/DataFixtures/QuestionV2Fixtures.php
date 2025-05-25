@@ -23,7 +23,8 @@ class QuestionV2Fixtures extends Fixture implements FixtureGroupInterface
         $question->setIsQuickQuestion(true); 
         
         $manager->persist($question);
-        $manager->flush();
+        $this->addReference("focus_moment_day", $question);
+        // $manager->flush();
 
         // -----------------------------------------------------
 
@@ -33,10 +34,12 @@ class QuestionV2Fixtures extends Fixture implements FixtureGroupInterface
         $question->setIsRootQuestion(false); 
         $question->setIsQuickQuestion(true); 
         
+        $manager->persist($question);
+        $this->addReference("hard_morning", $question);
+        // $manager->flush();
+        
         // -----------------------------------------------------
 
-        $manager->persist($question);
-        $manager->flush();
 
         $question = new QuestionV2();
         $question->setName('breakfast');
@@ -45,12 +48,10 @@ class QuestionV2Fixtures extends Fixture implements FixtureGroupInterface
         $question->setIsQuickQuestion(true); 
         
         $manager->persist($question);
-        $manager->flush();
+        $this->addReference("breakfast", $question);
+        // $manager->flush();
 
         // -----------------------------------------------------
-
-        $manager->persist($question);
-        $manager->flush();
 
         $question = new QuestionV2();
         $question->setName('afternoon_break');
@@ -59,12 +60,10 @@ class QuestionV2Fixtures extends Fixture implements FixtureGroupInterface
         $question->setIsQuickQuestion(true); 
         
         $manager->persist($question);
-        $manager->flush();
+        $this->addReference("afternoon_break", $question);
+        // $manager->flush();
 
         // -----------------------------------------------------
-
-        $manager->persist($question);
-        $manager->flush();
 
         $question = new QuestionV2();
         $question->setName('focus_break');
@@ -73,12 +72,10 @@ class QuestionV2Fixtures extends Fixture implements FixtureGroupInterface
         $question->setIsQuickQuestion(true); 
         
         $manager->persist($question);
-        $manager->flush();     
+        $this->addReference("focus_break", $question);
+        // $manager->flush();     
         
         // -----------------------------------------------------
-
-        $manager->persist($question);
-        $manager->flush();
 
         $question = new QuestionV2();
         $question->setName('hard_sleep');
@@ -87,6 +84,9 @@ class QuestionV2Fixtures extends Fixture implements FixtureGroupInterface
         $question->setIsQuickQuestion(true); 
         
         $manager->persist($question);
+        $this->addReference("hard_sleep", $question);
+
+
         $manager->flush();         
     }
 }
