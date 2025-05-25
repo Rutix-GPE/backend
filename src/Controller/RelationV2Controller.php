@@ -44,7 +44,7 @@ final class RelationV2Controller extends AbstractController
         return $this->json($relation);
     }
 
-    #[Route('/relation/v2/source-target/{question}', name: 'get_source_target', methods: ['GET'])]
+    #[Route('/relation/v2/source-target/{question}', name: 'get_answer', methods: ['GET'])]
     public function sourceAndTarget($question, Request $request, RelationV2Service $relationService): JsonResponse
     {
         // $user = $this->getUser();
