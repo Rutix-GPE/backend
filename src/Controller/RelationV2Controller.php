@@ -55,25 +55,43 @@ final class RelationV2Controller extends AbstractController
         //     throw new UnauthorizedHttpException('acces', "Accès refusé");
         // }
 
-        $data = $request->getContent();
-        $data = json_decode($data, true);
-
-        if(!isset($data['source']) || 
-        !isset($data['target']) ||
-        !isset($data['typeTarget']) ||
-        !isset($data['answer'])) {
+        if(!$question){
             $response = ["error" => "Missing informations"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
+        
+        
+        $target = $relationService->getTargetQuestion($question);
+        $source = $relationService->getSource($question);
 
-        $source = $data['source'];
-        $target = $data['target'];
-        $typeTarget = $data['typeTarget'];
-        $answer = $data['answer'];
+        $array = [
+            "target" => $target,
+            "source" => $source
+        ];
 
-        $relation = $relationService->join($source, $target, $typeTarget, $answer);
+        return $this->json([$array], Response::HTTP_OK);
 
-
-        return $this->json($relation);
     }    
+
+        #[Route('/relation/v2/answers/{question}', name: 'get_source_target', methods: ['GET'])]
+    public function answer($question, Request $request, RelationV2Service $relationService): JsonResponse
+    {
+        // $user = $this->getUser();
+        // if (!$user) {
+        //     throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        // }
+        // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+        //     throw new UnauthorizedHttpException('acces', "Accès refusé");
+        // }
+
+        if(!$question){
+            $response = ["error" => "Missing informations"];
+            return $this->json($response, Response::HTTP_BAD_REQUEST);
+        }
+        
+        
+        $answers = $relationService->getAnswer($question);
+
+        return $this->json($answers, Response::HTTP_OK);
+    }  
 }

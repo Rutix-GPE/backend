@@ -61,6 +61,65 @@ class RelationV2Service extends WebTestCase
         return $relation;
     }
 
+    public function getSource($question)
+    {
+        $question = $this->questionV2Repository->findOneBy([
+            'id' => $question
+        ]);
+
+        $target = $this->relationV2Repository->findBy([
+            'source' => $question
+        ]);
+
+        return $target;
+    }
+
+    public function getTargetQuestion($question)
+    {
+        $question = $this->questionV2Repository->findOneBy([
+            'id' => $question
+        ]);
+
+        $target = $this->relationV2Repository->findBy([
+            'targetQuestion' => $question
+        ]);
+
+        return $target;
+    }
+
+    public function getAnswer($question)
+    {
+        $question = $this->questionV2Repository->findOneBy([
+            'id' => $question
+        ]);
+
+        $source = $this->relationV2Repository->findBy([
+            'source' => $question
+        ]);
+
+
+        $answers = [];
+
+        foreach ($source as $value) {
+            array_push($answers, $value->getAnswer());
+        }
+
+        return $answers;
+    }
+
+    // public function getTargetRoutine($question)
+    // {
+    //     $question = $this->questionV2Repository->findOneBy([
+    //         'id' => $question
+    //     ]);
+
+    //     $target = $this->relationV2Repository->findOneBy([
+    //         'targetQuestion' => $question
+    //     ]);
+
+    //     return $target;
+    // }
+
 
     // public function show($routine)
     // {
