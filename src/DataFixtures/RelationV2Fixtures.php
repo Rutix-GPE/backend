@@ -50,6 +50,94 @@ class RelationV2Fixtures extends Fixture implements FixtureGroupInterface, Depen
 
         $manager->persist($relation);
 
+        // -----------------------------------------------------
+
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("breakfast"));
+        $relation->setAnswer("Oui");
+
+        $manager->persist($relation);  
+        
+        // -----------------------------------------------------
+
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("breakfast"));
+        $relation->setTargetRoutine($this->getReference("reveil_stimulant"));
+        $relation->setAnswer("Non");
+
+        $manager->persist($relation);  
+
+        // -----------------------------------------------------
+        
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("focus_moment_day"));
+        $relation->setTargetQuestion($this->getReference("afternoon_break"));
+        $relation->setAnswer("Après-midi");
+
+        $manager->persist($relation);
+
+        // -----------------------------------------------------
+        
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("afternoon_break"));
+        $relation->setTargetQuestion($this->getReference("focus_break"));
+        $relation->setAnswer("Oui");
+
+        $manager->persist($relation);
+
+        // -----------------------------------------------------
+        
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("afternoon_break"));
+        $relation->setTargetRoutine($this->getReference("pause_sensorielle"));
+        $relation->setAnswer("Non");
+
+        $manager->persist($relation);  
+        
+        // -----------------------------------------------------
+        
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("focus_break"));
+        $relation->setAnswer("Oui");
+
+        $manager->persist($relation);
+
+        // -----------------------------------------------------
+        
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("focus_break"));
+        $relation->setTargetRoutine($this->getReference("pause_sensorielle"));
+        $relation->setAnswer("Non");
+
+        $manager->persist($relation); 
+
+        // -----------------------------------------------------
+
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("focus_moment_day"));
+        $relation->setTargetQuestion($this->getReference("hard_sleep"));
+        $relation->setAnswer("Soir");
+
+        $manager->persist($relation);  
+        
+        // -----------------------------------------------------
+        
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("hard_sleep"));
+        $relation->setTargetRoutine($this->getReference("deconnexion_numerique"));
+        $relation->setAnswer("Oui");
+
+        $manager->persist($relation);  
+        
+        // -----------------------------------------------------
+        
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("hard_sleep"));
+        $relation->setAnswer("Non");
+
+        $manager->persist($relation);        
+
+        
         $manager->flush();
     }
 
