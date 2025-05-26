@@ -13,19 +13,24 @@ class TaskOutputDTO
     public string $status;
     public string $creationDate;
     public string $updatedDate;
-    public int $user; 
-    public ?int $category; 
+    public int $user;
+    public ?int $category;
+
     public function __construct(Task $task)
     {
         $this->id = $task->getId();
         $this->name = $task->getName();
         $this->description = $task->getDescription();
-        $this->taskDate = $task->getTaskDate()->format('Y-m-d');
-        $this->taskTime = $task->getTaskTime()->format('H:i:s');
+
+        // Utilisation du format ISO 8601
+        $this->taskDate = $task->getTaskDate()?->format(DATE_ATOM); // ou 'c'
+        $this->taskTime = $task->getTaskTime()?->format(DATE_ATOM); // idem
+
         $this->status = $task->getStatus();
-        $this->creationDate = $task->getCreationDate()->format('Y-m-d');
-        $this->updatedDate = $task->getUpdatedDate()->format('Y-m-d');
+        $this->creationDate = $task->getCreationDate()?->format(DATE_ATOM);
+        $this->updatedDate = $task->getUpdatedDate()?->format(DATE_ATOM);
+
         $this->user = $task->getUser()->getId();
-        $category = $task->getCategory()?->getId();
+        $this->category = $task->getCategory()?->getId();
     }
 }

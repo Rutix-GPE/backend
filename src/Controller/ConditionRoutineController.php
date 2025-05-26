@@ -2,11 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\ConditionRoutine;
-use App\Entity\UserResponse;
 use App\Repository\ConditionRoutineRepository;
-use App\Repository\UserResponseRepository;
-use App\Repository\TemplateQuestionRepository;
 use App\Service\ConditionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,10 +19,11 @@ class ConditionRoutineController extends AbstractController
     #[Route('/condition-routine/new', name:'new_condition_routine', methods: ['POST'])]
     public function newCondtionRoutine(Request $request): JsonResponse
     {   
-        $condtionRoutineDto = $this->conditionService->controllerCreateCondition($request);
-        return $this->json($condtionRoutineDto, Response::HTTP_CREATED, [], [
-            'groups' => 'condition_routine:read'
-        ]);
+       // $this->conditionService->testSerializer($request);
+  
+       //return $this->json($routineDto);
+
+        return $this->json($this->conditionService->controllerCreateCondition($request), Response::HTTP_CREATED, []);
     }
 
     // NOT USED 

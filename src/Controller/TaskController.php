@@ -32,39 +32,14 @@ class TaskController extends AbstractController
             return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
         }
 
-<<<<<<< HEAD
-        $data = $request->getContent();
-        $data = json_decode($data, true);
-
-        if(!isset($data['name']) || 
-        !isset($data['description']) ||
-        !isset($data['taskDate']) ||
-        !isset($data['taskTime'])) {
-            $response = ["error" => "Missing informations"];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }
-        $task = $this->taskService->controllerCreateTask($data, $user);
-
-        $date = new DateTime($data['taskDate']);
-        $time = new DateTime($data['taskTime']);
-        $task->setTaskDate($date);
-        $task->setTaskTime($time);
-
-        
-
-        return $this->json($task, Response::HTTP_CREATED);
-=======
         $taskDto = $this->taskService->controllerCreateTask($request, $user);
         return $this->json($taskDto, Response::HTTP_CREATED);
->>>>>>> 47097e6 (Dto Task)
 
     }
 //Good
     #[Route('/task/update/{task}', name: 'update_task', methods: ['PATCH'])]
-    public function updateTask(
-        Request $request,
-        $task
-    ): JsonResponse { 
+    public function updateTask(Request $request,$task): JsonResponse { 
+      
         $user = $this->getUser();
         if (!$user) {
             return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);

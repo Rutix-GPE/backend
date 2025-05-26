@@ -2,30 +2,23 @@
 
 namespace App\Service;
 
-use App\Dto\ConditionRoutine\ConditionRoutineOutputDTO;
 use App\Entity\User;
-use App\Entity\Routine;
 use App\Entity\ConditionRoutine;
-use App\Repository\TaskRepository;
-use App\Repository\RoutineRepository;
+use App\Dto\ConditionRoutine\ConditionRoutineInputDTO;
 use App\Repository\ConditionRoutineRepository;
 use App\Repository\TemplateQuestionRepository;
-use App\Repository\UserRepository;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Dto\ConditionRoutine\ConditionRoutineOutputDTO;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use App\Dto\ConditionRoutine\ConditionRoutineInputDTO;
 
 class ConditionService 
 {
 
     private ConditionRoutineRepository $conditionRepository;
     private TemplateQuestionRepository $templateQuestionRepository;
-
     private RoutineService $routineService;
-
-    
     public function __construct(
         ConditionRoutineRepository $conditionRepository, 
         TemplateQuestionRepository $templateQuestionRepository,
@@ -50,62 +43,33 @@ class ConditionService
         }
     }
 
-    public function controllerCreateCondition($request)
+   public function controllerCreateCondition($request)
     {
         $inputDto = $this->serializer->deserialize($request->getContent(),ConditionRoutineInputDTO::class,'json');
+     //  dd($inputDto);
         $errors = $this->validator->validate($inputDto);
+       // dd($errors);
         if (count($errors) > 0) {
             throw new BadRequestHttpException("Données invalides : " . (string) $errors);
         }
-        return new ConditionRoutineOutputDTO($this->createRoutineConditon($inputDto));
-
-       //  $category = $this->categoryRepository->find($inputDto->categoryId);
-         /*if (!$category) {
-             throw new NotFoundHttpException("Catégorie introuvable");
-         }*/
-
-     
- 
-        /*
+        return( new ConditionRoutineOutputDTO(conditionRoutine: $this->createRoutineConditon($inputDto)));
         
-        // TODO rajouter le setDays
-        $condition = new ConditionRoutine;
-
-        $condition->setName($data["name"]);
-        $condition->setDescription($data["description"]); 
-        
-        $dateTime = \DateTime::createFromFormat('H:i:s', $data["time"]);
-        $condition->setTaskTime($dateTime);
-
-        $question = $this->templateQuestionRepository->find($data["question"]);
-        $condition->setQuestion($question);
-        $condition->setResponseCondition($data["response"]);
-
-        if(isset($data['days'])){
-            $condition->setDays($data['days']);
-        }
-
-
-        $this->conditionRepository->add($condition, true);
-
-
-        return $condition;*/
+    
     }
     function createRoutineConditon($inputDto){
          
-        $question = $this->templateQuestionRepository->find($inputDto->questionId);
+        $question = $this->templateQuestionRepository->find($inputDto->question);
         if (!$question) {
             throw new NotFoundHttpException("Question introuvable");
         }
         $routine = new ConditionRoutine();
         $routine->setName($inputDto->name);
         $routine->setDescription($inputDto->description);
-        $routine->setTaskTime(new \DateTime($inputDto->taskTime));
-        $routine->setDays($inputDto->days);
-        $routine->setResponseCondition($inputDto->responseCondition);
-        $routine->setCreationDate(new \DateTime());
-        $routine->setUpdatedDate(new \DateTime());
+        $routine->setTaskTime($inputDto->time);
+        $routine->setResponseCondition($inputDto->response);
         $routine->setQuestion($question);
+        $this->conditionRepository->add($routine, true);
+
         return $routine;
 
     }

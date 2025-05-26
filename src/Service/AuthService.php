@@ -91,7 +91,9 @@ class AuthService
 
         // Authentification
         $user = $this->authenticate($dto);
+        $token = "aaa";
         $token = $this->jwtManager->create($user);
+
         $userDto = new UserResponseDTO($user);
 
         return [

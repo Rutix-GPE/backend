@@ -2,18 +2,20 @@
 
 namespace App\Tests;
 
-use App\Repository\ConditionRoutineRepository;
-use App\Repository\RoutineRepository;
+use App\Entity\User;
+use App\Service\TestService;
+use App\Dto\Auth\UserLoginDTO;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
+use App\Repository\RoutineRepository;
 use App\Repository\UserResponseRepository;
-use App\Service\TestService;
+use App\Repository\ConditionRoutineRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Serializer\SerializerInterface;
-use App\Dto\Auth\UserLoginDTO;
+
 class AuthenticationTest extends WebTestCase
 {
 
+    
     private $userRepository;
     private $userResponseRepository;
     private $conditionRepository;
@@ -39,7 +41,7 @@ class AuthenticationTest extends WebTestCase
 
         $this->removeAllUserResponse();
         $this->removeAllUsers();
-
+        
 
         
     }
@@ -142,7 +144,8 @@ class AuthenticationTest extends WebTestCase
             'username' => 'testuser1',
             'password' => 'password123'
         ]));
-
+       // dd($this->client->getResponse()->getStatusCode());
+      //  dd($this->client->getResponse()->getContent());
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertIsString($responseContent['token']);

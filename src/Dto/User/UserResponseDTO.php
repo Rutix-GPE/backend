@@ -7,6 +7,7 @@ use App\Entity\User;
 
 class UserResponseDTO
 {
+    public int $id;
     public string $username;
     public string $firstname;
     public string $lastname;
@@ -20,6 +21,7 @@ class UserResponseDTO
     public ?string $avatarFile;
     public function __construct(User $user)
     {
+        $this->id = $user->getId();
         $this->username = $user->getUsername();
         $this->firstname = $user->getFirstname();
         $this->lastname = $user->getLastname();
@@ -31,6 +33,7 @@ class UserResponseDTO
         $this->adress = $user->getAdress();
         $this->memo = $user->getMemo();
         $this->avatarFile = $user->getAvatarFile();
+
 
 
 

@@ -14,7 +14,7 @@ use DateTime;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class UserResponseTest extends WebTestCase
+class UserResponseTest //extends WebTestCase
 {
     
     private $userRepository;

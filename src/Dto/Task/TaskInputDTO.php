@@ -1,5 +1,6 @@
 <?php
 namespace App\Dto\Task;
+
 use Symfony\Component\Validator\Constraints as Assert;
 
 class TaskInputDTO
@@ -7,14 +8,16 @@ class TaskInputDTO
     #[Assert\NotBlank()]
     public string $name;
 
-    #[Assert\NotBlank()]
     public string $description;
 
     #[Assert\NotBlank()]
-    #[Assert\Date()]
-    public string $taskDate;
+    #[Assert\Type(\DateTimeInterface::class)]
+    public \DateTimeInterface $taskDate;
 
     #[Assert\NotBlank()]
-    #[Assert\Time()]
-    public string $taskTime;
+    #[Assert\Type(\DateTimeInterface::class)]
+    public \DateTimeInterface $taskTime;
+
+    public ?string $status = null;
+
 }

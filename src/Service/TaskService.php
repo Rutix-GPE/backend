@@ -67,20 +67,17 @@ class TaskService
 
     public function controllerCreateTask($request, $user)
     {
-       // die($this->serializer->deserialize($request->getContent(), TaskInputDTO::class, 'json'));
 
         $dto = $this->serializer->deserialize($request->getContent(), TaskInputDTO::class, 'json');
         $errors = $this->validator->validate($dto); 
         if (count($errors) > 0) {
-            throw new BadRequestHttpException("Données invalides.");
+            throw new BadRequestHttpException($errors);
         }
         $task = new Task;
         $task->setName($dto->name);
         $task->setDescription($dto->description);
-        $date = new DateTime($dto->taskDate);
-        $time = new DateTime($dto->taskTime);
-        $task->setTaskDate($date);
-        $task->setTaskTime($time);
+        $task->setTaskDate($dto->taskDate);
+        $task->setTaskTime($dto->taskTime);
         $task->setUser($user);
         $task->setStatus("Not finish");
         $this->taskRepository->add($task, true);
@@ -93,7 +90,8 @@ class TaskService
         $inputDto = $this->serializer->deserialize($request->getContent(), TaskInputUpdateDTO::class, 'json');
         $errors = $this->validator->validate($inputDto);
         if (count($errors) > 0) {
-            throw new BadRequestHttpException("Données invalides.");
+            dd($errors);
+            throw new BadRequestHttpException("Données invalides. ");
         }
         return (new TaskOutputDTO($this->updateTask($inputDto, $taskId)));
     }
