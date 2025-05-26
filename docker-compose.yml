@@ -1,40 +1,46 @@
+version: '3.8'
+
 services:
-  # Service pour l'API Symfony
+  # 🏗️ Backend Symfony
   app:
     build: .
     container_name: backend
     ports:
-      - "8080:80"  # Redirige le port externe 8080 vers le port interne 80 du conteneur
+      - "8080:80"  # Redirige le port 8080 sur le port 80 du conteneur
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html  # Montre le code source
     networks:
       - app
     depends_on:
       db:
         condition: service_healthy
     environment:
-      - DATABASE_URL=mysql://root:root@db/rutix_db
-    #command: php bin/console doctrine:migrations:generate --no-interaction && php bin/console doctrine:migrations:migrate --no-interaction  # Assure que Symfony écoute sur 0.0.0.0 et le port 80
+      - DATABASE_URL=mysql://root:root@db:3306/rutix_db  # DB principale
+    command: php -S 0.0.0.0:80 -t public  # Démarre le serveur PHP intégré
 
-
-  # Service pour la base de données MySQL
+  # 🛢️ Base de données MySQL avec init.sql
   db:
     image: mysql:8.0
     container_name: db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: rutix_db
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: test_password
     ports:
-      - "3306:3306"
+      - "3307:3306"  # Remplacé par 3307 pour éviter conflits
     networks:
       - app
     volumes:
       - db_data:/var/lib/mysql
-   
+      - ./docker/mysql-init:/docker-entrypoint-initdb.d  # Init SQL monté
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
 
 volumes:
   db_data:
+
 networks:
- app:
+  app:

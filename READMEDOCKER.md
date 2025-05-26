@@ -6,7 +6,8 @@ Installer docker ( vaut mieux suivre les commandes sur le site officel)
  # sous linux / debian 
 
  https://docs.docker.com/engine/install/ubuntu/
-
+# init le .env
+Il faut mettre la DB de 127.0.0.1:3306 => db:3306
  # lancemant du projet
 
  Une fois installer il faut se mettre à la racine du projet /backEnd et lancer la commande
