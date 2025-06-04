@@ -24,8 +24,6 @@ class UserResponseV2Service
 
     public function getFirstQuestion()
     {
-        // $relationService = new RelationV2Service;
-
         $question = $this->questionV2Repository->findOneBy([
             'id' => 1
         ]);
@@ -39,6 +37,35 @@ class UserResponseV2Service
         ];
 
         return $array;
+    }
+
+    public function getNextQuestion($question, $answer)
+    {
+        $relation = $this->relationV2Service->getQuestionByIdAndAnswer($question, $answer);
+
+        $question = $relation->getTargetQuestion();
+        $routine = $relation->getTargetRoutine();
+
+        if($question){
+            $answer = $this->relationV2Service->getAnswer($question->getId());
+    
+            $array = [
+                "question" => $question->getContent(),
+                "answer" => $answer,
+                "url" => "user-response/v2/next-question/" . $question->getId()
+            ];
+        } else if($routine){
+            $array = [
+                "routine" => $routine->getName(),
+                "content" => $routine->getDescription()
+            ];
+        }
+  
+
+        return $array;
+
+        // return "no question";
+
     }
 
 }

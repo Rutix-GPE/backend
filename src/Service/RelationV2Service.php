@@ -107,6 +107,26 @@ class RelationV2Service extends WebTestCase
         return $answers;
     }
 
+    public function getQuestionByIdAndAnswer($question, $answer)
+    {
+        $relation =  $this->relationV2Repository->findOneBy([
+            'source' => $question,
+            'answer' => $answer
+        ]);
+
+        return $relation;
+    }
+
+    public function getRoutinByIdAndAnswer($question, $answer)
+    {
+        $relation =  $this->relationV2Repository->findOneBy([
+            'source' => $question,
+            'answer' => $answer
+        ]);
+
+        return $relation;
+    }
+
     // public function getTargetRoutine($question)
     // {
     //     $question = $this->questionV2Repository->findOneBy([

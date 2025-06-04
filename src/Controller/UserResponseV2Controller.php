@@ -45,4 +45,34 @@ class UserResponseV2Controller extends AbstractController
 
         return $this->json($question);
     }
+
+    #[Route('/user-response/v2/next-question/{questionId}', name: 'get_next_question', methods: ['POST'])]
+    public function nextQuestion($questionId, Request $request, UserResponseV2Service $userResponseV2): JsonResponse
+    {
+        // $user = $this->getUser();
+        // if (!$user) {
+        //     throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        // }
+        // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+        //     throw new UnauthorizedHttpException('acces', "Accès refusé");
+        // }
+
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        if(!isset($data['answer'])) {
+            $response = ["error" => "Missing informations"];
+            return $this->json($response, Response::HTTP_BAD_REQUEST);
+        }
+
+        $answer = $data['answer'];
+
+        // $relation = $relationService->join($source, $target, $typeTarget, $answer);
+
+        // $question = $userResponseV2->getFirstQuestion();
+
+        $question = $userResponseV2->getNextQuestion($questionId, $answer);
+
+        return $this->json($question);
+    }
 }
