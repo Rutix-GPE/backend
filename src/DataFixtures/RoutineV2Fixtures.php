@@ -16,6 +16,8 @@ class RoutineV2Fixtures extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager): void
     {
+        // Tree one
+
         $routine = new RoutineV2();
         $routine->setName('reveil_stimulant');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
@@ -48,6 +50,40 @@ class RoutineV2Fixtures extends Fixture implements FixtureGroupInterface
         
         $manager->persist($routine);
         $this->addReference("deconnexion_numerique", $routine);
+
+
+        // Tre two
+
+        $routine = new RoutineV2();
+        $routine->setName('entretien_animal');
+        $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
+        $routine->setDays([1, 2, 3, 4, 5]); 
+        $routine->setTaskTime(new \DateTime('20:00:00')); 
+        
+        $manager->persist($routine);
+        $this->addReference("entretien_animal", $routine);
+
+        // -----------------------------------------------------
+
+        $routine = new RoutineV2();
+        $routine->setName('entretien_chat');
+        $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
+        $routine->setDays([1, 2, 3, 4, 5]); 
+        $routine->setTaskTime(new \DateTime('20:00:00')); 
+        
+        $manager->persist($routine);
+        $this->addReference("entretien_chat", $routine);
+
+        // -----------------------------------------------------   
+        
+        $routine = new RoutineV2();
+        $routine->setName('entretien_chien');
+        $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
+        $routine->setDays([1, 2, 3, 4, 5]); 
+        $routine->setTaskTime(new \DateTime('20:00:00')); 
+        
+        $manager->persist($routine);
+        $this->addReference("entretien_chien", $routine);
 
 
         $manager->flush();

@@ -16,6 +16,8 @@ class QuestionV2Fixtures extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager): void
     {
+        // Tree one
+
         $question = new QuestionV2();
         $question->setName('focus_moment_day');
         $question->setContent('À quel moment de la journée as-tu le plus de mal à te concentrer ?'); 
@@ -84,9 +86,43 @@ class QuestionV2Fixtures extends Fixture implements FixtureGroupInterface
         $question->setIsQuickQuestion(true); 
         
         $manager->persist($question);
-        $this->addReference("hard_sleep", $question);
+        $this->addReference("hard_sleep", $question);     
+        
 
+        // Tree two
 
-        $manager->flush();         
+        $question = new QuestionV2();
+        $question->setName('have_animal');
+        $question->setContent('Est-ce que tu as un animal ?'); 
+        $question->setIsRootQuestion(true); 
+        $question->setIsQuickQuestion(true); 
+        
+        $manager->persist($question);
+        $this->addReference("have_animal", $question);       
+        
+        // -----------------------------------------------------
+
+        $question = new QuestionV2();
+        $question->setName('what_animal');
+        $question->setContent('Quel type d\'animal as-tu ?'); 
+        $question->setIsRootQuestion(false); 
+        $question->setIsQuickQuestion(true); 
+        
+        $manager->persist($question);
+        $this->addReference("what_animal", $question);       
+        
+        // -----------------------------------------------------
+
+        $question = new QuestionV2();
+        $question->setName('dog_habits');
+        $question->setContent('As-tu une routine de sortie pour ton chien ?'); 
+        $question->setIsRootQuestion(false); 
+        $question->setIsQuickQuestion(true); 
+        
+        $manager->persist($question);
+        $this->addReference("dog_habits", $question);       
+        
+        $manager->flush(); 
+
     }
 }
