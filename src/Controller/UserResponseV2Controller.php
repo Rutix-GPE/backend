@@ -8,16 +8,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class UserResponseV2Controller extends AbstractController
 {
     #[Route('/user-response/v2/first-question', name: 'get_first_question', methods: ['GET'])]
     public function firstQuestion(Request $request, UserResponseV2Service $userResponseV2): JsonResponse
     {
-        // $user = $this->getUser();
-        // if (!$user) {
-        //     throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
-        // }
+        $user = $this->getUser();
+        if (!$user) {
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        }
         // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
         //     throw new UnauthorizedHttpException('acces', "Accès refusé");
         // }
@@ -40,8 +41,7 @@ class UserResponseV2Controller extends AbstractController
 
         // $relation = $relationService->join($source, $target, $typeTarget, $answer);
 
-        $question = $userResponseV2->getFirstQuestion();
-
+        $question = $userResponseV2->getFirstQuestion($user);
 
         return $this->json($question);
     }
@@ -49,10 +49,10 @@ class UserResponseV2Controller extends AbstractController
     #[Route('/user-response/v2/next-question/{questionId}', name: 'get_next_question', methods: ['POST'])]
     public function nextQuestion($questionId, Request $request, UserResponseV2Service $userResponseV2): JsonResponse
     {
-        // $user = $this->getUser();
-        // if (!$user) {
-        //     throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
-        // }
+        $user = $this->getUser();
+        if (!$user) {
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        }
         // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
         //     throw new UnauthorizedHttpException('acces', "Accès refusé");
         // }
@@ -71,7 +71,7 @@ class UserResponseV2Controller extends AbstractController
 
         // $question = $userResponseV2->getFirstQuestion();
 
-        $question = $userResponseV2->getNextQuestion($questionId, $answer);
+        $question = $userResponseV2->getNextQuestion($questionId, $answer, $user);
 
         return $this->json($question);
     }

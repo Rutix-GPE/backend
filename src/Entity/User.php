@@ -98,6 +98,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserTaskV2::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $userTaskV2s;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?QuestionV2 $nextRootQuestion = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -458,6 +461,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $userTaskV2->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNextRootQuestion(): ?QuestionV2
+    {
+        return $this->nextRootQuestion;
+    }
+
+    public function setNextRootQuestion(?QuestionV2 $nextRootQuestion): static
+    {
+        $this->nextRootQuestion = $nextRootQuestion;
 
         return $this;
     }

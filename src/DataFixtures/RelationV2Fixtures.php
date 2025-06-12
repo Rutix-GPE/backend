@@ -23,7 +23,7 @@ class RelationV2Fixtures extends Fixture implements FixtureGroupInterface, Depen
     public function load(ObjectManager $manager): void
     {
 
-        // $relationService->join("focus_moment_day", "hard_morning", "question", "Matin");
+        // Tree one
 
         $relation = new RelationV2();
         $relation->setSource($this->getReference("focus_moment_day"));
@@ -137,7 +137,68 @@ class RelationV2Fixtures extends Fixture implements FixtureGroupInterface, Depen
 
         $manager->persist($relation);        
 
+
+        // Tree two
         
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("have_animal"));
+        $relation->setTargetQuestion($this->getReference("what_animal"));
+        $relation->setAnswer("Oui");
+
+        $manager->persist($relation); 
+
+        // -----------------------------------------------------
+                
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("have_animal"));
+        $relation->setAnswer("Non");
+
+        $manager->persist($relation); 
+
+        // -----------------------------------------------------
+                
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("what_animal"));
+        $relation->setTargetQuestion($this->getReference("dog_habits"));
+        $relation->setAnswer("Chien");
+
+        $manager->persist($relation); 
+
+        // -----------------------------------------------------
+                
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("what_animal"));
+        $relation->setTargetRoutine($this->getReference("entretien_chat"));
+        $relation->setAnswer("Chat");
+
+        $manager->persist($relation);      
+        
+        // -----------------------------------------------------
+                
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("what_animal"));
+        $relation->setTargetRoutine($this->getReference("entretien_animal"));
+        $relation->setAnswer("Autre");
+
+        $manager->persist($relation);  
+
+        // -----------------------------------------------------
+                
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("dog_habits"));
+        $relation->setAnswer("Oui");
+
+        $manager->persist($relation);  
+
+        // -----------------------------------------------------
+                
+        $relation = new RelationV2();
+        $relation->setSource($this->getReference("dog_habits"));
+        $relation->setTargetRoutine($this->getReference("entretien_chien"));
+        $relation->setAnswer("Non");
+
+        $manager->persist($relation);
+
         $manager->flush();
     }
 

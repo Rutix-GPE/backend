@@ -4,19 +4,23 @@ namespace App\Service;
 
 use App\Entity\QuestionV2;
 use App\Repository\QuestionV2Repository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
+use function PHPUnit\Framework\isNull;
 
 class QuestionV2Service extends WebTestCase
 {
 
     private QuestionV2Repository $questionV2Repository;
+    private UserRepository $userRepository;
 
     
-    public function __construct(QuestionV2Repository $questionV2Repository) 
+    public function __construct(QuestionV2Repository $questionV2Repository, UserRepository $userRepository) 
     {
         $this->questionV2Repository = $questionV2Repository;
+        $this->userRepository = $userRepository;
     }
 
     public function show($question)
@@ -29,6 +33,13 @@ class QuestionV2Service extends WebTestCase
     public function list()
     {
         return $this->questionV2Repository->findAll();
+    }
+
+    public function listRoot()
+    {
+        return $this->questionV2Repository->findBy([
+            'isRootQuestion' => true
+        ]);
     }
 
     public function new($name, $content, $rootQuestion, $quickQuestion)
@@ -77,5 +88,26 @@ class QuestionV2Service extends WebTestCase
         return [$question, Response::HTTP_OK];
     }
 
+    function setNextRootQuestion($question, $user)
+    {
+        if($question)
+        {
+            if($question->isRootQuestion()){
+                $allQuestions = $this->questionV2Repository->findBy([
+                    'isRootQuestion' => true
+                ]);
+                
+                foreach($allQuestions as $index => $oneQuestion) {
+                    if($oneQuestion->getId() == $question->getId()){
+                        $next = $allQuestions[$index + 1] ?? null;
+                    }
+                }
+                
+                $user->setNextRootQuestion($next);
+    
+                $this->userRepository->add($user, true);
+            }
+        }
+    }
 
 }

@@ -52,7 +52,7 @@ class RoutineV2Fixtures extends Fixture implements FixtureGroupInterface
         $this->addReference("deconnexion_numerique", $routine);
 
 
-        // Tre two
+        // Tree two
 
         $routine = new RoutineV2();
         $routine->setName('entretien_animal');

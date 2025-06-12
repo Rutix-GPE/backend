@@ -43,6 +43,22 @@ class QuestionV2Controller extends AbstractController
 
         return $this->json($questionV2, Response::HTTP_OK);
     }
+
+    #[Route('/question/v2/list-root', name: 'list_root_question_v2', methods: ['GET'])]
+    public function listRoot(Request $request, QuestionV2Service $questionService): JsonResponse
+    {
+        // $user = $this->getUser();
+        // if (!$user) {
+        //     throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        // }
+        // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+        //     throw new UnauthorizedHttpException('acces', "Accès refusé");
+        // }
+
+        $questionV2 = $questionService->listRoot();
+
+        return $this->json($questionV2, Response::HTTP_OK);
+    }
     
     #[Route('/question/v2/create', name: 'create_question_v2', methods: ['POST'])]
     public function create(Request $request, QuestionV2Service $questionService): JsonResponse
