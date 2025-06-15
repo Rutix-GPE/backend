@@ -16,6 +16,15 @@ class UserRoutineV2Repository extends ServiceEntityRepository
         parent::__construct($registry, UserRoutineV2::class);
     }
 
+    public function add(UserRoutineV2 $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
     //    /**
     //     * @return UserRoutineV2[] Returns an array of UserRoutineV2 objects
     //     */

@@ -16,6 +16,15 @@ class UserTaskV2Repository extends ServiceEntityRepository
         parent::__construct($registry, UserTaskV2::class);
     }
 
+    public function add(UserTaskV2 $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
     //    /**
     //     * @return UserTaskV2[] Returns an array of UserTaskV2 objects
     //     */

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRoutineV2Repository::class)]
+#[ORM\HasLifecycleCallbacks]
 class UserRoutineV2
 {
     #[ORM\Id]
@@ -20,7 +21,7 @@ class UserRoutineV2
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::ARRAY)]
+    #[ORM\Column]
     private array $days = [];
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
@@ -32,6 +33,12 @@ class UserRoutineV2
     #[ORM\ManyToOne(inversedBy: 'userRoutineV2s')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $creationDate = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updatedDate = null;
 
     public function getId(): ?int
     {
@@ -108,5 +115,56 @@ class UserRoutineV2
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): static
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getUpdatedDate(): ?\DateTimeInterface
+    {
+        return $this->updatedDate;
+    }
+
+    public function setUpdatedDate(\DateTimeInterface $updatedDate): static
+    {
+        $this->updatedDate = $updatedDate;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->creationDate = new \DateTime();
+        $this->updatedDate = new \DateTime();
+        
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->updatedDate = new \DateTime();
+
+        return $this;
+    }
+
+    public function copyRoutine(RoutineV2 $routine, $user)
+    {
+        $this->user = $user;
+        $this->name = $routine->getName();
+        $this->description = $routine->getDescription();
+        $this->days = $routine->getDays();
+        $this->taskTime = $routine->getTaskTime();
+        $this->isAllTaskGenerated = false;
     }
 }

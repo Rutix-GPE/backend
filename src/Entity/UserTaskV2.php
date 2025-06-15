@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserTaskV2Repository::class)]
+#[ORM\HasLifecycleCallbacks]
 class UserTaskV2
 {
     #[ORM\Id]
@@ -29,6 +30,12 @@ class UserTaskV2
     #[ORM\ManyToOne(inversedBy: 'userTaskV2s')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $creationDate = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updatedDate = null;
 
     public function getId(): ?int
     {
@@ -91,6 +98,48 @@ class UserTaskV2
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): static
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getUpdatedDate(): ?\DateTimeInterface
+    {
+        return $this->updatedDate;
+    }
+
+    public function setUpdatedDate(\DateTimeInterface $updatedDate): static
+    {
+        $this->updatedDate = $updatedDate;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->creationDate = new \DateTime();
+        $this->updatedDate = new \DateTime();
+        
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->updatedDate = new \DateTime();
 
         return $this;
     }

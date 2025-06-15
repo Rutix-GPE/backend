@@ -71,8 +71,11 @@ class UserResponseV2Controller extends AbstractController
 
         // $question = $userResponseV2->getFirstQuestion();
 
-        $question = $userResponseV2->getNextQuestion($questionId, $answer, $user);
+        $array = $userResponseV2->getNextQuestion($questionId, $answer, $user);
 
-        return $this->json($question);
+        $code = $array['code'];
+        unset($array['code']);
+
+        return $this->json($array, $code);
     }
 }
