@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserTaskV2Repository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserTaskV2Repository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -13,28 +14,36 @@ class UserTaskV2
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['usertask:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['usertask:read', 'usertask:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['usertask:read', 'usertask:write'])]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(['usertask:read', 'usertask:write'])]
     private ?\DateTime $taskDateTime = null;
 
     #[ORM\Column(type: Types::BIGINT)]
+    #[Groups(['usertask:read', 'usertask:write'])]
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'userTaskV2s')]
     #[ORM\JoinColumn(nullable: false)]
+    // PAS DE GROUP!
     private ?User $user = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['usertask:read'])]
     private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['usertask:read'])]
     private ?\DateTimeInterface $updatedDate = null;
 
     public function getId(): ?int

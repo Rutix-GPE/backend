@@ -85,4 +85,59 @@ class UserTaskV2Service extends WebTestCase
         return $datetime;
     }
 
+
+    // public function controllerCreateTask($data, $user)
+    // {
+    //     $task = new Task;
+
+    //     $task->setName($data['name']);
+    //     $task->setDescription($data['description']);
+
+
+    //     $date = new DateTime($data['date']);
+    //     $time = new DateTime($data['time']);
+    //     $task->setTaskDate($date);
+    //     $task->setTaskTime($time);
+
+    //     $task->setUser($user);
+    //     $task->setStatus("Not finish");
+
+    //     $this->taskRepository->add($task, true);
+
+    //     return $task;
+    // }
+
+    // public function controllerUpdateTask($taskId, $data)
+    // {
+    //     $task = $this->taskRepository->find($taskId);
+
+    //     if(!$task) {
+    //         return $task;
+    //     }
+
+    //     if(isset($data['name'])){
+
+    //         $task->setName($data['name']);
+    //     }
+
+    //     if(isset($data['time'])){
+    //         $time = new DateTime($data['time']);
+    //         $task->setTaskTime($time);
+    //     }
+
+    //     $this->taskRepository->add($task, true);
+
+    //     return $task;
+    // }
+
+    public function controllerGetTasksByUser($user)
+    {
+        return $this->userTaskV2Repository->findBy(['user' => $user]);
+    }
+
+    public function controllerGetTasksByUserAndTime($user, $time)
+    {
+        return $this->userTaskV2Repository->findBy(['user' => $user->id, 'taskDateTime' => $time]);
+    }
+    
 }

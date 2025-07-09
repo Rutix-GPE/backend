@@ -10,6 +10,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
@@ -20,6 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user:read', 'routine:write'])]
     public ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -45,6 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $lastname = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['user:read'])]
     public ?string $email = null;
 
     #[ORM\Column(length: 100, nullable: true, unique: true)]

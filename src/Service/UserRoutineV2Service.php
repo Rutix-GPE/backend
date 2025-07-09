@@ -48,4 +48,9 @@ class UserRoutineV2Service extends WebTestCase
         return Response::HTTP_CREATED;
     }
 
+    public function controllerGetRoutineByUser($userId)
+    {
+        return $this->userRoutineV2Repository->findBy(['user' => $userId]);
+    }
+
 }
