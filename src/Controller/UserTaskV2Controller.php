@@ -25,12 +25,12 @@ class UserTaskV2Controller extends AbstractController
         ]);
     }
 
-    #[Route('/task/create', name: 'create_task', methods: ['POST'])]
+    #[Route('/user-task/v2/create', name: 'create_task', methods: ['POST'])]
     public function createTask(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
         // TaskRepository $taskRepository,
-        TaskService $taskService
+        UserTaskV2Service $userTaskV2Service
     ): JsonResponse { 
         $user = $this->getUser();
 
@@ -43,14 +43,20 @@ class UserTaskV2Controller extends AbstractController
 
         if(!isset($data['name']) || 
         !isset($data['description']) ||
-        !isset($data['date']) ||
-        !isset($data['time'])) {
+        !isset($data['dateTime'])) {
             $response = ["error" => "Missing informations"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
 
+
         try {
-            $task = $taskService->controllerCreateTask($data, $user);
+
+            $dateTime = $data['dateTime'];
+            $dateTime = new \DateTime($dateTime);
+            $data['dateTime'] = $dateTime;
+
+
+            $task = $userTaskV2Service->controllerCreateTask($user, $data);
 
             // $task = new Task;
 
@@ -68,7 +74,7 @@ class UserTaskV2Controller extends AbstractController
 
             // $taskRepository->add($task, true);
 
-            return $this->json($task, Response::HTTP_CREATED);
+            return $this->json($task, Response::HTTP_CREATED, [], ['groups' => 'usertask:read']);
 
         } catch (\Exception $error) {
             return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -76,12 +82,12 @@ class UserTaskV2Controller extends AbstractController
 
     }
 
-    #[Route('/task/update/{task}', name: 'update_task', methods: ['PUT'])]
+    #[Route('/user-task/update/v2/{task}', name: 'update_task', methods: ['PUT'])]
     public function updateTask(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
         // TaskRepository $taskRepository,
-        TaskService $taskService,
+        UserTaskV2Service $userTaskV2Service,
         $task
     ): JsonResponse { 
         $user = $this->getUser();
@@ -90,11 +96,19 @@ class UserTaskV2Controller extends AbstractController
             return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
         }
 
+        $task = $userTaskV2Service->getTaskById($task);
+        // $array = [$task->getUser()->id, $user->id];
+
+        if($task->getUser()->id != $user->id){
+            return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
+        } 
+
+
         $data = $request->getContent();
         $data = json_decode($data, true);
 
         try {
-            $task = $taskService->controllerUpdateTask($task, $data);
+            $task = $userTaskV2Service->controllerUpdateTask($task, $data);
 
             // $task = $taskRepository->find($task);
 
@@ -120,7 +134,7 @@ class UserTaskV2Controller extends AbstractController
             }
 
 
-            return $this->json($task, Response::HTTP_OK);
+            return $this->json($task, Response::HTTP_OK, [], ['groups' => 'usertask:read']);
 
         } catch (\Exception $error) {
             return $this->json(['error' => $error->getMessage() . " à la ligne " . $error->getLine() . " dans " . $error->getFile()], Response::HTTP_BAD_REQUEST);
@@ -177,11 +191,8 @@ class UserTaskV2Controller extends AbstractController
             $dateTime = new \DateTime($formattedDateTime);
 
             $tasks = $userTaskV2Service->controllerGetTasksByUserAndTime($user, $dateTime);
-            // $tasks = $taskRepository->findBy(['User' => $user->id, 'taskDate' => $time]);
 
             return $this->json($tasks, Response::HTTP_OK, [], ['groups' => 'usertask:read']);
-
-            // return $this->json($userResponse, Response::HTTP_CREATED);
 
         } catch (\Exception $error) {
             return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);

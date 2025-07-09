@@ -51,22 +51,11 @@ class UserTaskV2Service extends WebTestCase
 
         $task->setName($routine->getName());
         $task->setDescription($routine->getDescription());
-        // $task->setTaskTime($routine->getTaskTime());
-        // if (is_string($date)) {
-        //     $date = DateTime::createFromFormat('Y-m-d', $date); // Adapter le format à ton besoin (par exemple 'Y-m-d')
-        // }
-        // $task->setTaskDate($date);
-
-        // $task->setTaskDateTime();
 
         $task->setTaskDateTime($this->concatDateTime($routine->getTaskTime(), $date));
 
         $task->setStatus(false);
         $task->setUser($routine->getUser());
-
-
-        // $this->entityManager->persist($task);
-        // $this->entityManager->flush();
 
         $this->userTaskV2Repository->add($task, true);
     }
@@ -129,6 +118,54 @@ class UserTaskV2Service extends WebTestCase
 
     //     return $task;
     // }
+
+    public function getTaskById($id)
+    {
+        return $this->userTaskV2Repository->findOneBy(['id' => $id]);
+    }
+
+    public function controllerUpdateTask($task, $data)
+    {
+
+        if(isset($data['name'])){
+            $task->setName($data['name']);
+        }
+
+        if(isset($data['description'])){
+            $task->setDescription($data['description']);
+        }
+
+        if(isset($data['dateTime'])){
+            $dateTime = $data['dateTime'];
+            $dateTime = new \DateTime($dateTime);
+
+            $task->setTaskDateTime($dateTime);
+        }
+        
+        if(isset($data['status'])){
+            $task->setStatus($data['status']);
+        }        
+
+        $this->userTaskV2Repository->add($task, true);
+
+        return $task;
+    }
+
+    public function controllerCreateTask($user, $data)
+    {
+        $task = new UserTaskV2;
+
+        $task->setUser($user);
+
+        $task->setName($data['name']);
+        $task->setDescription($data['description']);
+        $task->setTaskDateTime($data['dateTime']);
+        $task->setStatus(false);
+
+        $this->userTaskV2Repository->add($task, true);
+
+        return $task;
+    }
 
     public function controllerGetTasksByUser($user)
     {
