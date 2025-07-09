@@ -31,7 +31,7 @@ class UserTaskV2
 
     #[ORM\Column(type: Types::BIGINT)]
     #[Groups(['usertask:read', 'usertask:write'])]
-    private ?string $status = null;
+    private ?int $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'userTaskV2s')]
     #[ORM\JoinColumn(nullable: false)]
@@ -87,12 +87,12 @@ class UserTaskV2
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?int
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(int $status): static
     {
         $this->status = $status;
 

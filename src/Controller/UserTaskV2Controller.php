@@ -155,12 +155,13 @@ class UserTaskV2Controller extends AbstractController
         }
     }
 
-    #[Route('/user-task/v2/get-by-user-and-time', name: 'task_by_user_and_time', methods: ['GET'])]
+    #[Route('/user-task/v2/get-by-user-and-datetime/{dateTime}', name: 'task_by_user_and_time', methods: ['GET'])]
     public function getTasksByUserAndTime(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
         // TaskRepository $taskRepository,
-        UserTaskV2Service $userTaskV2Service
+        UserTaskV2Service $userTaskV2Service,
+        string $dateTime
     ): JsonResponse {
         $data = $request->getContent();
         $data = json_decode($data, true);
@@ -171,14 +172,10 @@ class UserTaskV2Controller extends AbstractController
             return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
         }
 
-        if(!isset($data['dateTime'])) {
-            $response = ["error" => "Missing informations"];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }
-
-        $dateTime = new \DateTime($data['dateTime']);
-
         try {
+            $formattedDateTime = str_replace('_', ' ', $dateTime);
+            $dateTime = new \DateTime($formattedDateTime);
+
             $tasks = $userTaskV2Service->controllerGetTasksByUserAndTime($user, $dateTime);
             // $tasks = $taskRepository->findBy(['User' => $user->id, 'taskDate' => $time]);
 
