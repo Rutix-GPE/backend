@@ -170,7 +170,7 @@ class UserTaskV2Controller extends AbstractController
     }
 
     #[Route('/user-task/v2/get-by-user-and-datetime/{dateTime}', name: 'task_by_user_and_time', methods: ['GET'])]
-    public function getTasksByUserAndTime(
+    public function getTasksByUserAndDateTime(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
         // TaskRepository $taskRepository,
@@ -190,7 +190,42 @@ class UserTaskV2Controller extends AbstractController
             $formattedDateTime = str_replace('_', ' ', $dateTime);
             $dateTime = new \DateTime($formattedDateTime);
 
-            $tasks = $userTaskV2Service->controllerGetTasksByUserAndTime($user, $dateTime);
+            $tasks = $userTaskV2Service->controllerGetTasksByUserAndDateTime($user, $dateTime);
+
+            return $this->json($tasks, Response::HTTP_OK, [], ['groups' => 'usertask:read']);
+
+        } catch (\Exception $error) {
+            return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/user-task/v2/get-by-user-and-date/{date}', name: 'task_by_user_and_date', methods: ['GET'])]
+    public function getTasksByUserAndDate(
+        Request $request,
+        JWTTokenManagerInterface $tokenManager,
+        // TaskRepository $taskRepository,
+        UserTaskV2Service $userTaskV2Service,
+        string $date
+    ): JsonResponse {
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        try {
+            // $formattedDateTime = str_replace('_', ' ', $dateTime);
+            // $dateTime = new \DateTime($formattedDateTime);
+
+            $dateObject = \DateTime::createFromFormat('Y-m-d', $date);
+            if (!$dateObject) {
+                return $this->json(['error' => 'Invalid date format, expected Y-m-d'], Response::HTTP_BAD_REQUEST);
+            }
+
+            $tasks = $userTaskV2Service->controllerGetTasksByUserAndDate($user, $dateObject);
 
             return $this->json($tasks, Response::HTTP_OK, [], ['groups' => 'usertask:read']);
 

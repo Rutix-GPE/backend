@@ -172,9 +172,20 @@ class UserTaskV2Service extends WebTestCase
         return $this->userTaskV2Repository->findBy(['user' => $user]);
     }
 
-    public function controllerGetTasksByUserAndTime($user, $time)
+    public function controllerGetTasksByUserAndDateTime($user, $time)
     {
         return $this->userTaskV2Repository->findBy(['user' => $user->id, 'taskDateTime' => $time]);
+    }
+
+    public function controllerGetTasksByUserAndDate($user, $date): array
+    {
+        $tasks = $this->userTaskV2Repository->findBy(['user' => $user]);
+
+        $filteredTasks = array_filter($tasks, function ($task) use ($date) {
+            return $task->getTaskDateTime()->format('Y-m-d') === $date->format('Y-m-d');
+        });
+
+        return array_values($filteredTasks);
     }
     
 }
