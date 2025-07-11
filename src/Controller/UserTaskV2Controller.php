@@ -82,7 +82,7 @@ class UserTaskV2Controller extends AbstractController
 
     }
 
-    #[Route('/user-task/update/v2/{task}', name: 'update_task', methods: ['PUT'])]
+    #[Route('/user-task/update/v2/{task}', name: 'update_task', methods: ['PATCH'])]
     public function updateTask(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
