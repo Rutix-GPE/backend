@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /var/www/html/src/Controller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../_css/bootstrap.min.css?v=9.2.32" rel="stylesheet" type="text/css">
+  <link href="../_css/nv.d3.min.css?v=9.2.32" rel="stylesheet" type="text/css">
+  <link href="../_css/style.css?v=9.2.32" rel="stylesheet" type="text/css">
+  <link href="../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../index.html">/var/www/html/src</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Controller</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="AvatarController.php.html#10">App\Controller\AvatarController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="QuestionV2Controller.php.html#13">App\Controller\QuestionV2Controller</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RelationController.php.html#12">App\Controller\RelationController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RelationV2Controller.php.html#12">App\Controller\RelationV2Controller</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RoutineV2Controller.php.html#12">App\Controller\RoutineV2Controller</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TestController.php.html#9">App\Controller\TestController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserResponseV2Controller.php.html#13">App\Controller\UserResponseV2Controller</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserRoutineV2Controller.php.html#16">App\Controller\UserRoutineV2Controller</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#18">App\Controller\UserTaskV2Controller</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#13">App\Controller\TemplateQuestionController</a></td><td class="text-right">36%</td></tr>
+       <tr><td><a href="UserResponseController.php.html#21">App\Controller\UserResponseController</a></td><td class="text-right">36%</td></tr>
+       <tr><td><a href="RoutineController.php.html#11">App\Controller\RoutineController</a></td><td class="text-right">55%</td></tr>
+       <tr><td><a href="UserController.php.html#19">App\Controller\UserController</a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="TaskController.php.html#13">App\Controller\TaskController</a></td><td class="text-right">72%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="UserTaskV2Controller.php.html#18">App\Controller\UserTaskV2Controller</a></td><td class="text-right">506</td></tr>
+       <tr><td><a href="QuestionV2Controller.php.html#13">App\Controller\QuestionV2Controller</a></td><td class="text-right">132</td></tr>
+       <tr><td><a href="RoutineV2Controller.php.html#12">App\Controller\RoutineV2Controller</a></td><td class="text-right">110</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#13">App\Controller\TemplateQuestionController</a></td><td class="text-right">101</td></tr>
+       <tr><td><a href="RelationController.php.html#12">App\Controller\RelationController</a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="RelationV2Controller.php.html#12">App\Controller\RelationV2Controller</a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="UserResponseController.php.html#21">App\Controller\UserResponseController</a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="AvatarController.php.html#10">App\Controller\AvatarController</a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="UserResponseV2Controller.php.html#13">App\Controller\UserResponseV2Controller</a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="UserController.php.html#19">App\Controller\UserController</a></td><td class="text-right">17</td></tr>
+       <tr><td><a href="TaskController.php.html#13">App\Controller\TaskController</a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="UserRoutineV2Controller.php.html#16">App\Controller\UserRoutineV2Controller</a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="RoutineController.php.html#11">App\Controller\RoutineController</a></td><td class="text-right">5</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="AvatarController.php.html#12"><abbr title="App\Controller\AvatarController::listAvatar">listAvatar</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AvatarController.php.html#29"><abbr title="App\Controller\AvatarController::getAvatar">getAvatar</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="QuestionV2Controller.php.html#15"><abbr title="App\Controller\QuestionV2Controller::show">show</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="QuestionV2Controller.php.html#31"><abbr title="App\Controller\QuestionV2Controller::list">list</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="QuestionV2Controller.php.html#47"><abbr title="App\Controller\QuestionV2Controller::listRoot">listRoot</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="QuestionV2Controller.php.html#63"><abbr title="App\Controller\QuestionV2Controller::create">create</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="QuestionV2Controller.php.html#96"><abbr title="App\Controller\QuestionV2Controller::edit">edit</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RelationController.php.html#14"><abbr title="App\Controller\RelationController::join">join</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RelationController.php.html#47"><abbr title="App\Controller\RelationController::sourceAndTarget">sourceAndTarget</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RelationController.php.html#76"><abbr title="App\Controller\RelationController::answer">answer</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RelationV2Controller.php.html#14"><abbr title="App\Controller\RelationV2Controller::join">join</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RelationV2Controller.php.html#47"><abbr title="App\Controller\RelationV2Controller::sourceAndTarget">sourceAndTarget</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RelationV2Controller.php.html#76"><abbr title="App\Controller\RelationV2Controller::answer">answer</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RoutineController.php.html#17"><abbr title="App\Controller\RoutineController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RoutineV2Controller.php.html#14"><abbr title="App\Controller\RoutineV2Controller::show">show</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RoutineV2Controller.php.html#30"><abbr title="App\Controller\RoutineV2Controller::list">list</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RoutineV2Controller.php.html#46"><abbr title="App\Controller\RoutineV2Controller::create">create</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="RoutineV2Controller.php.html#81"><abbr title="App\Controller\RoutineV2Controller::edit">edit</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TaskController.php.html#20"><abbr title="App\Controller\TaskController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#70"><abbr title="App\Controller\TemplateQuestionController::show">show</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#83"><abbr title="App\Controller\TemplateQuestionController::listQT">listQT</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#96"><abbr title="App\Controller\TemplateQuestionController::byPageQT">byPageQT</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#146"><abbr title="App\Controller\TemplateQuestionController::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TestController.php.html#11"><abbr title="App\Controller\TestController::test">test</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserController.php.html#49"><abbr title="App\Controller\UserController::updateRole">updateRole</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserResponseController.php.html#25"><abbr title="App\Controller\UserResponseController::getUserResponses">getUserResponses</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserResponseController.php.html#57"><abbr title="App\Controller\UserResponseController::getUserResponse">getUserResponse</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserResponseV2Controller.php.html#15"><abbr title="App\Controller\UserResponseV2Controller::firstQuestion">firstQuestion</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserResponseV2Controller.php.html#49"><abbr title="App\Controller\UserResponseV2Controller::nextQuestion">nextQuestion</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserRoutineV2Controller.php.html#19"><abbr title="App\Controller\UserRoutineV2Controller::getRoutinesByUser">getRoutinesByUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#20"><abbr title="App\Controller\UserTaskV2Controller::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#28"><abbr title="App\Controller\UserTaskV2Controller::createTask">createTask</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#85"><abbr title="App\Controller\UserTaskV2Controller::updateTask">updateTask</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#145"><abbr title="App\Controller\UserTaskV2Controller::getTasksByUser">getTasksByUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#172"><abbr title="App\Controller\UserTaskV2Controller::getTasksByUserAndDateTime">getTasksByUserAndDateTime</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#202"><abbr title="App\Controller\UserTaskV2Controller::getTasksByUserAndDate">getTasksByUserAndDate</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#16"><abbr title="App\Controller\TemplateQuestionController::new">new</abbr></a></td><td class="text-right">68%</td></tr>
+       <tr><td><a href="UserResponseController.php.html#87"><abbr title="App\Controller\UserResponseController::newUserQuestion">newUserQuestion</abbr></a></td><td class="text-right">74%</td></tr>
+       <tr><td><a href="RoutineController.php.html#26"><abbr title="App\Controller\RoutineController::getRoutinesByUser">getRoutinesByUser</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="TaskController.php.html#28"><abbr title="App\Controller\TaskController::createTask">createTask</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="TaskController.php.html#40"><abbr title="App\Controller\TaskController::updateTask">updateTask</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="TaskController.php.html#51"><abbr title="App\Controller\TaskController::getTasksByUser">getTasksByUser</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="UserController.php.html#82"><abbr title="App\Controller\UserController::updateMemo">updateMemo</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="TaskController.php.html#67"><abbr title="App\Controller\TaskController::getTasksByUserAndTime">getTasksByUserAndTime</abbr></a></td><td class="text-right">83%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="QuestionV2Controller.php.html#63"><abbr title="App\Controller\QuestionV2Controller::create">create</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="RoutineV2Controller.php.html#46"><abbr title="App\Controller\RoutineV2Controller::create">create</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#28"><abbr title="App\Controller\UserTaskV2Controller::createTask">createTask</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="RelationController.php.html#14"><abbr title="App\Controller\RelationController::join">join</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="RelationV2Controller.php.html#14"><abbr title="App\Controller\RelationV2Controller::join">join</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#85"><abbr title="App\Controller\UserTaskV2Controller::updateTask">updateTask</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#202"><abbr title="App\Controller\UserTaskV2Controller::getTasksByUserAndDate">getTasksByUserAndDate</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="AvatarController.php.html#12"><abbr title="App\Controller\AvatarController::listAvatar">listAvatar</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="AvatarController.php.html#29"><abbr title="App\Controller\AvatarController::getAvatar">getAvatar</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#146"><abbr title="App\Controller\TemplateQuestionController::delete">delete</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="UserController.php.html#49"><abbr title="App\Controller\UserController::updateRole">updateRole</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="UserResponseController.php.html#25"><abbr title="App\Controller\UserResponseController::getUserResponses">getUserResponses</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="UserResponseV2Controller.php.html#49"><abbr title="App\Controller\UserResponseV2Controller::nextQuestion">nextQuestion</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="UserRoutineV2Controller.php.html#19"><abbr title="App\Controller\UserRoutineV2Controller::getRoutinesByUser">getRoutinesByUser</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#145"><abbr title="App\Controller\UserTaskV2Controller::getTasksByUser">getTasksByUser</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="UserTaskV2Controller.php.html#172"><abbr title="App\Controller\UserTaskV2Controller::getTasksByUserAndDateTime">getTasksByUserAndDateTime</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#16"><abbr title="App\Controller\TemplateQuestionController::new">new</abbr></a></td><td class="text-right">11</td></tr>
+       <tr><td><a href="UserResponseController.php.html#87"><abbr title="App\Controller\UserResponseController::newUserQuestion">newUserQuestion</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="QuestionV2Controller.php.html#96"><abbr title="App\Controller\QuestionV2Controller::edit">edit</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="RelationController.php.html#47"><abbr title="App\Controller\RelationController::sourceAndTarget">sourceAndTarget</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="RelationController.php.html#76"><abbr title="App\Controller\RelationController::answer">answer</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="RelationV2Controller.php.html#47"><abbr title="App\Controller\RelationV2Controller::sourceAndTarget">sourceAndTarget</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="RelationV2Controller.php.html#76"><abbr title="App\Controller\RelationV2Controller::answer">answer</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="RoutineV2Controller.php.html#81"><abbr title="App\Controller\RoutineV2Controller::edit">edit</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#70"><abbr title="App\Controller\TemplateQuestionController::show">show</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#83"><abbr title="App\Controller\TemplateQuestionController::listQT">listQT</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="TemplateQuestionController.php.html#96"><abbr title="App\Controller\TemplateQuestionController::byPageQT">byPageQT</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="UserResponseController.php.html#57"><abbr title="App\Controller\UserResponseController::getUserResponse">getUserResponse</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="UserResponseV2Controller.php.html#15"><abbr title="App\Controller\UserResponseV2Controller::firstQuestion">firstQuestion</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="RoutineController.php.html#26"><abbr title="App\Controller\RoutineController::getRoutinesByUser">getRoutinesByUser</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="TaskController.php.html#28"><abbr title="App\Controller\TaskController::createTask">createTask</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="TaskController.php.html#40"><abbr title="App\Controller\TaskController::updateTask">updateTask</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="TaskController.php.html#51"><abbr title="App\Controller\TaskController::getTasksByUser">getTasksByUser</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="UserController.php.html#82"><abbr title="App\Controller\UserController::updateMemo">updateMemo</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="TaskController.php.html#67"><abbr title="App\Controller\TaskController::getTasksByUserAndTime">getTasksByUserAndTime</abbr></a></td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 9.2.32</a> using <a href="https://secure.php.net/" target="_top">PHP 8.3.23</a> and <a href="https://phpunit.de/">PHPUnit 9.6.21</a> at Tue Jul 22 19:40:39 UTC 2025.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../_js/jquery.min.js?v=9.2.32" type="text/javascript"></script>
+  <script src="../_js/d3.min.js?v=9.2.32" type="text/javascript"></script>
+  <script src="../_js/nv.d3.min.js?v=9.2.32" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([9,0,0,0,2,0,1,1,1,0,0,2], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([36,0,0,0,0,0,0,1,1,6,0,14], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[100,3,"<a href=\"AuthenticationController.php.html#11\">App\\Controller\\AuthenticationController<\/a>"],[0,6,"<a href=\"AvatarController.php.html#10\">App\\Controller\\AvatarController<\/a>"],[100,6,"<a href=\"ConditionRoutineController.php.html#13\">App\\Controller\\ConditionRoutineController<\/a>"],[0,11,"<a href=\"QuestionV2Controller.php.html#13\">App\\Controller\\QuestionV2Controller<\/a>"],[0,9,"<a href=\"RelationController.php.html#12\">App\\Controller\\RelationController<\/a>"],[0,9,"<a href=\"RelationV2Controller.php.html#12\">App\\Controller\\RelationV2Controller<\/a>"],[55.55555555555556,4,"<a href=\"RoutineController.php.html#11\">App\\Controller\\RoutineController<\/a>"],[0,10,"<a href=\"RoutineV2Controller.php.html#12\">App\\Controller\\RoutineV2Controller<\/a>"],[72,10,"<a href=\"TaskController.php.html#13\">App\\Controller\\TaskController<\/a>"],[36.36363636363637,18,"<a href=\"TemplateQuestionController.php.html#13\">App\\Controller\\TemplateQuestionController<\/a>"],[0,1,"<a href=\"TestController.php.html#9\">App\\Controller\\TestController<\/a>"],[66.66666666666666,12,"<a href=\"UserController.php.html#19\">App\\Controller\\UserController<\/a>"],[36.36363636363637,11,"<a href=\"UserResponseController.php.html#21\">App\\Controller\\UserResponseController<\/a>"],[0,5,"<a href=\"UserResponseV2Controller.php.html#13\">App\\Controller\\UserResponseV2Controller<\/a>"],[0,3,"<a href=\"UserRoutineV2Controller.php.html#16\">App\\Controller\\UserRoutineV2Controller<\/a>"],[0,22,"<a href=\"UserTaskV2Controller.php.html#18\">App\\Controller\\UserTaskV2Controller<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[100,1,"<a href=\"AuthenticationController.php.html#13\">App\\Controller\\AuthenticationController::__construct<\/a>"],[100,1,"<a href=\"AuthenticationController.php.html#16\">App\\Controller\\AuthenticationController::register<\/a>"],[100,1,"<a href=\"AuthenticationController.php.html#22\">App\\Controller\\AuthenticationController::authenticate<\/a>"],[0,3,"<a href=\"AvatarController.php.html#12\">App\\Controller\\AvatarController::listAvatar<\/a>"],[0,3,"<a href=\"AvatarController.php.html#29\">App\\Controller\\AvatarController::getAvatar<\/a>"],[100,1,"<a href=\"ConditionRoutineController.php.html#15\">App\\Controller\\ConditionRoutineController::__construct<\/a>"],[100,1,"<a href=\"ConditionRoutineController.php.html#19\">App\\Controller\\ConditionRoutineController::newCondtionRoutine<\/a>"],[100,4,"<a href=\"ConditionRoutineController.php.html#30\">App\\Controller\\ConditionRoutineController::getQuestionResponse<\/a>"],[0,1,"<a href=\"QuestionV2Controller.php.html#15\">App\\Controller\\QuestionV2Controller::show<\/a>"],[0,1,"<a href=\"QuestionV2Controller.php.html#31\">App\\Controller\\QuestionV2Controller::list<\/a>"],[0,1,"<a href=\"QuestionV2Controller.php.html#47\">App\\Controller\\QuestionV2Controller::listRoot<\/a>"],[0,6,"<a href=\"QuestionV2Controller.php.html#63\">App\\Controller\\QuestionV2Controller::create<\/a>"],[0,2,"<a href=\"QuestionV2Controller.php.html#96\">App\\Controller\\QuestionV2Controller::edit<\/a>"],[0,5,"<a href=\"RelationController.php.html#14\">App\\Controller\\RelationController::join<\/a>"],[0,2,"<a href=\"RelationController.php.html#47\">App\\Controller\\RelationController::sourceAndTarget<\/a>"],[0,2,"<a href=\"RelationController.php.html#76\">App\\Controller\\RelationController::answer<\/a>"],[0,5,"<a href=\"RelationV2Controller.php.html#14\">App\\Controller\\RelationV2Controller::join<\/a>"],[0,2,"<a href=\"RelationV2Controller.php.html#47\">App\\Controller\\RelationV2Controller::sourceAndTarget<\/a>"],[0,2,"<a href=\"RelationV2Controller.php.html#76\">App\\Controller\\RelationV2Controller::answer<\/a>"],[100,1,"<a href=\"RoutineController.php.html#13\">App\\Controller\\RoutineController::__construct<\/a>"],[0,1,"<a href=\"RoutineController.php.html#17\">App\\Controller\\RoutineController::index<\/a>"],[80,2,"<a href=\"RoutineController.php.html#26\">App\\Controller\\RoutineController::getRoutinesByUser<\/a>"],[0,1,"<a href=\"RoutineV2Controller.php.html#14\">App\\Controller\\RoutineV2Controller::show<\/a>"],[0,1,"<a href=\"RoutineV2Controller.php.html#30\">App\\Controller\\RoutineV2Controller::list<\/a>"],[0,6,"<a href=\"RoutineV2Controller.php.html#46\">App\\Controller\\RoutineV2Controller::create<\/a>"],[0,2,"<a href=\"RoutineV2Controller.php.html#81\">App\\Controller\\RoutineV2Controller::edit<\/a>"],[100,1,"<a href=\"TaskController.php.html#16\">App\\Controller\\TaskController::__construct<\/a>"],[0,1,"<a href=\"TaskController.php.html#20\">App\\Controller\\TaskController::index<\/a>"],[80,2,"<a href=\"TaskController.php.html#28\">App\\Controller\\TaskController::createTask<\/a>"],[80,2,"<a href=\"TaskController.php.html#40\">App\\Controller\\TaskController::updateTask<\/a>"],[80,2,"<a href=\"TaskController.php.html#51\">App\\Controller\\TaskController::getTasksByUser<\/a>"],[83.33333333333334,2,"<a href=\"TaskController.php.html#67\">App\\Controller\\TaskController::getTasksByUserAndTime<\/a>"],[68.96551724137932,9,"<a href=\"TemplateQuestionController.php.html#16\">App\\Controller\\TemplateQuestionController::new<\/a>"],[0,2,"<a href=\"TemplateQuestionController.php.html#70\">App\\Controller\\TemplateQuestionController::show<\/a>"],[0,2,"<a href=\"TemplateQuestionController.php.html#83\">App\\Controller\\TemplateQuestionController::listQT<\/a>"],[0,2,"<a href=\"TemplateQuestionController.php.html#96\">App\\Controller\\TemplateQuestionController::byPageQT<\/a>"],[0,3,"<a href=\"TemplateQuestionController.php.html#146\">App\\Controller\\TemplateQuestionController::delete<\/a>"],[0,1,"<a href=\"TestController.php.html#11\">App\\Controller\\TestController::test<\/a>"],[100,1,"<a href=\"UserController.php.html#21\">App\\Controller\\UserController::__construct<\/a>"],[100,1,"<a href=\"UserController.php.html#27\">App\\Controller\\UserController::showUser<\/a>"],[100,1,"<a href=\"UserController.php.html#34\">App\\Controller\\UserController::listUser<\/a>"],[100,1,"<a href=\"UserController.php.html#41\">App\\Controller\\UserController::updateUser<\/a>"],[0,3,"<a href=\"UserController.php.html#49\">App\\Controller\\UserController::updateRole<\/a>"],[100,1,"<a href=\"UserController.php.html#63\">App\\Controller\\UserController::delete<\/a>"],[100,2,"<a href=\"UserController.php.html#71\">App\\Controller\\UserController::me<\/a>"],[80,2,"<a href=\"UserController.php.html#82\">App\\Controller\\UserController::updateMemo<\/a>"],[0,3,"<a href=\"UserResponseController.php.html#25\">App\\Controller\\UserResponseController::getUserResponses<\/a>"],[0,2,"<a href=\"UserResponseController.php.html#57\">App\\Controller\\UserResponseController::getUserResponse<\/a>"],[74.07407407407408,6,"<a href=\"UserResponseController.php.html#87\">App\\Controller\\UserResponseController::newUserQuestion<\/a>"],[0,2,"<a href=\"UserResponseV2Controller.php.html#15\">App\\Controller\\UserResponseV2Controller::firstQuestion<\/a>"],[0,3,"<a href=\"UserResponseV2Controller.php.html#49\">App\\Controller\\UserResponseV2Controller::nextQuestion<\/a>"],[0,3,"<a href=\"UserRoutineV2Controller.php.html#19\">App\\Controller\\UserRoutineV2Controller::getRoutinesByUser<\/a>"],[0,1,"<a href=\"UserTaskV2Controller.php.html#20\">App\\Controller\\UserTaskV2Controller::index<\/a>"],[0,6,"<a href=\"UserTaskV2Controller.php.html#28\">App\\Controller\\UserTaskV2Controller::createTask<\/a>"],[0,5,"<a href=\"UserTaskV2Controller.php.html#85\">App\\Controller\\UserTaskV2Controller::updateTask<\/a>"],[0,3,"<a href=\"UserTaskV2Controller.php.html#145\">App\\Controller\\UserTaskV2Controller::getTasksByUser<\/a>"],[0,3,"<a href=\"UserTaskV2Controller.php.html#172\">App\\Controller\\UserTaskV2Controller::getTasksByUserAndDateTime<\/a>"],[0,4,"<a href=\"UserTaskV2Controller.php.html#202\">App\\Controller\\UserTaskV2Controller::getTasksByUserAndDate<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

@@ -207,9 +207,7 @@ class UserTest extends WebTestCase
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
 
         $this->assertArrayHasKey('token', $responseContent);
-
         $jwt = $responseContent['token'];
-
         // test avec token
         $this->client->request('GET', '/user/me', [], [], [
              'HTTP_AUTHORIZATION' => 'Bearer ' . $jwt,
