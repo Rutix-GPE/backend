@@ -16,6 +16,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use App\Repository\ConditionRoutineRepository;
 use App\Repository\RoutineRepository;
 use App\Repository\TaskRepository;
+use App\Service\ConditionService;
 
 class UserResponseController extends AbstractController
 {
@@ -90,9 +91,7 @@ public function getUserResponse(
         JWTTokenManagerInterface $tokenManager,
         UserResponseRepository $userResponseRepository,
         TemplateQuestionRepository $TQRepository,
-        ConditionRoutineRepository $conditionRepository,
-        RoutineRepository $routineRepository,
-        TaskRepository $taskRepository
+        ConditionService $conditionService
     ): JsonResponse {
         $user = $this->getUser();
 
@@ -138,101 +137,16 @@ public function getUserResponse(
             // Sauvegarder la réponse
             $userResponseRepository->add($userResponse, true);
 
-            $condition = new ConditionRoutine;
-
-            $condition->createRoutine($question, $userResponseContent, $conditionRepository, $routineRepository, $user, $taskRepository);
+            // Utilisation de ConditionService pour la création de la routine
+            $conditionService->createRoutineByCondition($question, $userResponseContent, $user);
 
             return $this->json($userResponse, Response::HTTP_CREATED);
 
         } catch (\Exception $error) {
+            echo($error->getMessage());
             return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
-    #[Route('/user-response/new/page/{id}', name: 'new_user_question_page')]
-    public function duplicateByPage($id, JWTTokenManagerInterface $tokenManager, UserResponseRepository $userResponseRepository, TemplateQuestionRepository $TQRepository)
-    {
-        $arrayResponse = [];
-        $user = $this->getUser();
 
-        if(!$user){
-            $response = ["error" => "User incorect"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
-
-        $question = $TQRepository->findBy(['page' => $id]);
-
-        if(!$question){
-            $response = ["error" => "Question not found"." /id: ".$id];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
-
-        foreach($question as $val){
-
-            $duplicate = $userResponseRepository->findBy(["User" => $user, "Question" => $val]);
-
-            if(!$duplicate){
-                try{
-                    $response = new UserResponse;
-
-                    $response->duplicate($val);
-                    $response->setUser($user);
-                    $response->setQuestion($val);
-        
-                    $userResponseRepository->add($response, true);
-
-                    array_push($arrayResponse, $response);
-
-                } catch (\Exception $error) {
-                    $response = ["error" => $error->getMessage()];
-                    return $this->json($response, Response::HTTP_BAD_REQUEST);
-                }    
-
-            }
-
-        }
-
-        if(!$arrayResponse){
-            $response = $userResponseRepository->findBy(["User" => $user, "page" => $id]);
-
-            // $response = ["error" => "Duplicate"];
-            return $this->json($response);
-        }
-        
-        return $this->json($arrayResponse);
-    }
-
-    #[Route('/user-response/response/{id}', name: 'response_question')]
-    public function response($id, Request $request, JWTTokenManagerInterface $tokenManager, UserResponseRepository $userResponseRepository)
-    {
-        $user = $this->getUser();
-
-        $data = $request->getContent();
-        $data = json_decode($data, true);
-
-
-        $question = $userResponseRepository->find($id);
-
-        if(!$question){
-            $response = ["error" => "Question not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
-
-
-        if(!isset($data['response'])) {
-            $response = ["error" => "Missing informations"];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }
-
-        try{
-            $question->setResponse($data["response"]);
-
-            $userResponseRepository->add($question, true);
-
-            return $this->json($question, Response::HTTP_OK);
-        } catch (\Exception $error) {
-            $response = ["error" => $error->getMessage()];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }   
-    }
 }

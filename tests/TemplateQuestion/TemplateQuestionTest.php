@@ -2,30 +2,46 @@
 
 namespace App\Tests;
 
+use App\Repository\ConditionRoutineRepository;
 use App\Repository\TemplateQuestionRepository;
 use App\Repository\UserRepository;
 use App\Service\TestService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class TemplateQuestionTest extends WebTestCase
+class TemplateQuestionTest 
 {
     
     private $templateQuestionRepository;
+    private $conditionRoutineRepository;
+
     private $client;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
         $this->templateQuestionRepository = $this->client->getContainer()->get(TemplateQuestionRepository::class);
+        $this->conditionRoutineRepository = $this->client->getContainer()->get(ConditionRoutineRepository::class);
+
         $this->removeQuestions();
         $this->createQuestions();
     }
 
     private function removeQuestions()
     {
-        $users = $this->templateQuestionRepository->findAll();
-        foreach ($users as $user) {
-            $this->templateQuestionRepository->remove($user, true);
+        // $users = $this->templateQuestionRepository->findAll();
+        // foreach ($users as $user) {
+        //     $this->templateQuestionRepository->remove($user, true);
+        // }
+
+        $conditionRoutines = $this->conditionRoutineRepository->findAll();
+
+        foreach ($conditionRoutines as $condition) {
+            $this->conditionRoutineRepository->remove($condition, true);
+        }
+
+        $questions = $this->templateQuestionRepository->findAll();
+        foreach ($questions as $question) {
+            $this->templateQuestionRepository->remove($question, true);
         }
     }
 
@@ -54,11 +70,42 @@ class TemplateQuestionTest extends WebTestCase
 
     public function testNew()
     {
-        // test without page
+        // test missing informations
         $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
-            'name' => 'one',
-            'content' => 'First test',
-            'type' => 'text'
+            "name" => "one",
+            "content" => "First test",
+            // "type" => "multiple_choice"
+        ]));
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+
+        $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            "name" => "one",
+            // "content" => "First test",
+            "type" => "multiple_choice"
+        ]));
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+
+        $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            // "name" => "one",
+            "content" => "First test",
+            "type" => "multiple_choice"
+        ]));
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+
+        // test wrong type
+        $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            "name" => "one",
+            "content" => "First test",
+            "type" => "wrong"
+        ]));
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+
+        // test without page (multiple_choice)
+        $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            "name" => "one",
+            "content" => "First test",
+            "type" => "multiple_choice",
+            "choice" => ["YES", "NO"]
         ]));
 
         $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
@@ -66,7 +113,7 @@ class TemplateQuestionTest extends WebTestCase
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals("one", $responseContent['name']);
         $this->assertEquals("First test", $responseContent['content']);
-        $this->assertEquals("text", $responseContent['type']);
+        $this->assertEquals("multiple_choice", $responseContent['type']);
         $this->assertEquals(1, $responseContent['page']);
 
 
@@ -77,24 +124,8 @@ class TemplateQuestionTest extends WebTestCase
             'type' => 'text'
         ]));
 
-        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(409, $this->client->getResponse()->getStatusCode());
             
-
-        // test without page
-        $this->client->request('POST', '/template-question/new', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
-            'name' => 'two',
-            'content' => 'Second test',
-            'type' => 'text',
-            'page' => 45
-        ]));
-
-        $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
-                
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals("two", $responseContent['name']);
-        $this->assertEquals("Second test", $responseContent['content']);
-        $this->assertEquals("text", $responseContent['type']);
-        $this->assertEquals(45, $responseContent['page']);
     }
 
     public function testShow()

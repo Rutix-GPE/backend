@@ -33,16 +33,26 @@ class TemplateQuestionController extends AbstractController
         }
         // return $this->json("", 200);
 
+        $duplicate = $TQRepository->findBy([
+            'name' => $data['name']
+        ]);
+
+        if($duplicate){
+            return $this->json(['error' => 'Duplicate'], Response::HTTP_CONFLICT);
+        }
+
         try{
             $question = new TemplateQuestion;
 
             $question->setName($data["name"]);
             $question->setContent($data["content"]);            
             $question->setType($data["type"]);
-            $question->setChoice($data["choice"]);
 
             if(isset($data['page'])){
                 $question->setPage($data['page']);
+            }
+            if(isset($data['choice'])){
+                $question->setChoice($data['choice']);
             }
 
             $TQRepository->add($question, true);
@@ -51,6 +61,8 @@ class TemplateQuestionController extends AbstractController
 
         } catch (\Exception $error) {
             $response = ["error" => $error->getMessage()];
+
+            echo($error->getMessage());
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
     }

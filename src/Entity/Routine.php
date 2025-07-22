@@ -11,6 +11,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
+// use App\Service\TaskFactory;
+
 #[ORM\Entity(repositoryClass: RoutineRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource]
@@ -47,20 +49,19 @@ class Routine
     #[ORM\ManyToOne(inversedBy: 'routines')]
     private ?User $User = null;
 
+    // public function __construct(ConditionRoutine $condition, $user, TaskRepository $taskRepository)
+    // {
+    //     $this->setName($condition->getName());
+    //     $this->setDescription($condition->getDescription());
+    //     $this->setTaskTime($condition->getTaskTime());
+    //     $this->setDays($condition->getDays());        
+    //     $this->setUser($user);
 
-    private $taskRepository;
+    //     $task = new Task;
+    //     // $taskFactory = new TaskFactory;
 
-    public function __construct(ConditionRoutine $condition, $user, TaskRepository $taskRepository)
-    {
-        $this->setName($condition->getName());
-        $this->setDescription($condition->getDescription());
-        $this->setTaskTime($condition->getTaskTime());
-        $this->setDays($condition->getDays());        
-        $this->setUser($user);
-
-        $task = new Task;
-        $task->createList($this, $taskRepository);
-    }
+    //     $task->createList($this, $taskRepository);
+    // }
 
     public function getId(): ?int
     {

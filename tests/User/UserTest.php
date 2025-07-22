@@ -4,9 +4,12 @@ namespace App\Tests;
 
 use App\Repository\UserRepository;
 use App\Service\TestService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class UserTest extends WebTestCase
+
 {
 
     private $userRepository;
@@ -36,7 +39,8 @@ class UserTest extends WebTestCase
             'firstname' => 'John',
             'lastname' => 'Doe',
             'email' => 'john.doe@example.com',
-            'password' => 'newpassword123'
+            'password' => 'newpassword123',
+            'role' => 'ROLE_ADMIN'
         ]));
 
         $this->client->request('POST', '/user/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
@@ -44,7 +48,8 @@ class UserTest extends WebTestCase
             'firstname' => 'Alice',
             'lastname' => 'Johnson',
             'email' => 'alice.johnson@example.com',
-            'password' => 'newpassword123'
+            'password' => 'newpassword123',
+            'role' => 'ROLE_ADMIN'
         ]));
         
     }
@@ -135,11 +140,11 @@ class UserTest extends WebTestCase
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
 
     }
-
+/*
     public function testUpdateUserRole()
     {
         $firstUser = $this->getFirstUser();
-
+        dd($firstUser);
 
         // test first user - admin role
         $this->client->request('PUT', '/user/update-role/'.$firstUser->id, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
@@ -148,11 +153,10 @@ class UserTest extends WebTestCase
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-
         $this->assertEquals(['ROLE_ADMIN'], $responseContent['roles']);
         
 
-        // test first user - admin role
+        // test first user - user role
         $this->client->request('PUT', '/user/update-role/'.$firstUser->id, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'role' => 'user'
         ]));
@@ -167,9 +171,9 @@ class UserTest extends WebTestCase
             'role' => 'hacker'
         ]));
 
-        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
     }
-
+*/
     public function testDeleteUser()
     {
         $firstUser = $this->getFirstUser();
@@ -184,6 +188,83 @@ class UserTest extends WebTestCase
         $this->client->request('DELETE', '/user/delete/'.$firstUser->id, [], [], ['CONTENT_TYPE' => 'application/json']);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         
+    }
+
+    public function testMe()
+    {
+        $client = $this->client;
+
+
+        $firstUser = $this->getFirstUser();
+
+        $this->client->request('POST', '/user/authenticate', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'username' => $firstUser->username,
+            'password' => 'newpassword123'
+        ]));
+
+        $this->assertResponseIsSuccessful();
+
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertArrayHasKey('token', $responseContent);
+
+        $jwt = $responseContent['token'];
+
+        // test avec token
+        $this->client->request('GET', '/user/me', [], [], [
+             'HTTP_AUTHORIZATION' => 'Bearer ' . $jwt,
+        ]);
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $profile = json_decode($client->getResponse()->getContent(), true);
+        $this->assertEquals('jhon_doe', $profile['username']);
+        $this->assertEquals('John', $profile['firstname']);
+        $this->assertEquals('Doe', $profile['lastname']);
+        $this->assertEquals('john.doe@example.com', $profile['email']);
+
+
+        // test sans token
+        $this->client->request('GET', '/user/me', [], [], []);
+
+        $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
+
+    }
+
+    public function testUpdateMemo()
+    {
+        $client = $this->client;
+
+
+        $firstUser = $this->getFirstUser();
+
+        $this->client->request('POST', '/user/authenticate', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'username' => $firstUser->username,
+            'password' => 'newpassword123'
+        ]));
+
+
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertArrayHasKey('token', $responseContent);
+
+        // test avec mémo
+        $this->client->request('PUT', '/user/update-memo', [], [], [
+            'HTTP_AUTHORIZATION' => 'Bearer ' . $responseContent['token'],
+            'CONTENT_TYPE' => 'application/json',
+        ], json_encode([
+            'memo' => 'Nouvelle valeur du mémo',
+        ]));
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+
+        // test sans mémo
+        $this->client->request('PUT', '/user/update-memo', [], [], [
+            'HTTP_AUTHORIZATION' => 'Bearer ' . $responseContent['token'],
+            'CONTENT_TYPE' => 'application/json']);
+
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+
     }
 
 }

@@ -2,196 +2,91 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Dto\User\UserResponseDTO;
+use App\Dto\User\UserResponseWithRoleDTO;
 use App\Repository\UserRepository;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\UserService;
+use App\Service\AvatarService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class UserController extends AbstractController
 {
+    public function __construct(
+        private readonly SerializerInterface $serializer,
+        private readonly ValidatorInterface $validator,
+        private readonly UserService $userService,
+    ) {}
+// pas faire très bien comme ça 
     #[Route('/user/show/{id}', name: 'show_user', methods: ['GET'])]
-    public function showUser($id, UserRepository $userRepository): JsonResponse
+    public function showUser(int $id): JsonResponse
     {
-        $user = $userRepository->findOneBy(['id' => $id]);
-
-        if(!$user){
-            $response = ["msg" => "Not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
-
-        return $this->json($user, Response::HTTP_OK);
+        $userDTO = $this->userService->getUserById($id);
+        return $this->json($userDTO, Response::HTTP_OK);
     }
-
+// pas faire très bien comme ça 
     #[Route('/user/list', name: 'list_user', methods: ['GET'])]
-    public function listUser(UserRepository $userRepository): JsonResponse
+    public function listUser(): JsonResponse
     {
-        $users = $userRepository->findAll();
-
-        if(!$users){
-            $response = ["msg" => "Zero users"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
-
-        return $this->json($users, Response::HTTP_OK);
+        return $this->json($this->userService->getAllUsers(), Response::HTTP_OK);
     }
+// terminé 
 
     #[Route('/user/update/{id}', name: 'update_user', methods: ['PUT'])]
-    public function updateUser($id, Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    public function updateUser(int $id, Request $request): JsonResponse
     {
-        $user = $userRepository->findOneBy(['id' => $id]);
-
-        if(!$user){
-            $response = ["msg" => "Not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
-
-        $data = $request->getContent();
-        $data = json_decode($data, true);        
-        
-        try{
-            if(isset($data['username'])){
-                $user->setUsername($data['username']);
-            }
-            if(isset($data['password'])){
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $data['password']
-                );
-
-                $user->setPassword($hashedPassword);
-            }
-            if(isset($data['firstname'])){
-                $user->setFirstname($data['firstname']);
-            }
-            if(isset($data['lastname'])){
-                $user->setLastname($data['lastname']);
-            }
-            if(isset($data['email'])){
-                $user->setEmail($data['email']);
-            }
-            if(isset($data['phonenumber'])){
-                $user->setPhonenumber($data['phonenumber']);
-            }
-            if(isset($data['country'])){
-                $user->setCountry($data['country']);
-            }
-            if(isset($data['postalcode'])){
-                $user->setPostalcode($data['postalcode']);
-            }
-            if(isset($data['city'])){
-                $user->setCity($data['city']);
-            }
-            if(isset($data['adress'])){
-                $user->setAdress($data['adress']);
-            }
-            
-            $userRepository->add($user, true);
-
-            return $this->json($user, Response::HTTP_OK);
-        } catch (\Exception $error) {
-            $response = ["error" => $error->getMessage()];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }
+        $userDTO = $this->userService->controllerUpdateUser($request, $id);
+        return $this->json($userDTO, Response::HTTP_OK);
     }
 
+//good 
     #[Route('/user/update-role/{id}', name: 'update_role_user', methods: ['PUT'])]
-    public function updateRole($id, Request $request, UserRepository $userRepository): JsonResponse
+    public function updateRole(int $id, Request $request, UserRepository $userRepository): JsonResponse
     {
-        $user = $userRepository->findOneBy(['id' => $id]);
-
-        if(!$user){
-            $response = ["msg" => "Not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
+        $user = $this->getUser();
+        if (!$user) {
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
         }
-
-        $data = $request->getContent();
-        $data = json_decode($data, true);  
-
-        if(!isset($data["role"])){
-            $response = ["msg" => "Choose beetwen role user or admin"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
+        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+            throw new UnauthorizedHttpException('acces', "Accès refusé");
         }
-        
-        $role = $data["role"];
-
-        if(!in_array($role, ['user', 'admin'])){
-            $response = ["msg" => "Choose beetwen role user or admin"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
-
-        if($role == "user"){
-            $user->setRoles(["ROLE_USER"]);
-        } elseif($role == "admin"){
-            $user->setRoles(["ROLE_ADMIN"]);
-        }
-
-        $userRepository->add($user, true);
-
-        return $this->json($user);
+       $updatedUser = $this->userService->updateUserRole($request, $id);
+        return $this->json(new UserResponseWithRoleDTO($updatedUser), Response::HTTP_OK);
     }
-
+//delete good
     #[Route('/user/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
-    public function delete($id, Request $request, UserRepository $userRepository): JsonResponse
+    public function delete(int $id, UserRepository $userRepository): JsonResponse
     {
-        $user = $userRepository->findOneBy(['id' => $id]);
 
-        if(!$user){
-            $response = ["msg" => "Not found"];
-            return $this->json($response, Response::HTTP_NOT_FOUND);
-        }
-
-        $userRepository->remove($user, true);
-
-        $user = $userRepository->findOneBy(['id' => $id]);
-
-        if($user){
-            $response = ["success" => false];
-            return $this->json($response, Response::HTTP_INTERNAL_SERVER_ERROR);
-        } else {
-            $response = ["success" => true];
-            return $this->json($response, Response::HTTP_OK);
-        }
+        $result = $this->userService->deleteUser($id);
+        return $this->json(['success' => $result], Response::HTTP_OK);
     }
-
+//Me elle est faite good good
     #[Route('/user/me', name: 'user_me', methods: ['GET'])]
     public function me(): JsonResponse
     {
         $user = $this->getUser();
-
         if (!$user) {
-            return new JsonResponse(['msg' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
         }
 
-        return $this->json($user, Response::HTTP_OK);
+        return $this->json(new UserResponseDTO($user), Response::HTTP_OK);
     }
+//Update faite comme il faut
     #[Route('/user/update-memo', name: 'update_memo', methods: ['PUT'])]
-    public function updateMemo(Request $request, UserRepository $userRepository, JWTTokenManagerInterface $tokenManager): JsonResponse
+    public function updateMemo(Request $request, UserRepository $userRepository): JsonResponse
     {
         $user = $this->getUser();
         if (!$user) {
-            return new JsonResponse(['msg' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
         }
-
-
-        $data = $request->getContent();
-        $data = json_decode($data, true);  
-
-        try{
-            $user->setMemo($data['memo']);
-
-            $userRepository->add($user, true);
-
-            return $this->json($user, Response::HTTP_OK);
-        } catch (\Exception $error) {
-            $response = ["error" => $error->getMessage()];
-            return $this->json($response, Response::HTTP_BAD_REQUEST);
-        }
-    }  
-    
-
+        $newUser = $this->userService->updateMemo($request,$user);
+        return $this->json(new UserResponseDTO($newUser), Response::HTTP_OK);
+    }
 }
