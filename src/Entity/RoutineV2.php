@@ -34,10 +34,10 @@ class RoutineV2
     // #[ORM\OneToMany(targetEntity: RelationV2::class, mappedBy: 'targetRoutine')]
     // private Collection $relationV2s;
 
-    public function __construct()
-    {
-        $this->relationV2s = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     $this->relationV2s = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {

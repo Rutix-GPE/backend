@@ -77,17 +77,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $Memo = null;
 
-    /**
-     * @var Collection<int, Task>
-     */
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'User')]
-    private Collection $tasks;
+    // /**
+    //  * @var Collection<int, Task>
+    //  */
+    // #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'User')]
+    // private Collection $tasks;
 
-    /**
-     * @var Collection<int, Routine>
-     */
-    #[ORM\OneToMany(targetEntity: Routine::class, mappedBy: 'User')]
-    private Collection $routines;
+    // /**
+    //  * @var Collection<int, Routine>
+    //  */
+    // #[ORM\OneToMany(targetEntity: Routine::class, mappedBy: 'User')]
+    // private Collection $routines;
 
     /**
      * @var Collection<int, UserRoutineV2>
@@ -106,8 +106,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->tasks = new ArrayCollection();
-        $this->routines = new ArrayCollection();
+        // $this->tasks = new ArrayCollection();
+        // $this->routines = new ArrayCollection();
         $this->userRoutineV2s = new ArrayCollection();
         $this->userTaskV2s = new ArrayCollection();
     }
@@ -349,65 +349,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
     
 
-    /**
-     * @return Collection<int, Task>
-     */
-    public function getTasks(): Collection
-    {
-        return $this->tasks;
-    }
+    // /**
+    //  * @return Collection<int, Task>
+    //  */
+    // public function getTasks(): Collection
+    // {
+    //     return $this->tasks;
+    // }
 
-    public function addTask(Task $task): static
-    {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
-            $task->setUser($this);
-        }
+    // public function addTask(Task $task): static
+    // {
+    //     if (!$this->tasks->contains($task)) {
+    //         $this->tasks->add($task);
+    //         $task->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeTask(Task $task): static
-    {
-        if ($this->tasks->removeElement($task)) {
-            // set the owning side to null (unless already changed)
-            if ($task->getUser() === $this) {
-                $task->setUser(null);
-            }
-        }
+    // public function removeTask(Task $task): static
+    // {
+    //     if ($this->tasks->removeElement($task)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($task->getUser() === $this) {
+    //             $task->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * @return Collection<int, Routine>
-     */
-    public function getRoutines(): Collection
-    {
-        return $this->routines;
-    }
+    // /**
+    //  * @return Collection<int, Routine>
+    //  */
+    // public function getRoutines(): Collection
+    // {
+    //     return $this->routines;
+    // }
 
-    public function addRoutine(Routine $routine): static
-    {
-        if (!$this->routines->contains($routine)) {
-            $this->routines->add($routine);
-            $routine->setUser($this);
-        }
+    // public function addRoutine(Routine $routine): static
+    // {
+    //     if (!$this->routines->contains($routine)) {
+    //         $this->routines->add($routine);
+    //         $routine->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeRoutine(Routine $routine): static
-    {
-        if ($this->routines->removeElement($routine)) {
-            // set the owning side to null (unless already changed)
-            if ($routine->getUser() === $this) {
-                $routine->setUser(null);
-            }
-        }
+    // public function removeRoutine(Routine $routine): static
+    // {
+    //     if ($this->routines->removeElement($routine)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($routine->getUser() === $this) {
+    //             $routine->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @return Collection<int, UserRoutineV2>
