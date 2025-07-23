@@ -1,17 +1,17 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\Demo;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\QuestionV2; 
 
-class QuestionV2Fixtures extends Fixture implements FixtureGroupInterface
+class DemoQuestionFixtures extends Fixture implements FixtureGroupInterface
 {
     public static function getGroups(): array
     {
-        return ['v2'];
+        return ['demo'];
     }
 
     public function load(ObjectManager $manager): void

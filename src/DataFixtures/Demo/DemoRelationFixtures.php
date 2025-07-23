@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\Demo;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -12,12 +12,12 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use App\Service\RelationV2Service;
 
-class RelationV2Fixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
+class DemoRelationFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
 
     public static function getGroups(): array
     {
-        return ['v2'];
+        return ['demo'];
     }
 
     public function load(ObjectManager $manager): void
@@ -205,8 +205,8 @@ class RelationV2Fixtures extends Fixture implements FixtureGroupInterface, Depen
     public function getDependencies(): array
     {
         return [
-            QuestionV2Fixtures::class,
-            RoutineV2Fixtures::class,
+            DemoQuestionFixtures::class,
+            DemoRoutineFixtures::class,
         ];
     }
 }

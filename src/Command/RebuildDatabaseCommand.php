@@ -48,7 +48,7 @@ class RebuildDatabaseCommand extends Command
 
         $commands[] = array_merge($baseCommand, [
             'doctrine:fixtures:load',
-            '--group=v2',
+            '--group=demo',
             '--no-interaction',
             '--env=' . $env
         ]);
