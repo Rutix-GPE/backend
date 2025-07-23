@@ -60,6 +60,29 @@ class PresQuestionFixtures extends Fixture implements FixtureGroupInterface
         $manager->persist($question);
         $this->addReference("employee_fixed_hours", $question);
   
+        // Tree two
+
+        $question = new QuestionV2();
+        $question->setName('are_you_sporty');
+        $question->setContent('Pratique-tu un sport ?'); 
+        $question->setIsRootQuestion(true); 
+        $question->setIsQuickQuestion(true); 
+        
+        $manager->persist($question);
+        $this->addReference("are_you_sporty", $question);
+
+        // -----------------------------------------------------
+
+        $question = new QuestionV2();
+        $question->setName('what_rythme');
+        $question->setContent('A quelle rythme ?'); 
+        $question->setIsRootQuestion(false); 
+        $question->setIsQuickQuestion(true); 
+        
+        $manager->persist($question);
+        $this->addReference("what_rythme", $question);
+
+
         $manager->flush(); 
 
     }
