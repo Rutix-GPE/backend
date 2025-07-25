@@ -26,6 +26,7 @@ execute_command() {
 COMMANDS_MAIN=(
   "php bin/console make:migration"
   "php bin/console doctrine:migrations:migrate --no-interaction"
+  "php bin/console app:db:rebuild"
   "php bin/console lexik:jwt:generate-keypair"
   ""
 )

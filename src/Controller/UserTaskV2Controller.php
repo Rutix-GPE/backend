@@ -24,6 +24,33 @@ class UserTaskV2Controller extends AbstractController
             'controller_name' => 'TaskController',
         ]);
     }
+    #[Route('/user-task/v2/delete/{task}', name: 'delete_task', methods: ['DELETE'])]
+    public function deleteTask(
+        $task,
+        JWTTokenManagerInterface $tokenManager,
+        UserTaskV2Service $userTaskV2Service
+    ): JsonResponse {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $task = $userTaskV2Service->getTaskById($task);
+
+        if($task->getUser()->id != $user->id){
+            return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
+        } 
+
+        try {
+            $userTaskV2Service->controllerDeleteTask($task);
+
+            return $this->json("success", Response::HTTP_OK);
+
+        } catch (\Exception $error) {
+            return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
 
     #[Route('/user-task/v2/create', name: 'create_task', methods: ['POST'])]
     public function createTask(

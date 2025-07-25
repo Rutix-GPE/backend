@@ -187,5 +187,10 @@ class UserTaskV2Service extends WebTestCase
 
         return array_values($filteredTasks);
     }
+
+    public function controllerDeleteTask($task): void
+    {
+        $this->userTaskV2Repository->remove($task, true);
+    }
     
 }
