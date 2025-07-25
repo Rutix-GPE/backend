@@ -135,8 +135,8 @@ class UserTaskV2Service extends WebTestCase
             $task->setDescription($data['description']);
         }
 
-        if(isset($data['dateTime'])){
-            $dateTime = $data['dateTime'];
+        if(isset($data['taskDateTime'])){
+            $dateTime = $data['taskDateTime'];
             $dateTime = new \DateTime($dateTime);
 
             $task->setTaskDateTime($dateTime);
@@ -159,7 +159,7 @@ class UserTaskV2Service extends WebTestCase
 
         $task->setName($data['name']);
         $task->setDescription($data['description']);
-        $task->setTaskDateTime($data['dateTime']);
+        $task->setTaskDateTime($data['taskDateTime']);
         $task->setStatus(false);
 
         $this->userTaskV2Repository->add($task, true);

@@ -27,6 +27,7 @@ COMMANDS_MAIN=(
   "php bin/console make:migration"
   "php bin/console doctrine:migrations:migrate --no-interaction"
   "php bin/console lexik:jwt:generate-keypair"
+  ""
 )
 
 # Migrations pour la base de test (rutix_db_test) via DATABASE_URL temporaire

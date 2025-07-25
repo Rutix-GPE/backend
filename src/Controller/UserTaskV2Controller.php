@@ -43,7 +43,7 @@ class UserTaskV2Controller extends AbstractController
 
         if(!isset($data['name']) || 
         !isset($data['description']) ||
-        !isset($data['dateTime'])) {
+        !isset($data['taskDateTime'])) {
             $response = ["error" => "Missing informations"];
             return $this->json($response, Response::HTTP_BAD_REQUEST);
         }
@@ -51,9 +51,9 @@ class UserTaskV2Controller extends AbstractController
 
         try {
 
-            $dateTime = $data['dateTime'];
+            $dateTime = $data['taskDateTime'];
             $dateTime = new \DateTime($dateTime);
-            $data['dateTime'] = $dateTime;
+            $data['taskDateTime'] = $dateTime;
 
 
             $task = $userTaskV2Service->controllerCreateTask($user, $data);
