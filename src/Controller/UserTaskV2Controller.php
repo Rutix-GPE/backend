@@ -27,44 +27,21 @@ class UserTaskV2Controller extends AbstractController
     #[Route('/user-task/v2/delete/{task}', name: 'delete_task', methods: ['DELETE'])]
     public function deleteTask(
         $task,
-        JWTTokenManagerInterface $tokenManager,
         UserTaskV2Service $userTaskV2Service
     ): JsonResponse {
-        $user = $this->getUser();
-
-        if (!$user) {
-            return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $task = $userTaskV2Service->getTaskById($task);
-
-        if($task->getUser()->id != $user->id){
-            return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
-        } 
-
-        try {
             $userTaskV2Service->controllerDeleteTask($task);
-
             return $this->json("success", Response::HTTP_OK);
-
-        } catch (\Exception $error) {
-            return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
-        }
-    }
+    } 
 
     #[Route('/user-task/v2/create', name: 'create_task', methods: ['POST'])]
     public function createTask(
         Request $request,
-        JWTTokenManagerInterface $tokenManager,
-        // TaskRepository $taskRepository,
         UserTaskV2Service $userTaskV2Service
     ): JsonResponse { 
         $user = $this->getUser();
-
         if (!$user) {
             return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
         }
-
         $data = $request->getContent();
         $data = json_decode($data, true);
 
@@ -81,26 +58,7 @@ class UserTaskV2Controller extends AbstractController
             $dateTime = $data['taskDateTime'];
             $dateTime = new \DateTime($dateTime);
             $data['taskDateTime'] = $dateTime;
-
-
             $task = $userTaskV2Service->controllerCreateTask($user, $data);
-
-            // $task = new Task;
-
-            // $task->setName($data['name']);
-            // $task->setDescription($data['description']);
-
-
-            // $date = new DateTime($data['date']);
-            // $time = new DateTime($data['time']);
-            // $task->setTaskDate($date);
-            // $task->setTaskTime($time);
-
-            // $task->setUser($user);
-            // $task->setStatus("Not finish");
-
-            // $taskRepository->add($task, true);
-
             return $this->json($task, Response::HTTP_CREATED, [], ['groups' => 'usertask:read']);
 
         } catch (\Exception $error) {
@@ -112,8 +70,6 @@ class UserTaskV2Controller extends AbstractController
     #[Route('/user-task/update/v2/{task}', name: 'update_task', methods: ['PATCH'])]
     public function updateTask(
         Request $request,
-        JWTTokenManagerInterface $tokenManager,
-        // TaskRepository $taskRepository,
         UserTaskV2Service $userTaskV2Service,
         $task
     ): JsonResponse { 
@@ -124,8 +80,6 @@ class UserTaskV2Controller extends AbstractController
         }
 
         $task = $userTaskV2Service->getTaskById($task);
-        // $array = [$task->getUser()->id, $user->id];
-
         if($task->getUser()->id != $user->id){
             return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
         } 
@@ -136,26 +90,6 @@ class UserTaskV2Controller extends AbstractController
 
         try {
             $task = $userTaskV2Service->controllerUpdateTask($task, $data);
-
-            // $task = $taskRepository->find($task);
-
-            // if(!$task) {
-            //     return $this->json($task, Response::HTTP_NOT_FOUND);
-            // }
-
-            // if(isset($data['name'])){
-
-            //     $task->setName($data['name']);
-            // }
-
-            // if(isset($data['time'])){
-            //     $time = new DateTime($data['time']);
-            //     $task->setTaskTime($time);
-            // }
-
-            // $taskRepository->add($task, true);
-
-
             if(!$task) {
                 return $this->json($task, Response::HTTP_NOT_FOUND);
             }
@@ -172,8 +106,6 @@ class UserTaskV2Controller extends AbstractController
     #[Route('/user-task/v2/get-by-user', name: 'task_by_user', methods: ['GET'])]
     public function getTasksByUser(
         Request $request,
-        JWTTokenManagerInterface $tokenManager,
-        // TaskRepository $taskRepository
         UserTaskV2Service $userTaskV2Service
     ): JsonResponse {
         $user = $this->getUser();
@@ -185,11 +117,7 @@ class UserTaskV2Controller extends AbstractController
         try {
             $tasks = $userTaskV2Service->controllerGetTasksByUser($user->id);
 
-            // $tasks = $taskRepository->findBy(['User' => $user->id]);
-
             return $this->json($tasks, Response::HTTP_OK, [], ['groups' => 'usertask:read']);
-
-            // return $this->json($userResponse, Response::HTTP_CREATED);
 
         } catch (\Exception $error) {
             return $this->json(['error' => $error->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -199,8 +127,6 @@ class UserTaskV2Controller extends AbstractController
     #[Route('/user-task/v2/get-by-user-and-datetime/{dateTime}', name: 'task_by_user_and_time', methods: ['GET'])]
     public function getTasksByUserAndDateTime(
         Request $request,
-        JWTTokenManagerInterface $tokenManager,
-        // TaskRepository $taskRepository,
         UserTaskV2Service $userTaskV2Service,
         string $dateTime
     ): JsonResponse {
@@ -229,8 +155,6 @@ class UserTaskV2Controller extends AbstractController
     #[Route('/user-task/v2/get-by-user-and-date/{date}', name: 'task_by_user_and_date', methods: ['GET'])]
     public function getTasksByUserAndDate(
         Request $request,
-        JWTTokenManagerInterface $tokenManager,
-        // TaskRepository $taskRepository,
         UserTaskV2Service $userTaskV2Service,
         string $date
     ): JsonResponse {
@@ -244,9 +168,6 @@ class UserTaskV2Controller extends AbstractController
         }
 
         try {
-            // $formattedDateTime = str_replace('_', ' ', $dateTime);
-            // $dateTime = new \DateTime($formattedDateTime);
-
             $dateObject = \DateTime::createFromFormat('Y-m-d', $date);
             if (!$dateObject) {
                 return $this->json(['error' => 'Invalid date format, expected Y-m-d'], Response::HTTP_BAD_REQUEST);

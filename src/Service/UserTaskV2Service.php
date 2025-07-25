@@ -12,17 +12,20 @@ use App\Repository\UserTaskV2Repository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
 class UserTaskV2Service extends WebTestCase
 {
-
     private UserTaskV2Repository $userTaskV2Repository;
-
-    
     public function __construct(UserTaskV2Repository $userTaskV2Repository) 
     {
         $this->userTaskV2Repository = $userTaskV2Repository;
+    }
+
+    public function getTaskById($id)
+    {
+        return $this->userTaskV2Repository->findOneBy(['id' => $id]);
     }
 
     public function createList(UserRoutineV2 $routine)
@@ -33,16 +36,12 @@ class UserTaskV2Service extends WebTestCase
 
         while ($today <= $nextWeek) {
             $todayF = $today->format('N');
-
             if( in_array($todayF, $routine->getDays()) ) {
 
                 $this->createOne($routine, $today->format('Y-m-d'));
             } 
-
             $today->modify('+1 day'); 
         }
-
-
     }
 
     public function createOne(UserRoutineV2 $routine, $date)
@@ -62,66 +61,13 @@ class UserTaskV2Service extends WebTestCase
 
     public function concatDateTime($time, $date)
     {
-        // Récupérer l'heure au format H:i:s
         $timeStr = $time->format('H:i:s');
 
-        // Fusionner date + heure
         $datetimeStr = $date . ' ' . $timeStr;
 
-        // Créer l'objet DateTime final
         $datetime = new \DateTime($datetimeStr);
 
         return $datetime;
-    }
-
-
-    // public function controllerCreateTask($data, $user)
-    // {
-    //     $task = new Task;
-
-    //     $task->setName($data['name']);
-    //     $task->setDescription($data['description']);
-
-
-    //     $date = new DateTime($data['date']);
-    //     $time = new DateTime($data['time']);
-    //     $task->setTaskDate($date);
-    //     $task->setTaskTime($time);
-
-    //     $task->setUser($user);
-    //     $task->setStatus("Not finish");
-
-    //     $this->taskRepository->add($task, true);
-
-    //     return $task;
-    // }
-
-    // public function controllerUpdateTask($taskId, $data)
-    // {
-    //     $task = $this->taskRepository->find($taskId);
-
-    //     if(!$task) {
-    //         return $task;
-    //     }
-
-    //     if(isset($data['name'])){
-
-    //         $task->setName($data['name']);
-    //     }
-
-    //     if(isset($data['time'])){
-    //         $time = new DateTime($data['time']);
-    //         $task->setTaskTime($time);
-    //     }
-
-    //     $this->taskRepository->add($task, true);
-
-    //     return $task;
-    // }
-
-    public function getTaskById($id)
-    {
-        return $this->userTaskV2Repository->findOneBy(['id' => $id]);
     }
 
     public function controllerUpdateTask($task, $data)
@@ -188,8 +134,12 @@ class UserTaskV2Service extends WebTestCase
         return array_values($filteredTasks);
     }
 
-    public function controllerDeleteTask($task): void
+    public function controllerDeleteTask($taskId): void
     {
+        $task = $this->getTaskById($taskId);
+        if(!$task){
+            throw new BadRequestHttpException("Task not found");
+        }
         $this->userTaskV2Repository->remove($task, true);
     }
     
