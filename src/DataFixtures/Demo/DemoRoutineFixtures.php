@@ -26,7 +26,6 @@ class DemoRoutineFixtures extends Fixture implements FixtureGroupInterface
         
         $manager->persist($routine);
         $this->addReference("reveil_stimulant", $routine);
-        // $manager->flush();
 
         // -----------------------------------------------------
 
@@ -38,7 +37,6 @@ class DemoRoutineFixtures extends Fixture implements FixtureGroupInterface
         
         $manager->persist($routine);
         $this->addReference("pause_sensorielle", $routine);
-        // $manager->flush();
 
         // -----------------------------------------------------
 

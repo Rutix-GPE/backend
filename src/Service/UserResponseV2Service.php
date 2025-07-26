@@ -61,7 +61,6 @@ class UserResponseV2Service
 
         if($question){
 
-            // $array["QSource"] = $question->getName();
             $array["code"] = Response::HTTP_OK;
 
         } else if($routine){
@@ -74,6 +73,8 @@ class UserResponseV2Service
         } else {
             $question = $user->getNextRootQuestion();
 
+            $array["code"] = Response::HTTP_OK;
+
         }
 
         $this->questionV2Service->setNextRootQuestion($question, $user);
@@ -81,22 +82,11 @@ class UserResponseV2Service
         if($question){
             $answer = $this->relationV2Service->getAnswer($question->getId());
     
-            // $array = [
-            //     "question" => $question->getContent(),
-            //     "answer" => $answer,
-            //     "url" => "user-response/v2/next-question/" . $question->getId()
-            // ];
-
             $array["question"] = $question->getContent();
             $array["answer"] = $answer;
             $array["url"] = "user-response/v2/next-question/" . $question->getId();
     
         } else {
-            // $array = [
-            //     "question" => null,
-            //     "answer" => null,
-            //     "url" => null
-            // ];
 
             $array["question"] = null;
             $array["answer"] = null;

@@ -53,9 +53,6 @@ class UserResponseV2Controller extends AbstractController
         if (!$user) {
             throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
         }
-        // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
-        //     throw new UnauthorizedHttpException('acces', "Accès refusé");
-        // }
 
         $data = $request->getContent();
         $data = json_decode($data, true);

@@ -26,7 +26,6 @@ class DemoQuestionFixtures extends Fixture implements FixtureGroupInterface
         
         $manager->persist($question);
         $this->addReference("focus_moment_day", $question);
-        // $manager->flush();
 
         // -----------------------------------------------------
 
@@ -38,7 +37,6 @@ class DemoQuestionFixtures extends Fixture implements FixtureGroupInterface
         
         $manager->persist($question);
         $this->addReference("hard_morning", $question);
-        // $manager->flush();
         
         // -----------------------------------------------------
 
@@ -51,7 +49,6 @@ class DemoQuestionFixtures extends Fixture implements FixtureGroupInterface
         
         $manager->persist($question);
         $this->addReference("breakfast", $question);
-        // $manager->flush();
 
         // -----------------------------------------------------
 
@@ -63,7 +60,6 @@ class DemoQuestionFixtures extends Fixture implements FixtureGroupInterface
         
         $manager->persist($question);
         $this->addReference("afternoon_break", $question);
-        // $manager->flush();
 
         // -----------------------------------------------------
 
@@ -75,7 +71,6 @@ class DemoQuestionFixtures extends Fixture implements FixtureGroupInterface
         
         $manager->persist($question);
         $this->addReference("focus_break", $question);
-        // $manager->flush();     
         
         // -----------------------------------------------------
 
