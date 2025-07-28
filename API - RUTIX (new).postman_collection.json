@@ -1,0 +1,665 @@
+{
+	"info": {
+		"_postman_id": "d707db36-dbb8-4931-86b7-b9e4730ac46f",
+		"name": "API - RUTIX (new)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21118333",
+		"_collection_link": "https://solar-crater-954334.postman.co/workspace/New-Team-Workspace~2496c306-4681-4f78-831b-912f91ba3cde/collection/21118333-d707db36-dbb8-4931-86b7-b9e4730ac46f?action=share&source=collection_link&creator=21118333"
+	},
+	"item": [
+		{
+			"name": "User self",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"onyx\",\r\n  \"password\": \"securepassword\",\r\n  \"firstname\": \"O\",\r\n  \"lastname\": \"MEGA\",\r\n  \"email\": \"onyx@4example.com\"\r\n//   \"numberphone\": \"1234567890\",\r\n//   \"country\": \"France\",\r\n//   \"postalcode\": \"75001\",\r\n//   \"city\": \"Paris\",\r\n//   \"adress\": \"1 Rue de Rivoli\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let json = pm.response.json();\r",
+									"\r",
+									"if (json.token) {\r",
+									"    pm.environment.set(\"access_token\", json.token);\r",
+									"    console.log(\"✅ Token stocké avec succès :\", json.token);\r",
+									"} else {\r",
+									"    console.warn(\"⚠️ Aucun token trouvé dans la réponse.\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"onyx\",\r\n  \"password\": \"securepassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/authenticate",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/me",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update memo",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"memo\": \"Matinée escalade demain\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/update-memo",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"update-memo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update avatar",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"avatar\":\"9cb497f79fb15740b389564c5bbf269b.png\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/update-avatar",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"update-avatar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User admin",
+			"item": [
+				{
+					"name": "Get one user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/show/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"show",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"onyx\",\r\n  \"password\": \"securepassword\",\r\n  \"firstname\": \"O\",\r\n  \"lastname\": \"MEGA\",\r\n  \"email\": \"onyx@4example.com\"\r\n//   \"numberphone\": \"1234567890\",\r\n//   \"country\": \"France\",\r\n//   \"postalcode\": \"75001\",\r\n//   \"city\": \"Paris\",\r\n//   \"adress\": \"1 Rue de Rivoli\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/update/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"update",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update role user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"onyx\",\r\n  \"password\": \"securepassword\",\r\n  \"firstname\": \"O\",\r\n  \"lastname\": \"MEGA\",\r\n  \"email\": \"onyx@4example.com\"\r\n//   \"numberphone\": \"1234567890\",\r\n//   \"country\": \"France\",\r\n//   \"postalcode\": \"75001\",\r\n//   \"city\": \"Paris\",\r\n//   \"adress\": \"1 Rue de Rivoli\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/update-role/10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"update-role",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/delete/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"delete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Avatar",
+			"item": [
+				{
+					"name": "Get all Avatar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/avatar/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"avatar",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Response",
+			"item": [
+				{
+					"name": "First question",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user-response/first-question",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-response",
+								"first-question"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Next question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"answer\": \"Non\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user-response/next-question/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-response",
+								"next-question",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User routine",
+			"item": [
+				{
+					"name": "Get routine by user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/routine/get-by-user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"routine",
+								"get-by-user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User task",
+			"item": [
+				{
+					"name": "Create task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Escalade\",\r\n    \"description\": \"Chamonix ce week-end\",\r\n    \"taskDateTime\": \"2025-07-26 10:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user-task/create",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-task",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update task",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // \"name\": \"reveil_pas_stimulant\"\r\n    \"description\": \"FontaineBleau ce week-end\"\r\n    // \"dateTime\": \"2025-07-10 20:00\",\r\n    // \"status\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user-task/update/33",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-task",
+								"update",
+								"33"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete task",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user-task/delete/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-task",
+								"delete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get task by user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user-task/get-by-user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-task",
+								"get-by-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get task by user and dateTime",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user-task/get-by-user-and-datetime/2025-07-25_07:30:00",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-task",
+								"get-by-user-and-datetime",
+								"2025-07-25_07:30:00"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get task by user and date",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user-task/get-by-user-and-date/2025-07-26",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-task",
+								"get-by-user-and-date",
+								"2025-07-26"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
