@@ -2,45 +2,45 @@
 
 namespace App\Service;
 
-use App\Entity\QuestionV2;
-use App\Entity\RoutineV2;
-use App\Repository\RoutineV2Repository;
+use App\Entity\Question;
+use App\Entity\Routine;
+use App\Repository\RoutineRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class RoutineV2Service extends WebTestCase
+class RoutineService extends WebTestCase
 {
 
-    private RoutineV2Repository $routineV2Repository;
+    private RoutineRepository $routineRepository;
 
     
-    public function __construct(RoutineV2Repository $routineV2Repository) 
+    public function __construct(RoutineRepository $routineRepository) 
     {
-        $this->routineV2Repository = $routineV2Repository;
+        $this->routineRepository = $routineRepository;
     }
 
     public function show($routine)
     {
-        return $this->routineV2Repository->findOneBy([
+        return $this->routineRepository->findOneBy([
             'id' => $routine
         ]);
     }
 
     public function list()
     {
-        return $this->routineV2Repository->findAll();
+        return $this->routineRepository->findAll();
     }
 
     public function new($name, $description, $days, $taskTime)
     {
-        $routine = new RoutineV2;
+        $routine = new Routine;
 
         if(!is_string($name)||!is_string($description)||!is_array($days)||!is_object($taskTime) ){
             return -1;
         }
 
-        $duplicateName = $this->routineV2Repository->findOneBy([
+        $duplicateName = $this->routineRepository->findOneBy([
             'name' => $name
         ]);
         if($duplicateName) {
@@ -52,14 +52,14 @@ class RoutineV2Service extends WebTestCase
         $routine->setDays($days);
         $routine->setTaskTime($taskTime);
 
-        $this->routineV2Repository->add($routine, true);
+        $this->routineRepository->add($routine, true);
 
         return [$routine, Response::HTTP_CREATED];
     }
 
     public function edit($routineId, $data)
     {
-        $routine = $this->routineV2Repository->findOneBy([
+        $routine = $this->routineRepository->findOneBy([
             'id' => $routineId
         ]);
 
@@ -73,7 +73,7 @@ class RoutineV2Service extends WebTestCase
             $routine->setTaskTime($data['taskTime']);
         }
 
-        $this->routineV2Repository->add($routine, true);
+        $this->routineRepository->add($routine, true);
 
         return [$routine, Response::HTTP_OK];
     }

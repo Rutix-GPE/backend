@@ -2,25 +2,26 @@
 
 namespace App\Controller;
 
-use App\Service\RelationV2Service;
+use App\Service\RelationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-final class RelationV2Controller extends AbstractController
+final class RelationController extends AbstractController
 {
-    #[Route('/relation/v2/join', name: 'join_relation', methods: ['POST'])]
-    public function join(Request $request, RelationV2Service $relationService): JsonResponse
+    #[Route('/relation/join', name: 'join_relation', methods: ['POST'])]
+    public function join(Request $request, RelationService $relationService): JsonResponse
     {
-        // $user = $this->getUser();
-        // if (!$user) {
-        //     throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
-        // }
-        // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
-        //     throw new UnauthorizedHttpException('acces', "Accès refusé");
-        // }
+        $user = $this->getUser();
+        if (!$user) {
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        }
+        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+            throw new UnauthorizedHttpException('acces', "Accès refusé");
+        }
 
         $data = $request->getContent();
         $data = json_decode($data, true);
@@ -44,16 +45,16 @@ final class RelationV2Controller extends AbstractController
         return $this->json($relation);
     }
 
-    #[Route('/relation/v2/source-target/{question}', name: 'get_answer', methods: ['GET'])]
-    public function sourceAndTarget($question, Request $request, RelationV2Service $relationService): JsonResponse
+    #[Route('/relation/source-target/{question}', name: 'get_answer', methods: ['GET'])]
+    public function sourceAndTarget($question, Request $request, RelationService $relationService): JsonResponse
     {
-        // $user = $this->getUser();
-        // if (!$user) {
-        //     throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
-        // }
-        // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
-        //     throw new UnauthorizedHttpException('acces', "Accès refusé");
-        // }
+        $user = $this->getUser();
+        if (!$user) {
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        }
+        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+            throw new UnauthorizedHttpException('acces', "Accès refusé");
+        }
 
         if(!$question){
             $response = ["error" => "Missing informations"];
@@ -73,16 +74,16 @@ final class RelationV2Controller extends AbstractController
 
     }    
 
-        #[Route('/relation/v2/answers/{question}', name: 'get_source_target', methods: ['GET'])]
-    public function answer($question, Request $request, RelationV2Service $relationService): JsonResponse
+        #[Route('/relation/answers/{question}', name: 'get_source_target', methods: ['GET'])]
+    public function answer($question, Request $request, RelationService $relationService): JsonResponse
     {
-        // $user = $this->getUser();
-        // if (!$user) {
-        //     throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
-        // }
-        // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
-        //     throw new UnauthorizedHttpException('acces', "Accès refusé");
-        // }
+        $user = $this->getUser();
+        if (!$user) {
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        }
+        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+            throw new UnauthorizedHttpException('acces', "Accès refusé");
+        }
 
         if(!$question){
             $response = ["error" => "Missing informations"];

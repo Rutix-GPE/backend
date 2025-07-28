@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
 use App\Service\TaskService;
-use App\Service\UserTaskV2Service;
+use App\Service\UserTaskService;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class UserTaskV2Controller extends AbstractController
+class UserTaskController extends AbstractController
 {
     #[Route('/task', name: 'app_task')]
     public function index(): Response
@@ -24,19 +24,19 @@ class UserTaskV2Controller extends AbstractController
             'controller_name' => 'TaskController',
         ]);
     }
-    #[Route('/user-task/v2/delete/{task}', name: 'delete_task', methods: ['DELETE'])]
+    #[Route('/user-task/delete/{task}', name: 'delete_task', methods: ['DELETE'])]
     public function deleteTask(
         $task,
-        UserTaskV2Service $userTaskV2Service
+        UserTaskService $userTaskService
     ): JsonResponse {
-            $userTaskV2Service->controllerDeleteTask($task);
+            $userTaskService->controllerDeleteTask($task);
             return $this->json("success", Response::HTTP_OK);
     } 
 
-    #[Route('/user-task/v2/create', name: 'create_task', methods: ['POST'])]
+    #[Route('/user-task/create', name: 'create_task', methods: ['POST'])]
     public function createTask(
         Request $request,
-        UserTaskV2Service $userTaskV2Service
+        UserTaskService $userTaskService
     ): JsonResponse { 
         $user = $this->getUser();
         if (!$user) {
@@ -58,7 +58,7 @@ class UserTaskV2Controller extends AbstractController
             $dateTime = $data['taskDateTime'];
             $dateTime = new \DateTime($dateTime);
             $data['taskDateTime'] = $dateTime;
-            $task = $userTaskV2Service->controllerCreateTask($user, $data);
+            $task = $userTaskService->controllerCreateTask($user, $data);
             return $this->json($task, Response::HTTP_CREATED, [], ['groups' => 'usertask:read']);
 
         } catch (\Exception $error) {
@@ -67,10 +67,10 @@ class UserTaskV2Controller extends AbstractController
 
     }
 
-    #[Route('/user-task/update/v2/{task}', name: 'update_task', methods: ['PATCH'])]
+    #[Route('/user-task/update/{task}', name: 'update_task', methods: ['PATCH'])]
     public function updateTask(
         Request $request,
-        UserTaskV2Service $userTaskV2Service,
+        UserTaskService $userTaskService,
         $task
     ): JsonResponse { 
         $user = $this->getUser();
@@ -79,7 +79,7 @@ class UserTaskV2Controller extends AbstractController
             return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $task = $userTaskV2Service->getTaskById($task);
+        $task = $userTaskService->getTaskById($task);
         if($task->getUser()->id != $user->id){
             return $this->json(['error' => 'User incorrect'], Response::HTTP_UNAUTHORIZED);
         } 
@@ -89,7 +89,7 @@ class UserTaskV2Controller extends AbstractController
         $data = json_decode($data, true);
 
         try {
-            $task = $userTaskV2Service->controllerUpdateTask($task, $data);
+            $task = $userTaskService->controllerUpdateTask($task, $data);
             if(!$task) {
                 return $this->json($task, Response::HTTP_NOT_FOUND);
             }
@@ -103,10 +103,10 @@ class UserTaskV2Controller extends AbstractController
 
     }
 
-    #[Route('/user-task/v2/get-by-user', name: 'task_by_user', methods: ['GET'])]
+    #[Route('/user-task/get-by-user', name: 'task_by_user', methods: ['GET'])]
     public function getTasksByUser(
         Request $request,
-        UserTaskV2Service $userTaskV2Service
+        UserTaskService $userTaskService
     ): JsonResponse {
         $user = $this->getUser();
 
@@ -115,7 +115,7 @@ class UserTaskV2Controller extends AbstractController
         }
 
         try {
-            $tasks = $userTaskV2Service->controllerGetTasksByUser($user->id);
+            $tasks = $userTaskService->controllerGetTasksByUser($user->id);
 
             return $this->json($tasks, Response::HTTP_OK, [], ['groups' => 'usertask:read']);
 
@@ -124,10 +124,10 @@ class UserTaskV2Controller extends AbstractController
         }
     }
 
-    #[Route('/user-task/v2/get-by-user-and-datetime/{dateTime}', name: 'task_by_user_and_time', methods: ['GET'])]
+    #[Route('/user-task/get-by-user-and-datetime/{dateTime}', name: 'task_by_user_and_time', methods: ['GET'])]
     public function getTasksByUserAndDateTime(
         Request $request,
-        UserTaskV2Service $userTaskV2Service,
+        UserTaskService $userTaskService,
         string $dateTime
     ): JsonResponse {
         $data = $request->getContent();
@@ -143,7 +143,7 @@ class UserTaskV2Controller extends AbstractController
             $formattedDateTime = str_replace('_', ' ', $dateTime);
             $dateTime = new \DateTime($formattedDateTime);
 
-            $tasks = $userTaskV2Service->controllerGetTasksByUserAndDateTime($user, $dateTime);
+            $tasks = $userTaskService->controllerGetTasksByUserAndDateTime($user, $dateTime);
 
             return $this->json($tasks, Response::HTTP_OK, [], ['groups' => 'usertask:read']);
 
@@ -152,10 +152,10 @@ class UserTaskV2Controller extends AbstractController
         }
     }
 
-    #[Route('/user-task/v2/get-by-user-and-date/{date}', name: 'task_by_user_and_date', methods: ['GET'])]
+    #[Route('/user-task/get-by-user-and-date/{date}', name: 'task_by_user_and_date', methods: ['GET'])]
     public function getTasksByUserAndDate(
         Request $request,
-        UserTaskV2Service $userTaskV2Service,
+        UserTaskService $userTaskService,
         string $date
     ): JsonResponse {
         $data = $request->getContent();
@@ -173,7 +173,7 @@ class UserTaskV2Controller extends AbstractController
                 return $this->json(['error' => 'Invalid date format, expected Y-m-d'], Response::HTTP_BAD_REQUEST);
             }
 
-            $tasks = $userTaskV2Service->controllerGetTasksByUserAndDate($user, $dateObject);
+            $tasks = $userTaskService->controllerGetTasksByUserAndDate($user, $dateObject);
 
             return $this->json($tasks, Response::HTTP_OK, [], ['groups' => 'usertask:read']);
 

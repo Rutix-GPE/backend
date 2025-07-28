@@ -7,7 +7,6 @@ use App\Entity\Routine;
 class RoutineOutputDTO
 {
     public int $id;
-    public ?int $categoryId = null;
     public ?int $userId = null;
     public string $name;
     public string $description;
@@ -20,7 +19,6 @@ class RoutineOutputDTO
     public function __construct(Routine $routine)
     {
         $this->id = $routine->getId();
-        $this->categoryId = $routine->getCategory()?->getId();
         $this->userId = $routine->getUser()?->getId();
         $this->name = $routine->getName();
         $this->description = $routine->getDescription();

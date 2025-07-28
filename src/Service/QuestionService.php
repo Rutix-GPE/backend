@@ -2,74 +2,74 @@
 
 namespace App\Service;
 
-use App\Entity\QuestionV2;
-use App\Repository\QuestionV2Repository;
+use App\Entity\Question;
+use App\Repository\QuestionRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 use function PHPUnit\Framework\isNull;
 
-class QuestionV2Service extends WebTestCase
+class QuestionService extends WebTestCase
 {
 
-    private QuestionV2Repository $questionV2Repository;
+    private QuestionRepository $questionRepository;
     private UserRepository $userRepository;
 
     
-    public function __construct(QuestionV2Repository $questionV2Repository, UserRepository $userRepository) 
+    public function __construct(QuestionRepository $questionRepository, UserRepository $userRepository) 
     {
-        $this->questionV2Repository = $questionV2Repository;
+        $this->questionRepository = $questionRepository;
         $this->userRepository = $userRepository;
     }
 
     public function show($question)
     {
-        return $this->questionV2Repository->findOneBy([
+        return $this->questionRepository->findOneBy([
             'id' => $question
         ]);
     }
 
     public function list()
     {
-        return $this->questionV2Repository->findAll();
+        return $this->questionRepository->findAll();
     }
 
     public function listRoot()
     {
-        return $this->questionV2Repository->findBy([
+        return $this->questionRepository->findBy([
             'isRootQuestion' => true
         ]);
     }
 
     public function new($name, $content, $rootQuestion, $quickQuestion)
     {
-        $questionv2 = new QuestionV2;
+        $question = new Question;
 
         if(!is_string($name)||!is_string($content)||!is_bool($rootQuestion)||!is_bool($quickQuestion) ){
             return -1;
         }
 
-        $duplicateName = $this->questionV2Repository->findOneBy([
+        $duplicateName = $this->questionRepository->findOneBy([
             'name' => $name
         ]);
         if($duplicateName) {
             return  [$duplicateName, Response::HTTP_CONFLICT];
         }
 
-        $questionv2->setName($name);
-        $questionv2->setContent($content);
-        $questionv2->setIsRootQuestion($rootQuestion);
-        $questionv2->setIsQuickQuestion($quickQuestion);
+        $question->setName($name);
+        $question->setContent($content);
+        $question->setIsRootQuestion($rootQuestion);
+        $question->setIsQuickQuestion($quickQuestion);
 
-        $this->questionV2Repository->add($questionv2, true);
+        $this->questionRepository->add($question, true);
 
-        return [$questionv2, Response::HTTP_CREATED];
+        return [$question, Response::HTTP_CREATED];
     }
 
     public function edit($questionId, $data)
     {
-        $question = $this->questionV2Repository->findOneBy([
+        $question = $this->questionRepository->findOneBy([
             'id' => $questionId
         ]);
 
@@ -83,7 +83,7 @@ class QuestionV2Service extends WebTestCase
             $question->setIsQuickQuestion($data['rootQuestion']);
         }
 
-        $this->questionV2Repository->add($question, true);
+        $this->questionRepository->add($question, true);
 
         return [$question, Response::HTTP_OK];
     }
@@ -93,7 +93,7 @@ class QuestionV2Service extends WebTestCase
         if($question)
         {
             if($question->isRootQuestion()){
-                $allQuestions = $this->questionV2Repository->findBy([
+                $allQuestions = $this->questionRepository->findBy([
                     'isRootQuestion' => true
                 ]);
                 

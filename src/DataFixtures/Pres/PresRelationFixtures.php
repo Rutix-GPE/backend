@@ -6,11 +6,11 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\RelationV2;
-use App\Repository\QuestionV2Repository;
+use App\Entity\Relation;
+use App\Repository\QuestionRepository;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use App\Service\RelationV2Service;
+use App\Service\RelationService;
 
 class PresRelationFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
@@ -25,7 +25,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // Tree one
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("is_employed"));
         $relation->setTargetQuestion($this->getReference("is_student"));
         $relation->setAnswer("Non");
@@ -34,7 +34,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("is_employed"));
         $relation->setTargetQuestion($this->getReference("employee_fixed_hours"));
         $relation->setAnswer("Oui");
@@ -43,7 +43,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------  
         
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("is_student"));
         $relation->setAnswer("Non");
 
@@ -51,7 +51,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("is_student"));
         $relation->setTargetQuestion($this->getReference("student_fixed_hours"));
         $relation->setAnswer("Oui");
@@ -60,7 +60,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("student_fixed_hours"));
         $relation->setAnswer("Non");
 
@@ -68,7 +68,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("student_fixed_hours"));
         $relation->setTargetRoutine($this->getReference("etude_fixe"));
         $relation->setAnswer("Oui");
@@ -77,7 +77,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("employee_fixed_hours"));
         $relation->setAnswer("Non");
 
@@ -85,7 +85,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("employee_fixed_hours"));
         $relation->setTargetRoutine($this->getReference("travail_fixe"));
         $relation->setAnswer("Oui");
@@ -94,7 +94,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // Tree two
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("are_you_sporty"));
         $relation->setAnswer("Non");
 
@@ -102,7 +102,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("are_you_sporty"));
         $relation->setTargetQuestion($this->getReference("what_rythme"));
         $relation->setAnswer("Oui");
@@ -111,7 +111,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("what_rythme"));
         $relation->setTargetRoutine($this->getReference("sporty_7days"));
         $relation->setAnswer("7 fois par semaine");
@@ -120,7 +120,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
         
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("what_rythme"));
         $relation->setTargetRoutine($this->getReference("sporty_4days"));
         $relation->setAnswer("4 fois par semaine");
@@ -129,7 +129,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("what_rythme"));
         $relation->setTargetRoutine($this->getReference("sporty_3days"));
         $relation->setAnswer("3 fois par semaine");
@@ -138,7 +138,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("what_rythme"));
         $relation->setTargetRoutine($this->getReference("sporty_2days"));
         $relation->setAnswer("2 fois par semaine");
@@ -147,7 +147,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("what_rythme"));
         $relation->setTargetRoutine($this->getReference("sporty_1days"));
         $relation->setAnswer("1 fois par semaine");
@@ -156,7 +156,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // Tree three
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("treatment_?"));
         $relation->setTargetQuestion($this->getReference("vitamin_?"));
         $relation->setAnswer("Non");
@@ -165,7 +165,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("vitamin_?"));
         $relation->setAnswer("Non");
 
@@ -173,7 +173,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("vitamin_?"));
         $relation->setTargetRoutine($this->getReference("vitamin"));
         $relation->setAnswer("Oui");
@@ -182,7 +182,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
         
         // ----------------------------------------------------- 
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("treatment_?"));
         $relation->setTargetRoutine($this->getReference("treatment"));
         $relation->setAnswer("Oui");
@@ -191,7 +191,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
         
         // Tree four
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("focus_moment_day"));
         $relation->setTargetQuestion($this->getReference("hard_morning"));
         $relation->setAnswer("Matin");
@@ -200,7 +200,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("hard_morning"));
         $relation->setTargetRoutine($this->getReference("reveil_stimulant"));
         $relation->setAnswer("Oui");
@@ -209,7 +209,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("hard_morning"));
         $relation->setTargetQuestion($this->getReference("breakfast"));
         $relation->setAnswer("Non");
@@ -218,7 +218,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("breakfast"));
         $relation->setAnswer("Oui");
 
@@ -226,7 +226,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
         
         // -----------------------------------------------------
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("breakfast"));
         $relation->setTargetRoutine($this->getReference("reveil_stimulant"));
         $relation->setAnswer("Non");
@@ -235,7 +235,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
         
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("focus_moment_day"));
         $relation->setTargetQuestion($this->getReference("afternoon_break"));
         $relation->setAnswer("Après-midi");
@@ -244,7 +244,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
         
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("afternoon_break"));
         $relation->setTargetQuestion($this->getReference("focus_break"));
         $relation->setAnswer("Oui");
@@ -253,7 +253,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
         
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("afternoon_break"));
         $relation->setTargetRoutine($this->getReference("pause_sensorielle"));
         $relation->setAnswer("Non");
@@ -262,7 +262,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
         
         // -----------------------------------------------------
         
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("focus_break"));
         $relation->setAnswer("Oui");
 
@@ -270,7 +270,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
         
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("focus_break"));
         $relation->setTargetRoutine($this->getReference("pause_sensorielle"));
         $relation->setAnswer("Non");
@@ -279,7 +279,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("focus_moment_day"));
         $relation->setTargetQuestion($this->getReference("hard_sleep"));
         $relation->setAnswer("Soir");
@@ -288,7 +288,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
         
         // -----------------------------------------------------
         
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("hard_sleep"));
         $relation->setTargetRoutine($this->getReference("deconnexion_numerique"));
         $relation->setAnswer("Oui");
@@ -297,7 +297,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
         
         // -----------------------------------------------------
         
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("hard_sleep"));
         $relation->setAnswer("Non");
 
@@ -306,7 +306,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // Tree five
         
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("have_animal"));
         $relation->setTargetQuestion($this->getReference("what_animal"));
         $relation->setAnswer("Oui");
@@ -315,7 +315,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
                 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("have_animal"));
         $relation->setAnswer("Non");
 
@@ -323,7 +323,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
                 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("what_animal"));
         $relation->setTargetQuestion($this->getReference("dog_habits"));
         $relation->setAnswer("Chien");
@@ -332,7 +332,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
                 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("what_animal"));
         $relation->setTargetRoutine($this->getReference("entretien_chat"));
         $relation->setAnswer("Chat");
@@ -341,7 +341,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
         
         // -----------------------------------------------------
                 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("what_animal"));
         $relation->setTargetRoutine($this->getReference("entretien_animal"));
         $relation->setAnswer("Autre");
@@ -350,7 +350,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
                 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("dog_habits"));
         $relation->setAnswer("Oui");
 
@@ -358,7 +358,7 @@ class PresRelationFixtures extends Fixture implements FixtureGroupInterface, Dep
 
         // -----------------------------------------------------
                 
-        $relation = new RelationV2();
+        $relation = new Relation();
         $relation->setSource($this->getReference("dog_habits"));
         $relation->setTargetRoutine($this->getReference("entretien_chien"));
         $relation->setAnswer("Non");

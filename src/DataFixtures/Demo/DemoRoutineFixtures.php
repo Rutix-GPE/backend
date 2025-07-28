@@ -5,7 +5,7 @@ namespace App\DataFixtures\Demo;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\RoutineV2;
+use App\Entity\Routine;
 
 class DemoRoutineFixtures extends Fixture implements FixtureGroupInterface
 {
@@ -18,7 +18,7 @@ class DemoRoutineFixtures extends Fixture implements FixtureGroupInterface
     {
         // Tree one
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('reveil_stimulant');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
@@ -29,7 +29,7 @@ class DemoRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('pause_sensorielle');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
@@ -40,7 +40,7 @@ class DemoRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('deconnexion_numerique');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
@@ -52,7 +52,7 @@ class DemoRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // Tree two
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('entretien_animal');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
@@ -63,7 +63,7 @@ class DemoRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('entretien_chat');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
@@ -74,7 +74,7 @@ class DemoRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------   
         
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('entretien_chien');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 

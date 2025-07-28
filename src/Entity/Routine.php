@@ -2,14 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\RoutineV2Repository;
+use App\Repository\RoutineRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: RoutineV2Repository::class)]
-class RoutineV2
+#[ORM\Entity(repositoryClass: RoutineRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+class Routine
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,16 +29,11 @@ class RoutineV2
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $taskTime = null;
 
-    // /**
-    //  * @var Collection<int, RelationV2>
-    //  */
-    // #[ORM\OneToMany(targetEntity: RelationV2::class, mappedBy: 'targetRoutine')]
-    // private Collection $relationV2s;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public ?\DateTimeInterface $CreationDate = null;
 
-    // public function __construct()
-    // {
-    //     $this->relationV2s = new ArrayCollection();
-    // }
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public ?\DateTimeInterface $UpdatedDate = null;
 
     public function getId(): ?int
     {
@@ -92,33 +88,45 @@ class RoutineV2
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, RelationV2>
-    //  */
-    // public function getRelationV2s(): Collection
-    // {
-    //     return $this->relationV2s;
-    // }
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->CreationDate;
+    }
 
-    // public function addRelationV2(RelationV2 $relationV2): static
-    // {
-    //     if (!$this->relationV2s->contains($relationV2)) {
-    //         $this->relationV2s->add($relationV2);
-    //         $relationV2->setTargetRoutine($this);
-    //     }
+    public function setCreationDate(?\DateTimeInterface $CreationDate): static
+    {
+        $this->CreationDate = $CreationDate;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removeRelationV2(RelationV2 $relationV2): static
-    // {
-    //     if ($this->relationV2s->removeElement($relationV2)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($relationV2->getTargetRoutine() === $this) {
-    //             $relationV2->setTargetRoutine(null);
-    //         }
-    //     }
+    public function getUpdatedDate(): ?\DateTimeInterface
+    {
+        return $this->UpdatedDate;
+    }
 
-    //     return $this;
-    // }
+    public function setUpdatedDate(?\DateTimeInterface $UpdatedDate): static
+    {
+        $this->UpdatedDate = $UpdatedDate;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->CreationDate = new \DateTime();
+        $this->UpdatedDate = new \DateTime();
+        
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->UpdatedDate = new \DateTime();
+
+        return $this;
+    }
+
 }

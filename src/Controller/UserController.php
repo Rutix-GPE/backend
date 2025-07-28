@@ -23,20 +23,19 @@ class UserController extends AbstractController
         private readonly ValidatorInterface $validator,
         private readonly UserService $userService,
     ) {}
-// pas faire très bien comme ça 
+
     #[Route('/user/show/{id}', name: 'show_user', methods: ['GET'])]
     public function showUser(int $id): JsonResponse
     {
         $userDTO = $this->userService->getUserById($id);
         return $this->json($userDTO, Response::HTTP_OK);
     }
-// pas faire très bien comme ça 
+
     #[Route('/user/list', name: 'list_user', methods: ['GET'])]
     public function listUser(): JsonResponse
     {
         return $this->json($this->userService->getAllUsers(), Response::HTTP_OK);
     }
-// terminé 
 
     #[Route('/user/update/{id}', name: 'update_user', methods: ['PUT'])]
     public function updateUser(int $id, Request $request): JsonResponse
@@ -45,7 +44,6 @@ class UserController extends AbstractController
         return $this->json($userDTO, Response::HTTP_OK);
     }
 
-//good 
     #[Route('/user/update-role/{id}', name: 'update_role_user', methods: ['PUT'])]
     public function updateRole(int $id, Request $request, UserRepository $userRepository): JsonResponse
     {
@@ -85,15 +83,21 @@ class UserController extends AbstractController
         return $this->json($user);
     }
 
-//delete good
     #[Route('/user/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
     public function delete(int $id, UserRepository $userRepository): JsonResponse
     {
+        $user = $this->getUser();
+        if (!$user) {
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        }
+        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+            throw new UnauthorizedHttpException('acces', "Accès refusé");
+        }
 
         $result = $this->userService->deleteUser($id);
         return $this->json(['success' => $result], Response::HTTP_OK);
     }
-//Me elle est faite good good
+
     #[Route('/user/me', name: 'user_me', methods: ['GET'])]
     public function me(): JsonResponse
     {
@@ -104,7 +108,7 @@ class UserController extends AbstractController
 
         return $this->json(new UserResponseDTO($user), Response::HTTP_OK);
     }
-//Update faite comme il faut
+
     #[Route('/user/update-memo', name: 'update_memo', methods: ['PUT'])]
     public function updateMemo(Request $request, UserRepository $userRepository): JsonResponse
     {

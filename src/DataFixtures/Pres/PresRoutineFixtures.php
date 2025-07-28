@@ -5,7 +5,7 @@ namespace App\DataFixtures\Pres;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\RoutineV2;
+use App\Entity\Routine;
 
 class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 {
@@ -18,7 +18,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
     {
         // Tree one
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Horaire étudiant');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
@@ -29,7 +29,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Horaire travail');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
@@ -40,7 +40,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // Tree two
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('7 jours de sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5, 6, 7]); 
@@ -51,7 +51,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('4 jours de sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 3, 5, 7]); 
@@ -62,7 +62,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('3 jours de sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 3, 6]); 
@@ -73,7 +73,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('2 jours de sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 5]); 
@@ -84,7 +84,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('1 jours de sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([3]); 
@@ -95,7 +95,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         
         // Tree three
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Médicament');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5, 6, 7]); 
@@ -106,7 +106,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Vitamine');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5, 6, 7]); 
@@ -117,7 +117,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
             // Tree four
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Réveil stimulant');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
@@ -128,7 +128,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Pause sensorielle');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
@@ -139,7 +139,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Lecture du soir');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5, 6, 7]); 
@@ -151,7 +151,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // Tree five
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Entretien animal');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5, 6, 7]); 
@@ -162,7 +162,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------
 
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Soin du chat');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5, 6, 7]); 
@@ -173,7 +173,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
 
         // -----------------------------------------------------   
         
-        $routine = new RoutineV2();
+        $routine = new Routine();
         $routine->setName('Sortie du chien');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5, 6, 7]); 

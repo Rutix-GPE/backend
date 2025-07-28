@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Repository\RoutineRepository;
 use App\Service\RoutineService;
-use App\Service\UserRoutineV2Service;
+use App\Service\UserRoutineService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,29 +13,23 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class UserRoutineV2Controller extends AbstractController
+class UserRoutineController extends AbstractController
 {
 
-    #[Route('/routine/v2/get-by-user', name: 'routine_by_user', methods: ['GET'])]
+    #[Route('/routine/get-by-user', name: 'routine_by_user', methods: ['GET'])]
     public function getRoutinesByUser(
         Request $request,
         JWTTokenManagerInterface $tokenManager,
-        // RoutineRepository $routineRepository,
-        UserRoutineV2Service $userRoutineV2Service
+        UserRoutineService $userRoutineService
     ): JsonResponse {
         $user = $this->getUser();
 
         if (!$user) {
             throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
         }
-        // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
-        //     throw new UnauthorizedHttpException('acces', "Accès refusé");
-        // }
 
         try {
-            $tasks = $userRoutineV2Service->controllerGetRoutineByUser($user->id);
-
-            // $tasks = $routineRepository->findBy(['User' => $user->id]);
+            $tasks = $userRoutineService->controllerGetRoutineByUser($user->id);
 
             return $this->json($tasks, Response::HTTP_OK, [], ['groups' => 'routine:read']);
 

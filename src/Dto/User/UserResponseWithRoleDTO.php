@@ -18,7 +18,7 @@ class UserResponseWithRoleDTO
     public ?string $memo;
 
     /** @var string[] */
-    public array $roles; // <- ici on passe de ?string à array (plus logique vu que User::getRoles() retourne un array)
+    public array $roles; 
 
     public function __construct(User $user)
     {

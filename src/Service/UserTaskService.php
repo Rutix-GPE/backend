@@ -2,33 +2,33 @@
 
 namespace App\Service;
 
-use App\Entity\QuestionV2;
-use App\Entity\RoutineV2;
-use App\Entity\UserRoutineV2;
-use App\Entity\UserTaskV2;
-use App\Repository\RoutineV2Repository;
-use App\Repository\UserRoutineV2Repository;
-use App\Repository\UserTaskV2Repository;
+use App\Entity\Question;
+use App\Entity\Routine;
+use App\Entity\UserRoutine;
+use App\Entity\UserTask;
+use App\Repository\RoutineRepository;
+use App\Repository\UserRoutineRepository;
+use App\Repository\UserTaskRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
-class UserTaskV2Service extends WebTestCase
+class UserTaskService extends WebTestCase
 {
-    private UserTaskV2Repository $userTaskV2Repository;
-    public function __construct(UserTaskV2Repository $userTaskV2Repository) 
+    private UserTaskRepository $userTaskRepository;
+    public function __construct(UserTaskRepository $userTaskRepository) 
     {
-        $this->userTaskV2Repository = $userTaskV2Repository;
+        $this->userTaskRepository = $userTaskRepository;
     }
 
     public function getTaskById($id)
     {
-        return $this->userTaskV2Repository->findOneBy(['id' => $id]);
+        return $this->userTaskRepository->findOneBy(['id' => $id]);
     }
 
-    public function createList(UserRoutineV2 $routine)
+    public function createList(UserRoutine $routine)
     {
         $today = new DateTime();
 
@@ -44,9 +44,9 @@ class UserTaskV2Service extends WebTestCase
         }
     }
 
-    public function createOne(UserRoutineV2 $routine, $date)
+    public function createOne(UserRoutine $routine, $date)
     {
-        $task = new UserTaskV2;
+        $task = new UserTask;
 
         $task->setName($routine->getName());
         $task->setDescription($routine->getDescription());
@@ -56,7 +56,7 @@ class UserTaskV2Service extends WebTestCase
         $task->setStatus(false);
         $task->setUser($routine->getUser());
 
-        $this->userTaskV2Repository->add($task, true);
+        $this->userTaskRepository->add($task, true);
     }
 
     public function concatDateTime($time, $date)
@@ -92,14 +92,14 @@ class UserTaskV2Service extends WebTestCase
             $task->setStatus($data['status']);
         }        
 
-        $this->userTaskV2Repository->add($task, true);
+        $this->userTaskRepository->add($task, true);
 
         return $task;
     }
 
     public function controllerCreateTask($user, $data)
     {
-        $task = new UserTaskV2;
+        $task = new UserTask;
 
         $task->setUser($user);
 
@@ -108,24 +108,24 @@ class UserTaskV2Service extends WebTestCase
         $task->setTaskDateTime($data['taskDateTime']);
         $task->setStatus(false);
 
-        $this->userTaskV2Repository->add($task, true);
+        $this->userTaskRepository->add($task, true);
 
         return $task;
     }
 
     public function controllerGetTasksByUser($user)
     {
-        return $this->userTaskV2Repository->findBy(['user' => $user]);
+        return $this->userTaskRepository->findBy(['user' => $user]);
     }
 
     public function controllerGetTasksByUserAndDateTime($user, $time)
     {
-        return $this->userTaskV2Repository->findBy(['user' => $user->id, 'taskDateTime' => $time]);
+        return $this->userTaskRepository->findBy(['user' => $user->id, 'taskDateTime' => $time]);
     }
 
     public function controllerGetTasksByUserAndDate($user, $date): array
     {
-        $tasks = $this->userTaskV2Repository->findBy(['user' => $user]);
+        $tasks = $this->userTaskRepository->findBy(['user' => $user]);
 
         $filteredTasks = array_filter($tasks, function ($task) use ($date) {
             return $task->getTaskDateTime()->format('Y-m-d') === $date->format('Y-m-d');
@@ -140,7 +140,7 @@ class UserTaskV2Service extends WebTestCase
         if(!$task){
             throw new BadRequestHttpException("Task not found");
         }
-        $this->userTaskV2Repository->remove($task, true);
+        $this->userTaskRepository->remove($task, true);
     }
     
 }

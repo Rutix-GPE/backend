@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRoutineV2Repository;
+use App\Repository\UserRoutineRepository;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserRoutineV2Repository::class)]
+#[ORM\Entity(repositoryClass: UserRoutineRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class UserRoutineV2
+class UserRoutine
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -37,7 +37,7 @@ class UserRoutineV2
     #[Groups(['routine:read', 'routine:write'])]
     private ?bool $isAllTaskGenerated = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userRoutineV2s')]
+    #[ORM\ManyToOne(inversedBy: 'userRoutines')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['routine:write'])]
     private ?User $user = null;
@@ -168,7 +168,7 @@ class UserRoutineV2
         return $this;
     }
 
-    public function copyRoutine(RoutineV2 $routine, $user)
+    public function copyRoutine(Routine $routine, $user)
     {
         $this->user = $user;
         $this->name = $routine->getName();

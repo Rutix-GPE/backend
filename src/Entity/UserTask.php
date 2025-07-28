@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\UserTaskV2Repository;
+use App\Repository\UserTaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: UserTaskV2Repository::class)]
+#[ORM\Entity(repositoryClass: UserTaskRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class UserTaskV2
+class UserTask
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -33,9 +33,8 @@ class UserTaskV2
     #[Groups(['usertask:read', 'usertask:write'])]
     private ?int $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userTaskV2s')]
+    #[ORM\ManyToOne(inversedBy: 'userTasks')]
     #[ORM\JoinColumn(nullable: false)]
-    // PAS DE GROUP!
     private ?User $user = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

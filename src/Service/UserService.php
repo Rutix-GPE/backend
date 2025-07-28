@@ -90,7 +90,7 @@ class UserService
         if ($dto->city)         $user->setCity($dto->city);
         if ($dto->adress)       $user->setAdress($dto->adress);
         if ($dto->memo)         $user->setMemo($dto->memo);
-        if($dto->avatarFile)    $user->setAvatarFile($dto->avatarFile);
+        if ($dto->avatarFile)    $user->setAvatarFile($dto->avatarFile);
         if ($dto->password) {
             $hashed = $this->passwordHasher->hashPassword($user, $dto->password);
             $user->setPassword($hashed);
