@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use function PHPUnit\Framework\isNull;
 
-class QuestionService extends WebTestCase
+class QuestionService
 {
 
     private QuestionRepository $questionRepository;

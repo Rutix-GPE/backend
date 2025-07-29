@@ -33,7 +33,6 @@ class AuthenticationTest extends WebTestCase
         $this->conditionRepository = $this->client->getContainer()->get(ConditionRoutineRepository::class);
 
         $this->routineRepository = $this->client->getContainer()->get(RoutineRepository::class);
-        $this->taskRepository = $this->client->getContainer()->get(TaskRepository::class);
 
         $this->removeAllRoutines();
         $this->removeAllTasks();

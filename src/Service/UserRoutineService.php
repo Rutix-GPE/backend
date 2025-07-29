@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class UserRoutineService extends WebTestCase
+class UserRoutineService 
 {
 
     private UserRoutineRepository $userRoutineRepository;

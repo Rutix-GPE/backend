@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class RelationService extends WebTestCase
+class RelationService
 {
 
     private RelationRepository $relationRepository;

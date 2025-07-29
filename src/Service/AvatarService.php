@@ -5,7 +5,7 @@ namespace App\Service;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class AvatarService extends WebTestCase
+class AvatarService
 {
 
     

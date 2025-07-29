@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
-class UserTaskService extends WebTestCase
+class UserTaskService 
 {
     private UserTaskRepository $userTaskRepository;
     public function __construct(UserTaskRepository $userTaskRepository) 
