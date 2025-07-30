@@ -35,11 +35,11 @@ class Question
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     public ?\DateTimeInterface $UpdatedDate = null;
 
-    public function __construct()
-    {
-        $this->allSources = new ArrayCollection();
-        $this->allTargetQuestions = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     $this->allSources = new ArrayCollection();
+    //     $this->allTargetQuestions = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
