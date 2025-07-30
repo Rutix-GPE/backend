@@ -16,4 +16,21 @@ class RoutineRepository extends ServiceEntityRepository
         parent::__construct($registry, Routine::class);
     }
 
+        public function add(Routine $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Routine $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }
