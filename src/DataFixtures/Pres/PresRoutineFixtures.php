@@ -19,7 +19,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         // Tree one
 
         $routine = new Routine();
-        $routine->setName('Horaire étudiant');
+        $routine->setName('École');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
         $routine->setTaskTime(new \DateTime('08:30:00')); 
@@ -30,7 +30,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         // -----------------------------------------------------
 
         $routine = new Routine();
-        $routine->setName('Horaire travail');
+        $routine->setName('Travail');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
         $routine->setTaskTime(new \DateTime('09:30:00')); 
@@ -118,7 +118,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
             // Tree four
 
         $routine = new Routine();
-        $routine->setName('Réveil stimulant');
+        $routine->setName('Réveil');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
         $routine->setTaskTime(new \DateTime('07:30:00')); 
@@ -129,7 +129,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         // -----------------------------------------------------
 
         $routine = new Routine();
-        $routine->setName('Pause sensorielle');
+        $routine->setName('Pause');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5]); 
         $routine->setTaskTime(new \DateTime('13:30:00')); 
