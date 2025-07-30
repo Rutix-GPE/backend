@@ -41,7 +41,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         // Tree two
 
         $routine = new Routine();
-        $routine->setName('7 jours de sport');
+        $routine->setName('Sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5, 6, 7]); 
         $routine->setTaskTime(new \DateTime('20:00:00')); 
@@ -52,7 +52,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         // -----------------------------------------------------
 
         $routine = new Routine();
-        $routine->setName('4 jours de sport');
+        $routine->setName('Sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 3, 5, 7]); 
         $routine->setTaskTime(new \DateTime('20:00:00')); 
@@ -63,7 +63,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         // -----------------------------------------------------
 
         $routine = new Routine();
-        $routine->setName('3 jours de sport');
+        $routine->setName('Sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 3, 6]); 
         $routine->setTaskTime(new \DateTime('20:00:00')); 
@@ -74,7 +74,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         // -----------------------------------------------------
 
         $routine = new Routine();
-        $routine->setName('2 jours de sport');
+        $routine->setName('Sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 5]); 
         $routine->setTaskTime(new \DateTime('20:00:00')); 
@@ -85,7 +85,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         // -----------------------------------------------------
 
         $routine = new Routine();
-        $routine->setName('1 jours de sport');
+        $routine->setName('Sport');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([3]); 
         $routine->setTaskTime(new \DateTime('20:00:00')); 
@@ -143,7 +143,7 @@ class PresRoutineFixtures extends Fixture implements FixtureGroupInterface
         $routine->setName('Lecture du soir');
         $routine->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'); 
         $routine->setDays([1, 2, 3, 4, 5, 6, 7]); 
-        $routine->setTaskTime(new \DateTime('20:00:00')); 
+        $routine->setTaskTime(new \DateTime('19:00:00')); 
         
         $manager->persist($routine);
         $this->addReference("deconnexion_numerique", $routine);
