@@ -16,11 +16,6 @@ class UserTaskControllerTest extends WebTestCase
     private $userTaskRepository;
     private $em;
 
-    // public static function setUpBeforeClass(): void
-    // {
-    //     exec('php bin/console app:db:rebuild --env=test');
-    // }
-
     protected function setUp(): void
     {
         $this->client = static::createClient();

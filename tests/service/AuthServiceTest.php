@@ -26,6 +26,7 @@ class AuthServiceTest extends TestCase
     private $serializer;
     private $validator;
     private $service;
+    private $violationList;
 
     protected function setUp(): void
     {

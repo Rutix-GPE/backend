@@ -18,21 +18,6 @@ class UserRoutineControllerTest extends WebTestCase
     private $userRoutineRepository;
     private $em;
 
-    // public static function setUpBeforeClass(): void
-    // {
-    //     exec('php bin/console app:db:rebuild --env=test');
-    // }
-
-    // protected function setUp(): void
-    // {
-    //     $this->client = static::createClient();
-    //     $container = $this->client->getContainer();
-    //     $this->userRepository = $container->get(UserRepository::class);
-    //     $this->routineRepository = $container->get(RoutineRepository::class);
-    //     $this->userRoutineRepository = $container->get(UserRoutineRepository::class);
-    //     $this->em = $container->get('doctrine')->getManager();
-    // }
-
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -54,7 +39,7 @@ class UserRoutineControllerTest extends WebTestCase
         $connection->executeStatement('DELETE FROM routine');
         $connection->executeStatement('DELETE FROM user');
 
-        // Reset auto-increment (optionnel)
+        // Reset auto-increment
         $connection->executeStatement('ALTER TABLE relation AUTO_INCREMENT = 1');
         $connection->executeStatement('ALTER TABLE user_task AUTO_INCREMENT = 1');
         $connection->executeStatement('ALTER TABLE user_routine AUTO_INCREMENT = 1');
