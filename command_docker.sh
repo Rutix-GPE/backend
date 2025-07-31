@@ -16,11 +16,23 @@ fi
 execute_command() {
   local cmd="$1"
   echo "Exécution de la commande : $cmd"
-  
-  if ! docker exec -i ${CONTAINER_NAME_OR_ID} /bin/bash -c "$cmd"; then
-    echo "Erreur lors de l'exécution de la commande : $cmd" | tee -a "$ERROR_LOG"
+
+  # Exécute la commande dans le conteneur, capture toute la sortie (stdout+stderr), affiche et log
+  output=$(docker exec -i ${CONTAINER_NAME_OR_ID} /bin/bash -c "$cmd" 2>&1)
+  exit_code=$?
+  echo "$output" | tee -a "$ERROR_LOG"
+
+  if [ $exit_code -ne 0 ]; then
+    echo "Erreur lors de l'exécution de la commande : $cmd (code de retour : $exit_code)" | tee -a "$ERROR_LOG"
+    # Pour garder trace de l'échec global
+    return 1
   fi
+  return 0
 }
+
+# Exécution de composer install avant toute commande Symfony
+echo "==== Installation des dépendances Composer ===="
+execute_command "composer install"
 
 # Migrations pour la base principale (rutix_db)
 COMMANDS_MAIN=(
