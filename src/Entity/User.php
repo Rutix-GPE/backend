@@ -88,7 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserTask::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $userTasks;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
     private ?Question $nextRootQuestion = null;
 
     public function __construct()
