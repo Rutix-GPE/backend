@@ -25,4 +25,12 @@ class UserRoutineRepository extends ServiceEntityRepository
         }
     }
 
+    public function remove(UserRoutine $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

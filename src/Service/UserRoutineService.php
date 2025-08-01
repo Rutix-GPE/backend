@@ -53,4 +53,15 @@ class UserRoutineService
         return $this->userRoutineRepository->findBy(['user' => $userId]);
     }
 
+    public function deleteAllFromUser($user)
+    {
+        $routines = $this->userRoutineRepository->findBy(['user' => $user]);
+
+        foreach ($routines as $task) {
+            $this->userRoutineRepository->remove($task, true);
+        }        
+
+        return $this->userRoutineRepository->findBy(['user' => $user]);
+    }
+
 }

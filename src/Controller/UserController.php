@@ -5,8 +5,12 @@ namespace App\Controller;
 use App\Dto\User\UserResponseDTO;
 use App\Dto\User\UserResponseWithRoleDTO;
 use App\Repository\UserRepository;
+use App\Repository\UserRoutineRepository;
+use App\Repository\UserTaskRepository;
 use App\Service\UserService;
 use App\Service\AvatarService;
+use App\Service\UserRoutineService;
+use App\Service\UserTaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -118,5 +122,22 @@ class UserController extends AbstractController
         }
         $newUser = $this->userService->updateMemo($request,$user);
         return $this->json(new UserResponseDTO($newUser), Response::HTTP_OK);
+    }
+
+    #[Route('/user/reset-data', name: 'reset_data', methods: ['DELETE'])]
+    public function resetData(Request $request, UserRoutineService $userRoutineService, UserTaskService $userTaskService): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            throw new UnauthorizedHttpException('Bearer', 'Utilisateur non authentifié.');
+        } 
+        
+        $routines = $userRoutineService->deleteAllFromUser($user->id);
+        $tasks = $userTaskService->deleteAllFromUser($user->id);  
+
+        return $this->json([
+            "Routine" => sizeof($routines),
+            "Task" => sizeof($tasks)
+        ]);
     }
 }

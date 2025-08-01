@@ -142,5 +142,16 @@ class UserTaskService
         }
         $this->userTaskRepository->remove($task, true);
     }
+
+    public function deleteAllFromUser($user)
+    {
+        $tasks = $this->userTaskRepository->findBy(['user' => $user]);
+
+        foreach ($tasks as $task) {
+            $this->userTaskRepository->remove($task, true);
+        }        
+
+        return $this->userTaskRepository->findBy(['user' => $user]);
+    }
     
 }
